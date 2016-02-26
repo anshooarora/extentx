@@ -1,3 +1,5 @@
-# extentserver
+# ExtentX
 
-a [Sails](http://sailsjs.org) application
+Report Server for Extent.
+
+Demo: http://extentx.herokuapp.com/

@@ -1,0 +1,194 @@
+<%
+    var headerTitle = 'Report Details';
+%>
+
+<% include partials/header.ejs %>
+
+<div class='container main details-view'>
+    <div class='ui grid'>
+        <% if (tests && tests.length > 0) { %>
+
+            <div class='row'>
+                <div class='four wide column'>
+                    <div class='ui segment test-names'>
+                        
+                        <h1 style='padding:20px 0 20px 5px;'>
+                            Tests
+                        </h1>
+                        
+                        <div id='test-collection' class='list divided'>
+                            <% for (var ix = 0; ix < tests.length; ix++) { %>
+                                
+                                <div class='test item'>
+                                    <div class='content'>
+                                        <div class='test-name'><%= tests[ix].name %></div>
+                                        
+                                        <div class='test-content hidden'>
+                                            <div class='ui small label green'>
+                                                <%= new Date(tests[ix].startTime).toLocaleString().replace(',', '') %>
+                                            </div>
+                                            <div class='ui small label red'>
+                                                <%= new Date(tests[ix].endTime).toLocaleString().replace(',', '') %>
+                                            </div>
+                                            <div class='ui small label'>
+                                                <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %>
+                                            </div>
+                                            
+                                            <div class='test-description'>
+                                                <%- tests[ix].description %>
+                                            </div>
+                                            
+                                            <% var categories = tests[ix].categories; %>
+                                            
+                                            <div class='category-collection'>
+                                                <% for (var iy = 0; iy < categories.length; iy++) { %>
+                                                    <span class='ui tag label text-smaller'><%- categories[iy].name %></span>
+                                                <% } %>
+                                            </div>
+                                            
+                                            <% if (tests[ix].logs.length > 0) { %> 
+                                                <table class='ui table logs'>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Timestamp</th>
+                                                            <th>Status</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% var logs = tests[ix].logs; %>
+                                                        
+                                                        <% for (var iy = 0; iy < logs.length; iy++) { %>
+                                                            <tr>
+                                                                <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                                                                <td><%= logs[iy].status %></td>
+                                                                <td><%- logs[iy].details %></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            <% } %>
+                                                
+                                            <table class='ui table history'>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Date</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%
+                                                        var rowNum = 0;
+                                                        
+                                                        history.forEach(function(items) {
+                                                            items.forEach(function(item) {
+                                                                if (item.name == tests[ix].name && item.id != tests[ix].id) {
+                                                    %>
+                                                        <tr>
+                                                            <td><%= ++rowNum %></td>
+                                                            <td id='<%= item.id %>' class='history'>
+                                                                <span class='ui label history-link'><i class='calendar icon'></i><%= new Date(item.startTime).toLocaleString() %></span>
+                                                                
+                                                                <div class='history-content hidden'>
+                                                                    <div class='ui small label green'>
+                                                                        <%= new Date(item.startTime).toLocaleString().replace(',', '') %>
+                                                                    </div>
+                                                                    <div class='ui small label orange'>
+                                                                        <%= new Date(item.endTime).toLocaleString().replace(',', '') %>
+                                                                    </div>
+                                                                    <div class='ui small label'>
+                                                                        <%= new Date(item.endTime) - new Date(item.startTime) %>
+                                                                    </div>
+                                                                    
+                                                                    <div class='test-description'>
+                                                                        <%= item.description %>
+                                                                    </div>
+                                                                    
+                                                                    <% var categories = item.categories; %>
+                                                                    
+                                                                    <div class='category-collection'>
+                                                                        <% for (var iy = 0; iy < categories.length; iy++) { %>
+                                                                            <span class='ui tag label text-smaller'><%- categories[iy].name %></span>
+                                                                        <% } %>
+                                                                    </div>
+                                                                    
+                                                                    <% if (item.logs.length > 0) { %> 
+                                                                        <table class='ui table logs'>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Timestamp</th>
+                                                                                    <th>Status</th>
+                                                                                    <th>Details</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <% var logs = item.logs %>
+                                                                                
+                                                                                <% for (var iy = 0; iy < logs.length; iy++) { %>
+                                                                                    <tr>
+                                                                                        <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                                                                                        <td><%= logs[iy].status %></td>
+                                                                                        <td><%- logs[iy].details %></td>
+                                                                                    </tr>
+                                                                                <% } %>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    <% } %>
+                                                                </div>
+                                                            </td>
+                                                            <td><%= item.status %></td>
+                                                        </tr>
+                                                    <%
+                                                                }
+                                                            });
+                                                        });
+                                                    %>
+                                            
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <% } %>
+                        </div>
+                        <!-- /test-collection -->
+                        
+                    </div>
+                </div>
+                
+                <div class='six wide column'>
+                    <div class='ui segment current-details'>
+                        <h2 class='test-name'>
+                            
+                        </h2>
+                        
+                        <div class='cloned-content'>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class='six wide column'>
+                    <div class='ui segment historical-details hidden'>
+                        <h2 class='test-name'>
+                            
+                        </h2>
+                        
+                        <div class='cloned-content'>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <% } else { %>
+        
+            <div class='segment warning'>
+                No tests.
+            </div>
+            
+        <% } %>
+    </div>
+</div>

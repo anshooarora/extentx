@@ -1,0 +1,271 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic");
+
+body {
+	background: #eff2f8;
+    color: #343434;
+    font-size: 13px;
+    height: 100%;
+}
+h3, h4, h5 {
+    font-weight: 600 !important;
+}
+h1 {
+    color: #5a5a5a;
+    font-weight: 400;
+}
+th {
+    font-size: 12px;
+    font-weight: 600 !important;
+}
+pre {
+    background: #f4f4f4;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    margin: 0;
+    padding: 10px;
+    white-space: pre-wrap;
+}
+
+/* global styles */
+.hidden, .hide {
+    display: none;
+}
+.left {
+    float: left !important;
+}
+.right {
+    float: right !important;
+}
+.text-small {
+    font-size: 12px !important;
+}
+.text-smaller {
+    font-size: 11px !important;
+}
+.text-normal {
+    font-weight: 400 !important;
+}
+.text-right {
+    text-align: right;
+}
+
+/* bootstrap progress overrides */
+.progress {
+    height: 15px;
+    margin-bottom: 0;
+}
+.progress-bar {
+    font-size: 11px;
+    line-height: 15px;
+}
+.progress > span, span.sr-only {
+    position: initial;
+}
+
+/* topnav */
+.ui.top.menu {
+    height: 48px;
+    left: 60px;
+    line-height: 48px;
+    min-height: 48px;
+    right: 0;
+    width: auto;
+}
+.ui.top.menu .logo {
+    background: #f7f7f7 !important;
+    width: 90px;
+}
+.ui.top.menu .item:last-child {
+    background: #5093e1;
+    color: white; 
+}
+.menu-toggle {
+    background: #eee !important;
+}
+
+/* sidenav */
+.side-nav {
+    background: #2f323a;
+    bottom: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    transition: all 0.25s ease 0s;
+    width: 60px;
+}
+.side-nav li {
+    height: 50px;
+    line-height: 50px;
+    list-style: none;    
+}
+.side-nav li:hover {
+    background: transparent !important;  
+}
+.side-nav li:first-child {
+    padding: 0 0 100px;
+}
+.side-nav li.active {
+    background: #5093e1;
+}
+.side-nav li:active, .side-nav li:hover {
+    background: #eee;    
+}
+.side-nav a, .side-nav.fixed a {
+    color: #eaeefd;
+    padding: 10px 20px;
+}
+
+/* container */
+.container {
+    max-width: none;
+    padding-bottom: 5rem;
+    padding-left: 6.5rem !important;
+    padding-right: 2rem !important;
+    padding-top: 5rem;
+    width: 100%;
+}
+
+/* segment */
+.ui.segment, .ui.menu {
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.ui.segment.inverted {
+    background: #2e3e4e;
+    color: #fff;
+}
+.segment-title {
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* pagination */
+.ui.pagination.menu {
+    font-size: 12px;
+}
+
+/* labels */
+.ui.label {
+    background-color: #f3f4f7;
+    color: rgba(0, 0, 0, 0.6);
+}
+.ui.label.green {
+    background: #66bb6a !important;
+}
+.ui.label.red {
+    background: #ef5350 !important;
+}
+.ui.tag.label, .ui.tag.labels .label {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* report summary */
+table.report-summary th:first-child, table.report-summary td:first-child {
+    width: 50px;
+}
+
+/* analysis -> trends */
+#test-trends, #step-trends {
+    height: 250px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* analysis -> dashboard */
+#dashboard-test-analysis {
+    height: 130px;
+    margin: 0 auto;
+    width: 200px;
+}
+.chart-box {
+	display: block;
+	margin: 50px auto 30px;
+	text-align: center;
+}
+.doughnut-legend li span {
+	border-radius: 2px;
+	display: block;
+	float: left;
+	height: 10px;
+	margin-right: 8px;
+	margin-top: 4px;
+	width: 10px;
+}
+.doughnut-legend {
+	display: inline-block;
+	list-style: none;
+	margin: 10px 0 0 -35px;
+	font-size: 12px;
+    float: right;
+}
+.doughnut-legend li {
+	text-align: left;
+}
+.doughnut-legend li:first-letter {
+	text-transform: capitalize;
+}
+
+/* details view */
+.details-view .ui.segment {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+.details-view .ui.segment.test-names, .details-view .ui.segment.current-details, .details-view .ui.segment.historical-details {
+    border-left: 1px solid #d9d9d9;
+    bottom: 0;
+    overflow-y: auto;
+    position: fixed;
+    top: 48px;
+}
+.details-view .ui.segment.test-names {
+    left: 60px;
+    width: 400px;
+}
+.details-view .ui.segment.current-details {
+    left: 460px;
+}
+.details-view .ui.segment.historical-details {
+
+}
+.details-view .ui.segment.current-details .test-name, .details-view .ui.segment.historical-details .test-name {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+.test-description {
+    margin-top: 10px;
+}
+.category-collection {
+    margin-top: 10px;
+}
+.details-view table.logs {
+    margin-top: 30px;
+}
+.details-view table.logs th:first-child, table.logs td:first-child {
+    max-width: 100px;
+    width: 100px;
+}
+.details-view table.logs th:nth-child(2), table.logs td:nth-child(2) {
+    max-width: 70px;
+    width: 70px;
+}
+.details-view #test-collection > .test:first-child {
+    border-top: 1px solid #eee;
+}
+.details-view #test-collection > .test {
+    border-bottom: 1px solid #eee;
+    margin: 0 -12px;
+    padding: 10px 5px 10px 20px;
+}
+.details-view #test-collection .test.active {
+    background: #f7f7f7;
+    font-weight: 600;
+}
+.details-view .history-link {
+    cursor: default;
+}

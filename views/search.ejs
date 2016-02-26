@@ -1,0 +1,143 @@
+<%
+    var headerTitle = 'Search Tests';
+%>
+
+<% include partials/header.ejs %>
+
+<div class='container main'>
+    <div class='ui grid'>
+        <div class='sixteen wide column'>
+            <h1>Search</h1>
+        </div>
+        
+        <div class='five wide column'>
+            <div class='ui segment padded'>
+                
+                <form class='form' name='search-tests' action='/searchTests' method='get'>
+                    <div class='ui form'>
+                        <label class='text-normal'>Dates</label>
+                        <div class='two fields'>
+                            <div class='ui field left icon input'>
+                                <input name='startDate' placeholder='Test Start Date' type='text' value='<%= typeof query.startDate === "undefined" ? "" : query.startDate %>'>
+                                <i class='grid calendar icon'></i>
+                            </div>
+                            <div class='ui field left icon input'>
+                                <input name='endDate' placeholder='Test End Date' type='text' value='<%= typeof query.endDate === "undefined" ? "" : query.endDate %>'>
+                                <i class='grid calendar icon'></i>
+                            </div>
+                        </div>
+                        
+                        <label class='text-normal'>Name</label>
+                        <div class='fields'>
+                            <div class='ui six wide field'>
+                                <select class='dropdown fluid' name='regex'>
+                                    <option value='contains' <%= query.regex === 'contains' ? 'selected' : '' %>>contains</option>
+                                    <option value='exact' <%= query.regex === 'exact' ? 'selected' : '' %>>exact</option>
+                                    <option value='startsWith' <%= query.regex === 'startsWith' ? 'selected' : '' %>>startsWith</option>
+                                    <option value='endsWith' <%= query.regex === 'endsWith' ? 'selected' : '' %>>endsWith</option>
+                                </select>
+                            </div>
+                            <div class='ui ten wide field'>
+                                <input name='name' placeholder='Test Name' type='text' value='<%= typeof query.name === "undefined" ? "" : query.name %>'>
+                            </div>
+                        </div>
+                        
+                        <div class='ui field'>
+                            <label class='text-normal'>Status</label>
+                            <select multiple='' class='dropdown' name='status'>
+                                <option value=''>Select Status</option>
+                                <option value='pass'>Pass</option>
+                                <option value='fail'>Fail</option>
+                                <option value='fatal'>Fatal</option>
+                                <option value='error'>Error</option>
+                                <option value='warning'>Warning</option>
+                                <option value='skip'>Skip</option>
+                            </select>
+                        </div>
+                        
+                        <!--<% if (cats && cats.length > 0) { %>
+                        <div class='ui field'>
+                            <label class='text-normal'>Category</label>
+                            <select multiple='' class='dropdown' name='category'>
+                                <option value=''>Select Category</option>
+                                <% cats.forEach(function(cat, index) { %>
+                                    <option value='<%= index %>'><%= cat %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <% } %>-->
+                        
+                        <a onclick='clearForm(this)' class="ui button">
+                            Clear
+                        </a>
+                        <button type='submit' class="ui primary button">
+                            Search
+                        </button>
+                    </div>
+                    
+                </form>
+
+            </div>
+        </div>
+        
+        <% if (tests && tests.length > 0) { %>            
+            
+            <div class='sixteen wide column'>                    
+            
+                <% for (var ix = 0; ix < tests.length; ix++) { %>
+                    <div class='ui segment'>
+                        <h3><%= tests[ix].name %></h3>
+                        
+                        <div class='ui tiny label green'>
+                            <%= new Date(tests[ix].startTime).toLocaleString() %>
+                        </div>
+                        <div class='ui tiny label red'>
+                            <%= new Date(tests[ix].endTime).toLocaleString() %>
+                        </div>
+                        <div class='ui tiny label'>
+                            <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %>
+                        </div>
+                        
+                        <div class='test-description'>
+                            <%- tests[ix].description %>
+                        </div>
+                        
+                        <% var categories = tests[ix].categories; %>
+                                            
+                        <div class='category-collection'>
+                            <% for (var iy = 0; iy < categories.length; iy++) { %>
+                                <span class='ui tag label text-smaller'><%= categories[iy].name %></span>
+                            <% } %>
+                        </div>
+                        
+                        <% if (tests[ix].logs.length > 0) { %> 
+                            <table class='ui table logs'>
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Status</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% var logs = tests[ix].logs %>
+                                    
+                                    <% for (var iy = 0; iy < logs.length; iy++) { %>
+                                        <tr>
+                                            <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                                            <td><%= logs[iy].status %></td>
+                                            <td><%- logs[iy].details %></td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        <% } %>
+                    </div>
+                <% } %>
+                    
+            </div>
+            
+        <% } %>
+        
+    </div>
+</div>

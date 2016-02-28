@@ -10,7 +10,7 @@
             var active = '';
         %>
         
-        <li class='no-padding <%= (url === "/dashboard") && ("active") %>'>
+        <li class='no-padding <%= (url === "/dashboard" || url === "/") && ("active") %>'>
             <a alt='Dashboard' title='Dashboard' href='/dashboard'><i class='line chart icon'></i></a>
         </li>
         <li class='no-padding  <%= (url === "/lastRunReport") && ("active") %>'>

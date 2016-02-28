@@ -19,19 +19,30 @@
                         <div id='test-collection' class='list divided'>
                             <% for (var ix = 0; ix < tests.length; ix++) { %>
                                 
-                                <div class='test item'>
+                                <div class='test item <%= tests[ix].status %>'>
                                     <div class='content'>
-                                        <div class='test-name'><%= tests[ix].name %></div>
+                                        <div class='test-name'>
+                                            <%= tests[ix].name %>
+                                        </div>
+                                        <div class='test-status'>
+                                            <span class='<%= tests[ix].status %>'>
+                                                <%
+                                                    var icon = '';
+                                                    StatusService.getIcon(tests[ix].status, function(e) { icon = e; }); 
+                                                %>
+                                                <i class='<%= icon %>'></i>
+                                            </span>
+                                        </div>
                                         
-                                        <div class='test-content hidden'>
-                                            <div class='ui small label green'>
+                                        <div class='test-content hidden'>                                            
+                                            <div class='ui label green'>
                                                 <%= new Date(tests[ix].startTime).toLocaleString().replace(',', '') %>
                                             </div>
-                                            <div class='ui small label red'>
+                                            <div class='ui label red'>
                                                 <%= new Date(tests[ix].endTime).toLocaleString().replace(',', '') %>
                                             </div>
-                                            <div class='ui small label'>
-                                                <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %>
+                                            <div class='ui label'>
+                                                <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %> ms
                                             </div>
                                             
                                             <div class='test-description'>
@@ -42,7 +53,7 @@
                                             
                                             <div class='category-collection'>
                                                 <% for (var iy = 0; iy < categories.length; iy++) { %>
-                                                    <span class='ui tag label text-smaller'><%- categories[iy].name %></span>
+                                                    <span class='ui tag label text-small'><%- categories[iy].name %></span>
                                                 <% } %>
                                             </div>
                                             
@@ -61,7 +72,13 @@
                                                         <% for (var iy = 0; iy < logs.length; iy++) { %>
                                                             <tr>
                                                                 <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
-                                                                <td><%= logs[iy].status %></td>
+                                                                <td class='<%= logs[iy].status %>'>
+                                                                    <%
+                                                                        var icon = '';
+                                                                        StatusService.getIcon(logs[iy].status, function(e) { icon = e; }); 
+                                                                    %>
+                                                                    <i class='<%= icon %>'></i>
+                                                                </td>
                                                                 <td><%- logs[iy].details %></td>
                                                             </tr>
                                                         <% } %>
@@ -91,14 +108,14 @@
                                                                 <span class='ui label history-link'><i class='calendar icon'></i><%= new Date(item.startTime).toLocaleString() %></span>
                                                                 
                                                                 <div class='history-content hidden'>
-                                                                    <div class='ui small label green'>
+                                                                    <div class='ui label green'>
                                                                         <%= new Date(item.startTime).toLocaleString().replace(',', '') %>
                                                                     </div>
-                                                                    <div class='ui small label orange'>
+                                                                    <div class='ui label orange'>
                                                                         <%= new Date(item.endTime).toLocaleString().replace(',', '') %>
                                                                     </div>
-                                                                    <div class='ui small label'>
-                                                                        <%= new Date(item.endTime) - new Date(item.startTime) %>
+                                                                    <div class='ui label'>
+                                                                        <%= new Date(item.endTime) - new Date(item.startTime) %> ms
                                                                     </div>
                                                                     
                                                                     <div class='test-description'>
@@ -109,7 +126,7 @@
                                                                     
                                                                     <div class='category-collection'>
                                                                         <% for (var iy = 0; iy < categories.length; iy++) { %>
-                                                                            <span class='ui tag label text-smaller'><%- categories[iy].name %></span>
+                                                                            <span class='ui tag label text-small'><%- categories[iy].name %></span>
                                                                         <% } %>
                                                                     </div>
                                                                     
@@ -128,7 +145,7 @@
                                                                                 <% for (var iy = 0; iy < logs.length; iy++) { %>
                                                                                     <tr>
                                                                                         <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
-                                                                                        <td><%= logs[iy].status %></td>
+                                                                                        <td class='status <%= logs[iy].status %>'><%= logs[iy].status %></td>
                                                                                         <td><%- logs[iy].details %></td>
                                                                                     </tr>
                                                                                 <% } %>

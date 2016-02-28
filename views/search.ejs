@@ -17,11 +17,11 @@
                     <div class='ui form'>
                         <label class='text-normal'>Dates</label>
                         <div class='two fields'>
-                            <div class='ui field left icon input'>
+                            <div class='ui field float-left icon input'>
                                 <input name='startDate' placeholder='Test Start Date' type='text' value='<%= typeof query.startDate === "undefined" ? "" : query.startDate %>'>
                                 <i class='grid calendar icon'></i>
                             </div>
-                            <div class='ui field left icon input'>
+                            <div class='ui field float-left icon input'>
                                 <input name='endDate' placeholder='Test End Date' type='text' value='<%= typeof query.endDate === "undefined" ? "" : query.endDate %>'>
                                 <i class='grid calendar icon'></i>
                             </div>
@@ -82,56 +82,73 @@
         
         <% if (tests && tests.length > 0) { %>            
             
-            <div class='sixteen wide column'>                    
+            <div class='eleven wide column'>                    
             
                 <% for (var ix = 0; ix < tests.length; ix++) { %>
-                    <div class='ui segment'>
-                        <h3><%= tests[ix].name %></h3>
+                    <div class='ui segment padded'>
+                        <h2 class='test-name'>
+                            <span class='<%= tests[ix].status %> status'>
+                                <%
+                                    var icon = '';
+                                    StatusService.getIcon(tests[ix].status, function(e) { icon = e; }); 
+                                %>
+                                <i class='<%= icon %>'></i>
+                            </span>
+                            <%= tests[ix].name %> 
+                        </h2>
                         
-                        <div class='ui tiny label green'>
-                            <%= new Date(tests[ix].startTime).toLocaleString() %>
-                        </div>
-                        <div class='ui tiny label red'>
-                            <%= new Date(tests[ix].endTime).toLocaleString() %>
-                        </div>
-                        <div class='ui tiny label'>
-                            <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %>
-                        </div>
-                        
-                        <div class='test-description'>
-                            <%- tests[ix].description %>
-                        </div>
-                        
-                        <% var categories = tests[ix].categories; %>
-                                            
-                        <div class='category-collection'>
-                            <% for (var iy = 0; iy < categories.length; iy++) { %>
-                                <span class='ui tag label text-smaller'><%= categories[iy].name %></span>
+                        <div class='test-content'>
+                            <div class='ui label green'>
+                                <%= new Date(tests[ix].startTime).toLocaleString() %>
+                            </div>
+                            <div class='ui label red'>
+                                <%= new Date(tests[ix].endTime).toLocaleString() %>
+                            </div>
+                            <div class='ui label'>
+                                <%= new Date(tests[ix].endTime) - new Date(tests[ix].startTime) %> ms
+                            </div>
+                            
+                            <div class='test-description'>
+                                <%- tests[ix].description %>
+                            </div>
+                            
+                            <% var categories = tests[ix].categories; %>
+                                                
+                            <div class='category-collection'>
+                                <% for (var iy = 0; iy < categories.length; iy++) { %>
+                                    <span class='ui tag label text-smaller'><%= categories[iy].name %></span>
+                                <% } %>
+                            </div>
+                            
+                            <% if (tests[ix].logs.length > 0) { %> 
+                                <table class='ui table logs'>
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Status</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var logs = tests[ix].logs %>
+                                        
+                                        <% for (var iy = 0; iy < logs.length; iy++) { %>
+                                            <tr>
+                                                <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                                                <td class='status <%= logs[iy].status %>'>
+                                                    <%
+                                                        var icon = '';
+                                                        StatusService.getIcon(logs[iy].status, function(e) { icon = e; }); 
+                                                    %>
+                                                    <i class='<%= icon %>'></i>                                                    
+                                                </td>
+                                                <td><%- logs[iy].details %></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
                             <% } %>
                         </div>
-                        
-                        <% if (tests[ix].logs.length > 0) { %> 
-                            <table class='ui table logs'>
-                                <thead>
-                                    <tr>
-                                        <th>Timestamp</th>
-                                        <th>Status</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% var logs = tests[ix].logs %>
-                                    
-                                    <% for (var iy = 0; iy < logs.length; iy++) { %>
-                                        <tr>
-                                            <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
-                                            <td><%= logs[iy].status %></td>
-                                            <td><%- logs[iy].details %></td>
-                                        </tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                        <% } %>
                     </div>
                 <% } %>
                     

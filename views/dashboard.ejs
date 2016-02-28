@@ -16,9 +16,31 @@
         
         <% if (typeof fields === 'undefined' || fields.length === 0) { %>
             
-            
+            <div class=''>
+                Nothing to display. 
+            </div>
             
         <% } else { %>
+            
+            <div class='eight wide column'>
+                <div class='ui segment padded'>
+                    <div class='segment-title'>
+                        Report Trends By Status - Test 
+                    </div>
+                    
+                    <canvas id='test-trends'></canvas>
+                </div>
+            </div>
+            
+            <div class='eight wide column'>
+                <div class='ui segment padded'>
+                    <div class='segment-title'>
+                        Report Trends By Status - Step 
+                    </div>
+                    
+                    <canvas id='step-trends'></canvas>
+                </div>
+            </div>
             
             <div class='eleven wide column'>
                 <div class='ui segment padded'>
@@ -30,10 +52,10 @@
                         <thead>
                             <th></th>
                             <th>File</th>
-                            <th>StartTime</th>
-                            <th>EndTime</th>
-                            <th>TestDistribution</th>
-                            <th>LogDistribution</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Test Distribution</th>
+                            <th>Log Distribution</th>
                             <!--<th></th>-->
                         </thead>
                         <tbody>
@@ -129,26 +151,6 @@
                         <div class='text-small'><strong><%= testsPassed + testsFailed + testsOthers %></strong> tests, <strong><%= testsPassed %></strong> passed</div>
                         <div class='text-small'><strong><%= testsFailed %></strong> tests failed, <strong><%= testsOthers %></strong> others</div>
                     </div>
-                </div>
-            </div>
-            
-            <div class='eight wide column'>
-                <div class='ui segment padded'>
-                    <div class='segment-title'>
-                        Report Trends By Status - Test 
-                    </div>
-                    
-                    <canvas id='test-trends'></canvas>
-                </div>
-            </div>
-            
-            <div class='eight wide column'>
-                <div class='ui segment padded'>
-                    <div class='segment-title'>
-                        Report Trends By Status - Step 
-                    </div>
-                    
-                    <canvas id='step-trends'></canvas>
                 </div>
             </div>
             

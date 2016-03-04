@@ -20,7 +20,7 @@ module.exports = {
       status: {
           type: 'string',
           enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'],
-          defaultTo: 'unknown'
+          defaultsTo: 'unknown'
       },
       stepName: 'text',
       details: 'text',

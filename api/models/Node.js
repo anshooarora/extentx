@@ -14,7 +14,11 @@ module.exports = {
       
       name: 'text',
       level: 'number',
-      status: 'string',
+      status: {
+          type: 'string',
+          enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'],
+          defaultsTo: 'unknown'
+      },
       description: 'text',
       startTime: 'date',
       endTime: 'date',

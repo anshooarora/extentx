@@ -4,7 +4,7 @@
 
 <% include partials/header.ejs %>
 
-<div class='container main'>
+<div class='container main dashboard-view'>
     <form class='hidden' id='report-detail' name='report-detail' action='/details' method='get'>
         <input id='report-id' type='text' value='' name='reportId'>
     </form>
@@ -22,7 +22,7 @@
             
         <% } else { %>
             
-            <div class='eight wide column'>
+            <div class='sixteen wide tablet eight wide computer column'>
                 <div class='ui segment padded'>
                     <div class='segment-title'>
                         Report Trends By Status - Test 
@@ -32,7 +32,7 @@
                 </div>
             </div>
             
-            <div class='eight wide column'>
+            <div class='sixteen wide tablet eight wide computer column'>
                 <div class='ui segment padded'>
                     <div class='segment-title'>
                         Report Trends By Status - Step 
@@ -42,7 +42,7 @@
                 </div>
             </div>
             
-            <div class='eleven wide column'>
+            <div class='sixteen wide tablet eleven wide computer column'>
                 <div class='ui segment padded'>
                     <div class='segment-title'>
                         Reports (Last 5 Runs)
@@ -73,8 +73,8 @@
                                 <tr>
                                     <td><%= (ix + 1) %></td>
                                     <td><a href='/reportDetails?id=<%= fields[ix].id %>'><%= fields[ix].fileName %></a></td>
-                                    <td><span class='ui label'><i class='calendar icon'></i><%= new Date(fields[ix].startTime).toLocaleString() %></span></td>
-                                    <td><span class='ui label'><i class='calendar icon'></i><%= new Date(fields[ix].endTime).toLocaleString() %></span></td>
+                                    <td><span class='ui label'><i class='fa fa-calendar icon'></i><%= new Date(fields[ix].startTime).toLocaleString() %></span></td>
+                                    <td><span class='ui label'><i class='fa fa-calendar icon'></i><%= new Date(fields[ix].endTime).toLocaleString() %></span></td>
                                     <td>
                                         <%
                                             var passed = 0, failed = 0, others = 0;
@@ -137,7 +137,7 @@
                 </div>
             </div>
             
-            <div class='five wide column'>
+            <div class='sixteen wide tablet five wide computer column'>
                 <div class='ui segment inverted padded'>
                     <div class='segment-title'>
                         Analysis (Last 5 Runs)
@@ -155,7 +155,13 @@
             </div>
             
             <% if (passedStatus || failedStatus) { %>
-                <div class='eight wide column'>
+                
+                <% 
+                    var colSize = 'eight';
+                    if (categories && categories.length > 0) colSize = 'six';
+                %>
+            
+                <div class='eight wide tablet <%= colSize %> wide computer column'>
                     <div class='ui segment padded'>
                         <div class='segment-title'>
                             Top Passed
@@ -164,7 +170,6 @@
                         <table class='ui table'>
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>Name</th>
                                     <th>Count</th>
                                 </tr>
@@ -172,7 +177,6 @@
                             <tbody>
                                 <% for (var ix = 0; ix < passedStatus.length; ix++) { %>
                                     <tr>
-                                        <td><%= (ix + 1) %></td>
                                         <td><a href='/searchTests?regex=exact&name=<%= passedStatus[ix]._id.name %>'><%= passedStatus[ix]._id.name %></a></td>
                                         <td><%= passedStatus[ix].count %></td>
                                     </tr>
@@ -182,7 +186,7 @@
                     </div>
                 </div>
                 
-                <div class='eight wide column'>
+                <div class='eight wide tablet <%= colSize %> wide computer column'>
                     <div class='ui segment padded'>
                         <div class='segment-title'>
                             Top Failed
@@ -196,7 +200,6 @@
                             <table class='ui table'>
                                 <thead>
                                     <tr>
-                                        <th></th>
                                         <th>Name</th>
                                         <th>Count</th>
                                     </tr>
@@ -204,7 +207,6 @@
                                 <tbody>
                                     <% for (var ix = 0; ix < failedStatus.length; ix++) { %>
                                         <tr>
-                                            <td><%= (ix + 1) %></td>
                                             <td><a href='/searchTests?regex=exact&name=<%= failedStatus[ix]._id.name %>'><%= failedStatus[ix]._id.name %></a></td>
                                             <td><%= failedStatus[ix].count %></td>
                                         </tr>
@@ -213,6 +215,32 @@
                             </table>
                         <% } %>
                         
+                    </div>
+                </div>
+            <% } %>
+            
+            <% if (categories && categories.length > 0) { %>
+                <div class='eight wide tablet four wide computer column'>
+                    <div class='ui segment padded'>
+                        <div class='segment-title'>
+                            Categories
+                        </div>
+
+                        <table class='ui table'>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (var ix = 0; ix < categories.length; ix++) { %>
+                                    <tr>
+                                        <td><%= categories[ix] %></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                                                
                     </div>
                 </div>
             <% } %>

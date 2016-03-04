@@ -21,12 +21,17 @@ module.exports = {
           collection: 'category',
           via: 'owner'
       },
+      
+      authors: {
+          collection: 'author',
+          via: 'owner'
+      },
 
       name: 'text',
       status: {
           type: 'string',
           enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'unknown'],
-          defaultTo: 'unknown'
+          defaultsTo: 'unknown'
       },
       description: 'text',
       warnings: 'text',

@@ -1,9 +1,12 @@
 $(document).ready(function() {
+    $('.datepicker').datepicker();
     $('select.dropdown').dropdown();
 });
 
-$('.menu-toggle').click(function() {
-    $('.ui.sidebar').toggleClass('docked');
+$('#expand-sidenav').click(function() {
+    $(this).children('i').toggleClass('fa-arrow-circle-o-right fa-arrow-circle-o-left');
+    $('.side-nav').toggleClass('expanded');
+    $('.container.main, .ui.top.menu').toggleClass('padded');
 });
 
 $('.view-report').click(function() {

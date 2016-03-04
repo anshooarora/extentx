@@ -4,7 +4,7 @@
 
 <% include partials/header.ejs %>
 
-<div class='container main'>
+<div class='container main reports-view'>
     <form class='hidden' id='report-detail' name='report-detail' action='/details' method='get'>
         <input id='report-id' type='text' value='' name='reportId'>
     </form>
@@ -14,7 +14,12 @@
             <h1>Reports</h1>
         </div>
         
-        <div class='two wide column'>
+        <% if (!fields || fields.length === 0) { %>
+        
+            <p>Nothing to display.</p>
+        
+        <% } else { %>
+        <div class='four wide tablet two wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Total Reports
@@ -25,7 +30,7 @@
             </div>
         </div>
         
-        <div class='three wide column'>
+        <div class='four wide tablet three wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Total Tests
@@ -36,7 +41,7 @@
             </div>
         </div>
         
-        <div class='two wide column'>
+        <div class='four wide tablet two wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Tests Passed
@@ -47,7 +52,7 @@
             </div>
         </div>
         
-        <div class='two wide column'>
+        <div class='four wide tablet two wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Tests Failed
@@ -58,7 +63,7 @@
             </div>
         </div>
         
-        <div class='three wide column'>
+        <div class='four wide tablet three wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Total Steps
@@ -69,7 +74,7 @@
             </div>
         </div>
         
-        <div class='two wide column'>
+        <div class='four wide tablet two wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Steps Passed
@@ -80,7 +85,7 @@
             </div>
         </div>
         
-        <div class='two wide column'>
+        <div class='four wide tablet two wide computer column'>
             <div class='ui segment'>
                 <div class='segment-title'>
                     Steps Failed
@@ -107,7 +112,9 @@
                         <th>File</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Tests</th>
                         <th>Test Distribution</th>
+                        <th>Steps</th>
                         <th>Log Distribution</th>
                         <th></th>
                     </thead>
@@ -125,9 +132,8 @@
                             <tr>
                                 <td><%= (((currentPage * limit) - limit) + ix + 1) %></td>
                                 <td><a href='/reportDetails?id=<%= fields[ix].id %>'><%= fields[ix].fileName %></a></td>
-                                <td><span class='ui label'><i class='calendar icon'></i><%= new Date(fields[ix].startTime).toLocaleString() %></span></td>
-                                <td><span class='ui label'><i class='calendar icon'></i><%= new Date(fields[ix].endTime).toLocaleString() %></span></td>
-                                <td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i><%= new Date(fields[ix].startTime).toLocaleString() %></span></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i><%= new Date(fields[ix].endTime).toLocaleString() %></span></td>
                                     <%
                                         var passed = 0, failed = 0, others = 0;
                                         var testDistribution = statusDistribution.testDistribution[distIndex];
@@ -138,33 +144,8 @@
                                             else if (item._id === 'skip' || item._id === 'warning' || item._id === 'error') { others += item.count; }
                                         });
                                     %>
-                                    
-                                    <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: <%= (passed / (passed + failed + others)) * 100 %>%'>
-                                            <span class='sr-only'><%= passed %></span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: <%= (others / (passed + failed + others)) * 100 %>%'>
-                                            <span class='sr-only'><%= others %></span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: <%= (failed / (passed + failed + others)) * 100 %>%'>
-                                            <span class='sr-only'><%= failed %></span>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td><%= passed + failed + others %></td>
                                 <td>
-                                    <%
-                                        var passed = 0, failed = 0, others = 0;
-                                        var logDistribution = statusDistribution.logDistribution[distIndex];
-                                        
-                                        logDistribution.forEach(function(items) {
-                                            items.forEach(function(item) {
-                                                if (item._id === 'pass') { passed += item.count; }
-                                                else if (item._id === 'fail' || item._id === 'fatal' ) { failed += item.count; }
-                                                else if (item._id === 'skip' || item._id === 'warning' || item._id === 'error') { others += item.count; }
-                                            });
-                                        });
-                                    %>
-                                    
                                     <div class='progress'>
                                         <div class='progress-bar progress-bar-success' style='width: <%= (passed / (passed + failed + others)) * 100 %>%'>
                                             <span class='sr-only'><%= passed %></span>
@@ -177,7 +158,33 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><a href='/reportDetails?id=<%= fields[ix].id %>'><i class='external icon'></i></a></td>
+                                <%
+                                    var passed = 0, failed = 0, others = 0;
+                                    var logDistribution = statusDistribution.logDistribution[distIndex];
+                                    
+                                    logDistribution.forEach(function(items) {
+                                        items.forEach(function(item) {
+                                            if (item._id === 'pass') { passed += item.count; }
+                                            else if (item._id === 'fail' || item._id === 'fatal' ) { failed += item.count; }
+                                            else if (item._id === 'skip' || item._id === 'warning' || item._id === 'error') { others += item.count; }
+                                        });
+                                    });
+                                %>
+                                <td><%= passed + failed + others %></td>
+                                <td>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: <%= (passed / (passed + failed + others)) * 100 %>%'>
+                                            <span class='sr-only'><%= passed %></span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: <%= (others / (passed + failed + others)) * 100 %>%'>
+                                            <span class='sr-only'><%= others %></span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: <%= (failed / (passed + failed + others)) * 100 %>%'>
+                                            <span class='sr-only'><%= failed %></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><a href='/reportDetails?id=<%= fields[ix].id %>'><i class='fa fa-external-link'></i></a></td>
                             </tr>
                             
                         <% } %>
@@ -186,12 +193,12 @@
                 </table>
             </div>
             
-            <% if (itemCounts.pages !== 1) { %>
+            <% if (itemCounts.pagesCount !== 1) { %>
             <div class='ui pagination menu'>
                 <% 
                     var active = '';
                     
-                    for (var ix = 0; ix < itemCounts.pages; ix++) { 
+                    for (var ix = 0; ix < itemCounts.pagesCount; ix++) { 
                         (ix + 1 === currentPage) && (active = 'active') || (active = '');
                 %>
                 <a href='?page=<%= (ix + 1) %>'>
@@ -203,5 +210,6 @@
             </div>
             <% } %>
         </div>
+        <% } %>
     </div>
 </div>

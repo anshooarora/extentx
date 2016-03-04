@@ -44,7 +44,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   
-  '/trends': 'AnalysisController.trends',
   '/dashboard': 'AnalysisController.dashboard',
   
   '/reports': 'ReportController.reports',
@@ -52,5 +51,5 @@ module.exports.routes = {
   '/reportDistribution': 'ReportController.reportDistribution',
   '/lastRunReport': 'ReportController.showLastRunReport',
   
-  '/searchTests': 'SearchController.searchTests',
+  '/search': 'SearchController.search',
 };

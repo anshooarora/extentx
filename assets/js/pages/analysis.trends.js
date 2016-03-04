@@ -30,9 +30,9 @@ function getTrendData(passed, failed, others, labels) {
         labels: labels,
         datasets: [
             {
-                label: 'Passed',
+                label: 'Pass',
                 fillColor: '#E6F9F6',
-                strokeColor: '#03B59E',
+                strokeColor: '#33cc99',
                 pointColor: '#00AF9A',
                 pointStrokeColor: '#fff',
                 pointHighlightFill: '#fff',
@@ -40,23 +40,23 @@ function getTrendData(passed, failed, others, labels) {
                 data: passed
             },
             {
-                label: 'Failed',
+                label: 'Fail',
                 fillColor: 'rgba(255,90,94,.2)',
                 strokeColor: 'rgba(255,90,94,.5)',
                 pointColor: 'rgba(255,90 94,.5)',
                 pointStrokeColor: '#fff',
-                pointHighlightFill: 'rgb(255,90,94)',
+                pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(151,187,205,1)',
                 data: failed
             },
             {
                 label: 'Others',
-                fillColor: 'rgba(93, 201, 255, .2)',
-                strokeColor: 'rgba(93, 201, 255, .5)',
-                pointColor: 'rgba(93, 201, 255, .5)',
+                fillColor: 'rgba(253, 180, 92, .1)',
+                strokeColor: 'rgba(253, 180, 92, .3)',
+                pointColor: 'rgba(253, 180, 92, .5)',
                 pointStrokeColor: '#fff',
                 pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(93, 201, 255, 1)',
+                pointHighlightStroke: 'rgba(253, 180, 92, 1)',
                 data: others
             }
         ]
@@ -68,6 +68,7 @@ function getTrendData(passed, failed, others, labels) {
 /* chart options for line chart in TRENDS-view */
 var trendOptions = {
     scaleFontSize: 10,
+    scaleBeginAtZero: true,
     legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 };
 

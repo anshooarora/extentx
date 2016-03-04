@@ -6,20 +6,6 @@
  */
 
 module.exports = {
-    trends: function(req, res) {
-        var passed, failed;
-        
-        TestService.getTestsSortedByStatus(['pass'], function(e) {
-            passed = e;
-            
-            TestService.getTestsSortedByStatus(['fatal', 'fail'], function(e) {
-                failed = e;
-                
-                res.view('trends', { passed: passed, failed: failed });
-            });
-        });
-    },
-
     /*
     * dashboard -> reports
     *   show latest report at the top
@@ -40,13 +26,15 @@ module.exports = {
             
             var itemsToIterate = result.length;
             var passed = 0, failed = 0;
+            var categories = null;
 
             var view = function view() {
                 res.view('dashboard', { 
                     fields: result, 
                     statusDistribution: statusDistribution,
                     passedStatus: passed,
-                    failedStatus: failed
+                    failedStatus: failed,
+                    categories: categories
                 });
             }
             
@@ -55,21 +43,25 @@ module.exports = {
 
             TestService.getTestsGroupCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, function(e) {
                 passed = e;
-                
-                TestService.getTestsGroupCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, function(e) {
-                    failed = e;
-                    
-                    for (var ix = 0; ix < result.length; ix++) {
-                        ReportService.getReportDistribution(result[ix].id, function(dist) {
-                            statusDistribution.testDistribution.push(dist.testDistribution);
-                            statusDistribution.logDistribution.push(dist.logDistribution);
-                            
-                            if (--itemsToIterate === 0)
-                                view();
-                        });
-                    }
-                });
             });
+            
+            TestService.getTestsGroupCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, function(e) {
+                failed = e;
+            });
+            
+            CategoryService.getNames(function(cats) {
+                categories = cats;
+            });
+            
+            for (var ix = 0; ix < result.length; ix++) {
+                ReportService.getReportDistribution(result[ix].id, function(dist) {
+                    statusDistribution.testDistribution.push(dist.testDistribution);
+                    statusDistribution.logDistribution.push(dist.logDistribution);
+                    
+                    if (--itemsToIterate === 0)
+                        view();
+                });
+            }
         });
     }
 };

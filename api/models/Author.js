@@ -8,12 +8,16 @@
 module.exports = {
 
   attributes: {
-      reportId: 'string',
+      owner: {
+          model: 'test'
+      },
       
-      testId: 'string',
       testName: 'string',
       
-      name: 'string'
+      reportId: 'string',
+      
+      name: 'string',
+      status: 'string'
   }
 };
 

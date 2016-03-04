@@ -21,7 +21,6 @@ module.exports = {
                 
                 if (err) {
                     console.log(err);
-                    return;
                 }
                 
                 var itemCounts = {
@@ -97,29 +96,12 @@ module.exports = {
     
     showLastRunReport: function(req, res) {
         Report.find({ }).sort({startTime: 'desc'}).limit(1).exec(function(err, report) {
-            
-            Test.find({ 
-                owner: report[0].id
-            }).populateAll().exec(function(err, result) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                
-                var itemsToIterate = result.length;            
-                var history = [];
-                
-                for (var ix = 0; ix < result.length; ix++) {
-                    TestService.getLogs({ name: result[ix].name }, function(tests) {
-                        
-                        history.push(tests);
-                        
-                        if (--itemsToIterate == 0)
-                            res.view('details', { tests: result, history: history });
-                            
-                    });                
-                }
-            });
+            if (report.length > 0) {
+                res.redirect('/reportDetails?id=' + report[0].id);
+            }
+            else {
+                res.view('details', { tests: null, history: null });
+            }
         });
     },
     
@@ -129,7 +111,6 @@ module.exports = {
         }).populateAll().exec(function(err, result) {
             if (err) {
                 console.log(err);
-                return;
             }
             
             var itemsToIterate = result.length;            
@@ -172,34 +153,5 @@ module.exports = {
             }
         });
     }
-    
-    /*reportDistribution: function(req, res) {
-        Report.find({ }).sort({startTime: 'desc'}).exec(function(err, result) {
-            var itemsToIterate = result.length;
-            var distribution = {
-                testDistribution: [],
-                logDistribution: []
-            };
-            
-            for (var ix = 0; ix < result.length; ix++) {
-                
-                Report.getTestDistribution(result[ix].id, function(testDist) {
-                    Report.getLogDistribution(testDist[0].owner, function(logDist) {
-                        ReportService.getReport(testDist[0].owner, function(report) {
-                            testDist.push({ reportTime: new Date(report.startTime) });
-                            logDist.push({ reportTime: new Date(report.startTime) });
-                                                        
-                            distribution.testDistribution.push(testDist);
-                            distribution.logDistribution.push(logDist);
-                            
-                            if (--itemsToIterate === 0)
-                                res.send(200, distribution);
-                        });
-                        
-                    });
-                });
-            }
-        });
-    },*/
 };
 

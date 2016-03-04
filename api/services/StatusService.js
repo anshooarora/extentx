@@ -8,15 +8,15 @@
 module.exports = {
     getIcon: function(status, cb) {
         switch (status) {
-            case 'pass': cb('check circle icon'); break;
-            case 'fail': cb('remove circle icon'); break;                
-            case 'fatal': cb('warning sign icon'); break;
-            case 'error': cb('warning sign icon'); break;
-            case 'warning': cb('warning icon'); break;
-            case 'skip': cb('chevron circle right icon'); break;                
-            case 'info': cb('info circle icon'); break;
+            case 'pass': cb('fa fa-check-circle'); break;
+            case 'fail': cb('fa fa-times-circle'); break;                
+            case 'fatal': cb('fa fa-times-circle'); break;
+            case 'error': cb('fa fa-exclamation-circle'); break;
+            case 'warning': cb('fa fa-warning'); break;
+            case 'skip': cb('fa fa-chevron-circle-right'); break;                
+            case 'info': cb('fa fa-info-circle'); break;
             default:
-                cb('question icon');
+                cb('fa fa-question');
                 break;
         };
     },

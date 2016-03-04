@@ -1,0 +1,192 @@
+<!--
+    arguments:
+        tests
+        history    
+-->
+
+<div class='test item <%= test.status %>'>
+    <div class='content'>
+        <div class='test-name'>
+            <%= test.name %>
+        </div>
+        <div class='test-status'>
+            <span class='<%= test.status %>'>
+                <%
+                    var icon = '';
+                    StatusService.getIcon(test.status, function(e) { icon = e; }); 
+                %>
+                <i class='<%= icon %>'></i>
+            </span>
+        </div>
+        
+        <div class='test-content hidden'>                                            
+            <div class='ui label green'>
+                <%= new Date(test.startTime).toLocaleString().replace(',', '') %>
+            </div>
+            <div class='ui label red'>
+                <%= new Date(test.endTime).toLocaleString().replace(',', '') %>
+            </div>
+            <div class='ui label'>
+                <%= new Date(test.endTime) - new Date(test.startTime) %> ms
+            </div>
+            
+            <div class='test-description'>
+                <%- test.description %>
+            </div>
+            
+            <% var categories = test.categories; %>
+            
+            <div class='category-collection'>
+                <% for (var iy = 0; iy < categories.length; iy++) { %>
+                <span class='ui label'>
+                    <i class='fa fa-tag icon'></i> <%- categories[iy].name %>
+                </span>
+                <% } %>
+            </div>
+            
+            <% var authors = test.authors; %>
+            
+            <div class='author-collection'>
+                <% for (var iy = 0; iy < authors.length; iy++) { %>
+                <span class='ui label'>
+                    <i class='fa fa-user icon'></i> <%- authors[iy].name %>
+                </span>
+                <% } %>
+            </div>
+            
+            <% if (test.logs.length > 0) { %> 
+            <table class='ui table logs'>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var logs = test.logs; %>
+                    
+                    <% for (var iy = 0; iy < logs.length; iy++) { %>
+                        <tr>
+                            <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                            <td class='<%= logs[iy].status %>'>
+                                <%
+                                    var icon = '';
+                                    StatusService.getIcon(logs[iy].status, function(e) { icon = e; }); 
+                                %>
+                                <i class='<%= icon %>'></i>
+                            </td>
+                            <td><%- logs[iy].details %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <% } %>
+            
+            <% if (typeof history !== 'undefined' && history.length > 0) { %>
+            <h3>History</h3>
+            <table class='ui table history'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        var rowNum = 0;
+                        
+                        history.forEach(function(items) {
+                            items.reverse().forEach(function(item) {
+                                if (item.name == test.name && item.id != test.id) {
+                                %>
+                                <tr>
+                                    <td><%= ++rowNum %></td>
+                                    <td id='<%= item.id %>' class='history'>
+                                        <span class='ui label history-link'><i class='fa fa-calendar icon'></i><%= new Date(item.startTime).toLocaleString() %></span>
+                                        <a href='/reportDetails?id=<%= item.owner.id %>'><i class='fa fa-external-link'></i></a>
+                                        
+                                        <div class='history-content hidden'>
+                                            <div class='ui label green'>
+                                                <%= new Date(item.startTime).toLocaleString().replace(',', '') %>
+                                            </div>
+                                            <div class='ui label red'>
+                                                <%= new Date(item.endTime).toLocaleString().replace(',', '') %>
+                                            </div>
+                                            <div class='ui label'>
+                                                <%= new Date(item.endTime) - new Date(item.startTime) %> ms
+                                            </div>
+                                            
+                                            <div class='test-description'>
+                                                <%= item.description %>
+                                            </div>
+                                            
+                                            <% var categories = item.categories; %>
+            
+                                            <div class='category-collection'>
+                                                <% for (var iy = 0; iy < categories.length; iy++) { %>
+                                                    <span class='ui label'><i class='fa fa-tag icon'></i> <%- categories[iy].name %></span>
+                                                <% } %>
+                                            </div>
+                                            
+                                            <% var authors = item.authors; %>
+                                            
+                                            <div class='author-collection'>
+                                                <% for (var iy = 0; iy < authors.length; iy++) { %>
+                                                    <span class='ui label'><i class='fa fa-user icon'></i> <%- authors[iy].name %></span>
+                                                <% } %>
+                                            </div>
+                                            
+                                            <% if (item.logs.length > 0) { %> 
+                                                <table class='ui table logs'>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Timestamp</th>
+                                                            <th>Status</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% var logs = item.logs %>
+                                                        
+                                                        <% for (var iy = 0; iy < logs.length; iy++) { %>
+                                                            <tr>
+                                                                <td><%= new Date(logs[iy].timestamp).toLocaleTimeString().replace(',', '') %></td>
+                                                                <td class='status <%= logs[iy].status %>'>
+                                                                    <%
+                                                                        var icon = '';
+                                                                        StatusService.getIcon(logs[iy].status, function(e) { icon = e; }); 
+                                                                    %>
+                                                                    <i class='<%= icon %>'></i>
+                                                                </td>
+                                                                <td><%- logs[iy].details %></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <%
+                                            var icon = '';
+                                            StatusService.getIcon(item.status, function(e) { icon = e; }); 
+                                        %>
+                                        <span class='<%= item.status %>'>
+                                            <i class='<%= icon %>'></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <%
+                                }
+                            });
+                        });
+                    %>
+            
+                </tbody>
+            </table>
+            <% } %>
+        </div>
+    </div>
+</div>

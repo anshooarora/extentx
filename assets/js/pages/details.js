@@ -1,4 +1,4 @@
-const usedWidth = 470;
+const usedWidth = 480;
 
 $(document).ready(function() {
     setDetailsViewContrainerWidths();
@@ -53,20 +53,18 @@ $('#test-collection .test').click(function() {
     d.find('.cloned-content').html('').append($(testContent).removeClass('hidden'));
 });
 
-$('.details-view td.history').click(function() {
-    var t = $(this);
-    var id = t.prop('id');
-});
-
 $('.details-view .current-details').click(function(evt) {
     var t = $(evt.target);
         
     if (t.is('.history-link')) {
+        $('table.history tr').removeClass('warning');
+        t.closest('tr').addClass('warning');
+        
         $('.details-view .ui.segment.historical-details').removeClass('hidden');
         setDetailsViewContrainerWidths();
         
         var testName = $('.current-details').find('.test-name').html();
-        var historyContent = t.next().clone();
+        var historyContent = t.nextAll('.history-content').first().clone();
         
         var h = $('.historical-details');
         

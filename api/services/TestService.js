@@ -57,7 +57,8 @@ module.exports = {
                         count: { $sum: 1 },
                     }, 
                 },
-                { $sort : sortBy }
+                { $sort : sortBy },
+                { $limit: 10 }
             ],
             function(err, result) {
                 if (err) console.log(err);

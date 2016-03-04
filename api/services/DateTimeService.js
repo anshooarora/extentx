@@ -8,6 +8,6 @@
 module.exports = {
     dateToLocaleString: function(date, cb) {
         var dt = new Date(date).toLocaleDateString().replace(',', '');
-        return cb(dt);
+        cb(dt);
     },
 };

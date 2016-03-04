@@ -6,14 +6,14 @@
  */
 
 module.exports = {
-    searchTests: function(req, res) {
+    search: function(req, res) {
         var startDate = typeof req.query.startDate === 'undefined' || req.query.startDate === '' 
                         ? new Date('01/01/1900') 
                         : new Date(req.query.startDate);
                         
         var endDate = typeof req.query.endDate === 'undefined' || req.query.endDate === ''
                         ? new Date() 
-                        : new Date(req.query.endDate);
+                        : new Date(req.query.endDate + ' 23:59:59');
 
         var regex = req.query.regex;
 
@@ -46,15 +46,6 @@ module.exports = {
                         ? {$ne : null} 
                         : req.query.category;
 
-        Test.count({
-            startTime: { '>=': startDate },
-            endTime: { '<=': endDate },
-            name: name,
-            status: status
-        }).exec(function(err, count) {
-            
-        });
-        
         Test.find({
             startTime: { '>=': startDate },
             endTime: { '<=': endDate },

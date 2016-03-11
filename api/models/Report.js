@@ -21,11 +21,38 @@ module.exports = {
       endTime: 'date',
   },
   
+  getReport: function(id, cb) {
+    Report.findOne({
+        id: id
+    }).exec(function(err, result) {
+        if (err) console.log('ReportService.getReport -> ' + err);
+        
+        cb(result);
+    });
+  },
+  
+  getDistribution: function(id, cb) {
+      var dist = {
+          testDistribution: null,
+          logDistribution: null
+      };
+      
+      Report.getTestDistribution(id, function(d1) {
+          dist.testDistribution = d1;
+
+          Report.getLogDistribution(id, function(d2) {
+              dist.logDistribution = d2;
+
+              cb(dist);
+          })
+      });
+  },
+  
   getTestDistribution: function(id, cb) {
       Test.native(function(err, collection) {
         collection.aggregate(
         [
-            { $match: { owner: new ObjectId(id) } },
+            { $match: { owner: new ObjectId(id), childNodesCount: 0 } },
             { $group: 
                 { 
                     _id: '$status', 
@@ -37,7 +64,13 @@ module.exports = {
             if (err) console.log(err);
             else {
                 result.unshift({ owner: id });
-                cb(result);
+
+                Test.getNodeDistributionByReport(id, function(nodes) {
+                    if (nodes.length > 0)
+                        result = result.concat(nodes);
+
+                    cb(result);
+                });
             }
         });
     });
@@ -45,49 +78,23 @@ module.exports = {
   
   getLogDistribution: function(id, cb) {
       var dist = [];
-      var itemsToIterate = 0;
       
-      var reportDate = '';
-      Report.find({
+      Report.findOne({
           id: id
-      }).sort({startTime: 'desc'}).exec(function(err, result) {
+      }).exec(function(err, result) {
           if (err) console.log('models.Report.getLogDistribution -> ' + err);
-          
-          reportDate = result[0].startTime;
-      });      
+      });
       
-      Test.find({
-          owner: id
-      }).exec(function(err, result) {          
-          if (err) console.log(err);
-          
-          if (result.length == 0)
-            cb(dist);
-          
-          itemsToIterate = result.length;
-                    
-          for (var ix = 0; ix < result.length; ix++) {
+      Test.getLogDistributionByReport(id, function(dist1) {
+          dist.push(dist1);
 
-            Log.native(function(err, collection) {
-                collection.aggregate(
-                [
-                    { $match: { owner: new ObjectId(result[ix].id) } },
-                    { $group: 
-                        { 
-                            _id: '$status',
-                            count: { $sum: 1 } 
-                        },
-                    },
-                ],
-                function(err, logs) {
-                    if (err) console.log(err);
-                    else dist.push(logs);
-                    
-                    if (--itemsToIterate == 0)
-                        cb(dist);
-                });
-            })
-          }
+          Node.getLogDistributionByReport(id, function(dist2) {
+            dist.push(dist2);
+
+            dist = dist1.concat(dist2);
+
+            cb(dist);
+          })
       });
   }
 };

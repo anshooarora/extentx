@@ -140,10 +140,6 @@ i.icon {
 }
 .side-nav .item-name {
     padding-left: 10px;
-    display: none;
-}
-.side-nav.expanded .item-name {
-    display: inline-block;
 }
 
 /* container */
@@ -346,7 +342,7 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 .status i {
 	font-size: 1rem;
 }
-.status.fail, .fail i {
+.status.fail, .fail > i {
 	color: #eb4550;
 } 
 .status.fatal, .fatal > i {

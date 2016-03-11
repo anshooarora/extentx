@@ -7,7 +7,7 @@ $(document).ready(function() {
     var tbody = $('table.history > tbody');
     for (var ix = 0; ix < tbody.length; ix++) {
         var t = tbody.eq(ix);
-        (t.find('tr').length == 0) && (t.parent().html(''));
+        (t.find('tr').length == 0) && (t.parent().addClass('hidden').prev().addClass('hidden'));
     }
 });
 

@@ -139,8 +139,8 @@
                                         var testDistribution = statusDistribution.testDistribution[distIndex];
                                         
                                         testDistribution.forEach(function(item) {
-                                            if (item._id === 'pass') { passed = item.count; }
-                                            else if (item._id === 'fail' || item._id === 'fatal' ) { failed = item.count; }
+                                            if (item._id === 'pass') { passed += item.count; }
+                                            else if (item._id === 'fail' || item._id === 'fatal' ) { failed += item.count; }
                                             else if (item._id === 'skip' || item._id === 'warning' || item._id === 'error') { others += item.count; }
                                         });
                                     %>
@@ -166,7 +166,7 @@
                                         items.forEach(function(item) {
                                             if (item._id === 'pass') { passed += item.count; }
                                             else if (item._id === 'fail' || item._id === 'fatal' ) { failed += item.count; }
-                                            else if (item._id === 'skip' || item._id === 'warning' || item._id === 'error') { others += item.count; }
+                                            else { others += item.count; }
                                         });
                                     });
                                 %>

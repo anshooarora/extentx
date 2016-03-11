@@ -6,37 +6,6 @@
  */
 
 module.exports = {
-    getReport: function(id, cb) {
-        Report.findOne({
-            id: id
-        }).exec(function(err, result) {
-            if (err) console.log('ReportService.getReport -> ' + err);
-            
-            cb(result);
-        });
-    },
-    
-    getReportDistribution: function(id, cb) {
-        var distribution = {
-            testDistribution: null,
-            logDistribution: null        
-        };
-        
-        Report.findOne({ 
-            id: id
-        }).sort({startTime: 'desc'}).exec(function(err, result) {
-            
-            Report.getTestDistribution(result.id, function(testDist) {
-                Report.getLogDistribution(testDist[0].owner, function(logDist) {                                                
-                    distribution.testDistribution = testDist;
-                    distribution.logDistribution = logDist;
-
-                    cb(distribution);                       
-                });
-            });
-        });
-    },
-    
     getReportDistributionWithTimeStamp: function(id, cb) {
         var distribution = {
             testDistribution: null,

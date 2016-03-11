@@ -41,23 +41,23 @@ module.exports = {
             if (itemsToIterate == 0)
                 view();
 
-            TestService.getTestsGroupCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, function(e) {
+            Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                 passed = e;
             });
             
-            TestService.getTestsGroupCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, function(e) {
+            Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                 failed = e;
             });
             
-            CategoryService.getNames(function(cats) {
+            Category.getNames(function(cats) {
                 categories = cats;
             });
             
             for (var ix = 0; ix < result.length; ix++) {
-                ReportService.getReportDistribution(result[ix].id, function(dist) {
+                Report.getDistribution(result[ix].id, function(dist) {
                     statusDistribution.testDistribution.push(dist.testDistribution);
                     statusDistribution.logDistribution.push(dist.logDistribution);
-                    
+
                     if (--itemsToIterate === 0)
                         view();
                 });

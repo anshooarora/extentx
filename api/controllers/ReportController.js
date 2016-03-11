@@ -19,9 +19,7 @@ module.exports = {
                     pages = parseInt((count / limit).toString().split('.')[0]) + 1;
                 }
                 
-                if (err) {
-                    console.log(err);
-                }
+                if (err) console.log(err);
                 
                 var itemCounts = {
                     pagesCount: pages,
@@ -51,28 +49,42 @@ module.exports = {
                     testDistribution: [],
                     logDistribution: []
                 };
-                var itemsToIterate = result.length;
                 
                 // tests count
-                TestService.getTestsGroupCounts({
-                    status: {
-                        $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip']
-                    }}, { status: '$status'}, { count: -1 }, function(testsByStatus) {
-                        
+                Test.getGroupsWithCounts(
+                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] }, childNodesCount: 0 }, // matcher
+                  { status: '$status'}, // groupBy
+                  { count: -1 }, // sort
+                  10, // limit
+                  function(testsByStatus) {    
                     testsByStatus.forEach(function(item) {
                         itemCounts.testsCount += item.count;
                         
-                        (item._id.status === 'pass') && (itemCounts.testsPassed = item.count);
+                        (item._id.status === 'pass') && (itemCounts.testsPassed += item.count);
+                        (item._id.status === 'fail' || item._id.status === 'fatal') && (itemCounts.testsFailed += item.count);
+                    });
+                });
+                
+                // nodes count
+                Node.getGroupsWithCounts(
+                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] } }, // matcher
+                  { status: '$status'}, // groupBy
+                  { count: -1 }, // sort
+                  10, // limit
+                  function(nodesByStatus) {    
+                    nodesByStatus.forEach(function(item) {
+                        itemCounts.testsCount += item.count;
+                        
+                        (item._id.status === 'pass') && (itemCounts.testsPassed += item.count);
                         (item._id.status === 'fail' || item._id.status === 'fatal') && (itemCounts.testsFailed += item.count);
                     });
                 });
                 
                 // steps count
-                StepService.getStepsGroupCounts({
-                    status: {
-                        $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown']
-                    }}, { status: '$status'}, function(stepsByStatus) {
-                        
+                Log.getGroupsWithCounts(
+                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'] }}, // matcher
+                  { status: '$status'}, // groupBy
+                  function(stepsByStatus) {
                     stepsByStatus.forEach(function(item) {
                         itemCounts.stepsCount += item.count;
                         
@@ -81,14 +93,18 @@ module.exports = {
                     });
                 });
                 
+                var itemsToIterate = result.length;
+                
                 for (var ix = 0; ix < result.length; ix++) {
-                    ReportService.getReportDistribution(result[ix].id, function(dist) {
+                    
+                    Report.getDistribution(result[ix].id, function(dist) {
                         statusDistribution.testDistribution.push(dist.testDistribution);
                         statusDistribution.logDistribution.push(dist.logDistribution);
-                        
+
                         if (--itemsToIterate === 0)
                             view();
                     });
+                    
                 }
             });
         });
@@ -117,7 +133,7 @@ module.exports = {
             var history = [];
             
             for (var ix = 0; ix < result.length; ix++) {
-                TestService.getChildren({ name: result[ix].name }, function(tests) {
+                Test.getChildren({ name: result[ix].name }, function(tests) {
                     
                     history.push(tests);
                     
@@ -147,7 +163,7 @@ module.exports = {
                     distribution.logDistribution.push(dist.logDistribution);
                     
                     if (--itemsToIterate === 0)
-                        res.send(200, distribution);
+                        res.json(200, distribution);
                 });
                 
             }

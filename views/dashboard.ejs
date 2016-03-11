@@ -81,8 +81,8 @@
                                             var testDistribution = statusDistribution.testDistribution[distIndex];
                                             
                                             testDistribution.forEach(function(item) {
-                                                item._id === 'pass' && ( passed = item.count );
-                                                (item._id === 'fail' || item._id === 'fatal') && ( failed = item.count );
+                                                item._id === 'pass' && ( passed += item.count );
+                                                (item._id === 'fail' || item._id === 'fatal') && ( failed += item.count );
                                                 (item._id === 'skip' || item._id === 'warning' || item._id === 'error') && ( others += item.count );
                                             });
                                             
@@ -110,9 +110,9 @@
                                             
                                             logDistribution.forEach(function(items) {
                                                 items.forEach(function(item) {
-                                                    item._id === 'pass' && ( passed += item.count );
-                                                    (item._id === 'fail' || item._id === 'fatal' ) && ( failed += item.count );
-                                                    (item._id === 'skip' || item._id === 'warning' || item._id === 'error') && ( others += item.count );
+                                                    if (item._id === 'pass') { passed += item.count; }
+                                                    else if (item._id === 'fail' || item._id === 'fatal' ) { failed += item.count; }
+                                                    else { others += item.count; }
                                                 });
                                             });
                                         %>
@@ -177,7 +177,7 @@
                             <tbody>
                                 <% for (var ix = 0; ix < passedStatus.length; ix++) { %>
                                     <tr>
-                                        <td><a href='/searchTests?regex=exact&name=<%= passedStatus[ix]._id.name %>'><%= passedStatus[ix]._id.name %></a></td>
+                                        <td><a href='/search?regex=exact&name=<%= passedStatus[ix]._id.name %>'><%= passedStatus[ix]._id.name %></a></td>
                                         <td><%= passedStatus[ix].count %></td>
                                     </tr>
                                 <% } %>
@@ -207,7 +207,7 @@
                                 <tbody>
                                     <% for (var ix = 0; ix < failedStatus.length; ix++) { %>
                                         <tr>
-                                            <td><a href='/searchTests?regex=exact&name=<%= failedStatus[ix]._id.name %>'><%= failedStatus[ix]._id.name %></a></td>
+                                            <td><a href='/search?regex=exact&name=<%= failedStatus[ix]._id.name %>'><%= failedStatus[ix]._id.name %></a></td>
                                             <td><%= failedStatus[ix].count %></td>
                                         </tr>
                                     <% } %>

@@ -100,9 +100,26 @@
                 <% include partials/test.ejs %>
             </div>
             <% } %>
-                
-        </div>
             
+            <% if (pages > 1) { %>
+            <div class='ui pagination menu'>
+                <% 
+                    var active = '';
+                    
+                    for (var ix = 0; ix < pages; ix++) { 
+                        (ix + 1 === currentPage) && (active = 'active') || (active = '');
+                %>
+                <a href='?<%= url %>&page=<%= (ix + 1) %>'>
+                    <div class='item <%= active %>'>
+                        <%= (ix + 1) %>
+                    </div>
+                </a>
+                <% } %>
+            </div>
+            <% } %>
+            
+        </div>
+           
         <% } %>
         
     </div>

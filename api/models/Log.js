@@ -12,7 +12,9 @@ module.exports = {
           model: 'test'
       },
       
-      reportId: 'string',
+      report: {
+          model: 'report'
+      },
       
       testName: 'text',
       
@@ -25,6 +27,25 @@ module.exports = {
       stepName: 'text',
       details: 'text',
       timestamp: 'date'
-  }
+  },
+  
+  getGroupsWithCounts: function(matcher, groupBy, cb) {
+        Log.native(function(err, collection) {
+            collection.aggregate(
+            [
+                { $match: matcher },
+                { $group: 
+                    { 
+                        _id: groupBy,
+                        count: { $sum: 1 },
+                    }, 
+                } 
+            ],
+            function(err, result) {
+                if (err) console.log(err);
+                else cb(result);
+            });
+        });
+    },
 };
 

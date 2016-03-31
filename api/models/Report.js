@@ -10,11 +10,32 @@ var ObjectId = require('mongodb').ObjectID;
 module.exports = {
 
   attributes: {
+      /* A report can have one or more tests
+       * There is a one-to-many relationship between report and test
+       * In Waterline, from the Report model, it is possible to do:
+       *   Report.find().populate('tests').. 
+       */
       tests: {
         collection: 'test',
-        via: 'owner'
+        via: 'report'
       },
       
+      /* A report can have one or more categories
+       * There is a one-to-many relationship between report and category
+       */
+      categories: {
+          collection: 'category',
+          via: 'report'
+      },
+      
+      /* A report can have one or more authors
+       * There is a one-to-many relationship between report and author
+       */
+      authors: {
+          collection: 'author',
+          via: 'report'
+      },
+
       reportStatus: 'string',
       fileName: 'string',
       startTime: 'date',
@@ -47,54 +68,61 @@ module.exports = {
           })
       });
   },
-  
+
   getTestDistribution: function(id, cb) {
       Test.native(function(err, collection) {
         collection.aggregate(
         [
-            { $match: { owner: new ObjectId(id), childNodesCount: 0 } },
+            { $match: { report: new ObjectId(id), childNodesCount: 0 } },
             { $group: 
                 { 
                     _id: '$status', 
-                    count: { $sum: 1 } 
+                    count: { $sum: 1 }
                 }, 
              }, 
         ],
         function(err, result) {
             if (err) console.log(err);
             else {
-                result.unshift({ owner: id });
-
-                Test.getNodeDistributionByReport(id, function(nodes) {
-                    if (nodes.length > 0)
-                        result = result.concat(nodes);
-
-                    cb(result);
-                });
+                Report.findOne({ id: id }).exec(function(err, report) { 
+                    Test.getNodeDistributionByReport(id, function(nodes) {
+                        if (nodes && nodes.distribution.length)
+                            result = nodes.distribution.concat(result);
+                        
+                        cb({
+                            report: report,
+                            distribution: result
+                        });
+                    });
+              });
             }
         });
     });
   },
   
   getLogDistribution: function(id, cb) {
-      var dist = [];
-      
       Report.findOne({
           id: id
-      }).exec(function(err, result) {
-          if (err) console.log('models.Report.getLogDistribution -> ' + err);
-      });
-      
-      Test.getLogDistributionByReport(id, function(dist1) {
-          dist.push(dist1);
-
-          Node.getLogDistributionByReport(id, function(dist2) {
-            dist.push(dist2);
-
-            dist = dist1.concat(dist2);
-
-            cb(dist);
-          })
+      }).exec(function(err, report) {
+        Log.native(function(err, collection) {
+            collection.aggregate(
+            [
+                { $match: { report: new ObjectId(report.id) } },
+                { $group: 
+                    { 
+                        _id: '$status',
+                        count: { $sum: 1 } 
+                    },
+                },
+            ],
+            function(err, logs) {
+                if (err) console.log(err);
+                else cb({
+                    report: report,
+                    distribution: logs
+                });
+            });
+        })
       });
   }
 };

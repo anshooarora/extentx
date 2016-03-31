@@ -5,169 +5,161 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = {
-	reports: function(req, res) {
-        var page = typeof req.query.page === 'undefined' || req.query.page === '' ? 1 : (parseInt(req.query.page));
-        var limit = 10;
-        
-        Report.count().exec(function(err, count) {
-            if (err) console.log('ReportController.reports -> ' + err);
-            
-            Report.find({ }).sort({startTime: 'desc'}).paginate({ page: page, limit: limit }).exec(function(err, result) {
-                var pages = (count / limit);
-                if ((count / limit).toString().indexOf('.') > 0) {
-                    pages = parseInt((count / limit).toString().split('.')[0]) + 1;
-                }
-                
-                if (err) console.log(err);
-                
-                var itemCounts = {
-                    pagesCount: pages,
-                    reportsCount: count,
-                    testsCount: 0,
-                    testsPassed: 0,
-                    testsFailed: 0,
-                    stepsCount: 0,
-                    stepsPassed: 0,
-                    stepsFailed: 0
-                }
-                
-                var view = function view() {
-                    res.view('reportSummary', { 
-                        fields: result, 
-                        statusDistribution: statusDistribution,
-                        currentPage: page,
-                        limit: limit,
-                        itemCounts: itemCounts
-                    });
-                }
-                
-                if (result.length == 0)
-                    view();
-                
-                var statusDistribution = {
-                    testDistribution: [],
-                    logDistribution: []
-                };
-                
-                // tests count
-                Test.getGroupsWithCounts(
-                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] }, childNodesCount: 0 }, // matcher
-                  { status: '$status'}, // groupBy
-                  { count: -1 }, // sort
-                  10, // limit
-                  function(testsByStatus) {    
-                    testsByStatus.forEach(function(item) {
-                        itemCounts.testsCount += item.count;
-                        
-                        (item._id.status === 'pass') && (itemCounts.testsPassed += item.count);
-                        (item._id.status === 'fail' || item._id.status === 'fatal') && (itemCounts.testsFailed += item.count);
-                    });
-                });
-                
-                // nodes count
-                Node.getGroupsWithCounts(
-                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] } }, // matcher
-                  { status: '$status'}, // groupBy
-                  { count: -1 }, // sort
-                  10, // limit
-                  function(nodesByStatus) {    
-                    nodesByStatus.forEach(function(item) {
-                        itemCounts.testsCount += item.count;
-                        
-                        (item._id.status === 'pass') && (itemCounts.testsPassed += item.count);
-                        (item._id.status === 'fail' || item._id.status === 'fatal') && (itemCounts.testsFailed += item.count);
-                    });
-                });
-                
-                // steps count
-                Log.getGroupsWithCounts(
-                  { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'] }}, // matcher
-                  { status: '$status'}, // groupBy
-                  function(stepsByStatus) {
-                    stepsByStatus.forEach(function(item) {
-                        itemCounts.stepsCount += item.count;
-                        
-                        (item._id.status === 'pass') && (itemCounts.stepsPassed = item.count);
-                        (item._id.status === 'fail' || item._id.status === 'fatal') && (itemCounts.stepsFailed += item.count);
-                    });
-                });
-                
-                var itemsToIterate = result.length;
-                
-                for (var ix = 0; ix < result.length; ix++) {
-                    
-                    Report.getDistribution(result[ix].id, function(dist) {
-                        statusDistribution.testDistribution.push(dist.testDistribution);
-                        statusDistribution.logDistribution.push(dist.logDistribution);
+var ObjectId = require('mongodb').ObjectID;
 
-                        if (--itemsToIterate === 0)
-                            view();
-                    });
-                    
-                }
+module.exports = {
+    aggregates: function(req, res) {
+        Report.find({}).sort({ startTime: 'desc' }).exec(function(err, result) {
+            if (err) console.log(err);
+
+            var testsCount = 0, testsPassed = 0, testsFailed = 0, stepsCount = 0, stepsPassed = 0, stepsFailed = 0;
+            var testDistribution = [], logDistribution = [];
+            var categories = [];
+            var topPassed = [], topFailed = [];
+            
+            var view = function view() {
+                res.json({
+                    reports: result,
+                    categories: categories,
+                    testDistribution: testDistribution,
+                    logDistribution: logDistribution,
+                    total: {
+                        testsCount: testsCount,
+                        testsPassed: testsPassed,
+                        testsFailed: testsFailed,
+                        stepsCount: stepsCount,
+                        stepsPassed: stepsPassed,
+                        stepsFailed: stepsFailed
+                    },
+                    trends: {
+                        topPassed: topPassed,
+                        topFailed: topFailed
+                    }
+                });
+            }
+
+            if (result.length == 0)
+                view();
+
+            Category.getNames(function(cats) {
+                categories = cats;
+            })
+            
+            // top passed tests
+            Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                topPassed = e;
+                
+                // top failed tests
+                Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                    topFailed = e;
+                });
             });
+
+            // tests count
+            Test.getGroupsWithCounts(
+                { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] }, childNodesCount: 0 }, // matcher
+                { status: '$status' }, // groupBy
+                { count: -1 }, // sort
+                10, // limit
+                function(testsByStatus) {
+                    testsByStatus.forEach(function(item) {
+                        testsCount += item.count;
+
+                        (item._id.status === 'pass') && (testsPassed += item.count);
+                        (item._id.status === 'fail' || item._id.status === 'fatal') && (testsFailed += item.count);
+                    });
+            });
+
+            // nodes count
+            Node.getGroupsWithCounts(
+                { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] } }, // matcher
+                { status: '$status' }, // groupBy
+                { count: -1 }, // sort
+                10, // limit
+                function(nodesByStatus) {
+                    nodesByStatus.forEach(function(item) {
+                        testsCount += item.count;
+
+                        (item._id.status === 'pass') && (testsPassed += item.count);
+                        (item._id.status === 'fail' || item._id.status === 'fatal') && (testsFailed += item.count);
+                    });
+            });
+
+            // steps count
+            Log.getGroupsWithCounts(
+                { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'] } }, // matcher
+                { status: '$status' }, // groupBy
+                function(stepsByStatus) {
+                    stepsByStatus.forEach(function(item) {
+                        stepsCount += item.count;
+
+                        (item._id.status === 'pass') && (stepsPassed = item.count);
+                        (item._id.status === 'fail' || item._id.status === 'fatal') && (stepsFailed += item.count);
+                    });
+            });
+
+            var itemsToIterate = result.length;
+
+            for (var ix = 0; ix < result.length; ix++) {                    
+                Report.getDistribution(result[ix].id, function(dist) {
+                    testDistribution.push(dist.testDistribution);
+                    logDistribution.push(dist.logDistribution);
+
+                    if (--itemsToIterate === 0)
+                        setTimeout(function() { view(); }, 50);
+                });
+
+            }
         });
     },
-    
-    showLastRunReport: function(req, res) {
-        Report.find({ }).sort({startTime: 'desc'}).limit(1).exec(function(err, report) {
-            if (report.length > 0) {
-                res.redirect('/reportDetails?id=' + report[0].id);
-            }
-            else {
-                res.view('details', { tests: null, history: null });
-            }
-        });
-    },
-    
+
     details: function(req, res) {
-        Test.find({ 
-            owner: req.query.id
-        }).populateAll().exec(function(err, result) {
-            if (err) {
-                console.log(err);
-            }
-            
-            var itemsToIterate = result.length;            
-            var history = [];
-            
-            for (var ix = 0; ix < result.length; ix++) {
-                Test.getChildren({ name: result[ix].name }, function(tests) {
-                    
-                    history.push(tests);
-                    
-                    if (--itemsToIterate == 0)
-                        res.view('details', { tests: result, history: history });
-                        
-                });                
-            }
-        });
-    },
-    
-    reportDistribution: function(req, res) {
-        var limit = typeof req.query.limit === 'undefined' ? 10 : parseInt(req.query.limit);
+        req.query = req.body.query;
         
-        Report.find({ }).sort({startTime: 'desc'}).limit(limit).exec(function(err, result) {
+        Test.find({ report: req.query.id }).populateAll().exec(function(err, result) {
+            if (err) console.log(err);
+
+            var out = [];
+            
+            var sendRes = function() {
+                res.json(out);
+            };
+
+            var getNodesWithLogs = function(nodeArray, cb) {
+                if (nodeArray.length === 0) cb(nodeArray);
+
+                var itemsToIterateIn = nodeArray.length;
+                
+                for (var ix = 0; ix < nodeArray.length; ix++) {
+                    (function(ix) {
+                        Log.getLogs({ test: nodeArray[ix].id }, function(logs) {
+                            nodeArray[ix].logs = logs;
+                            
+                            if (--itemsToIterateIn === 0) cb(nodeArray);
+                        });
+                    })(ix);
+                }
+            }
+            
             var itemsToIterate = result.length;
             
-            var distribution = {
-                testDistribution: [],
-                logDistribution: []
-            };
-            
             for (var ix = 0; ix < result.length; ix++) {
-                
-                ReportService.getReportDistributionWithTimeStamp(result[ix].id, function(dist) {
-                    distribution.testDistribution.push(dist.testDistribution);
-                    distribution.logDistribution.push(dist.logDistribution);
+                (function(ix) {
+                    out[ix] = result[ix].toJSON();
                     
-                    if (--itemsToIterate === 0)
-                        res.json(200, distribution);
-                });
-                
+                    if (result[ix].nodes.length > 0) {
+                        getNodesWithLogs(result[ix].toJSON().nodes, function(nodes) {
+                            out[ix].nodes = nodes;
+                            
+                            (--itemsToIterate === 0) && sendRes();
+                        });
+                    }
+                    else {
+                        (--itemsToIterate === 0) && sendRes();
+                    }
+                })(ix)
             }
-        });
+        })
     }
 };
 

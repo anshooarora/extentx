@@ -7,7 +7,6 @@
   "dependencies": {
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
-    "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",
     "grunt-contrib-concat": "~0.3.0",
@@ -33,7 +32,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anshooarora/extentx.git"
+    "url": "git://github.com/anonymous node/sails user/extentx.git"
   },
   "author": "anonymous node/sails user",
   "license": ""

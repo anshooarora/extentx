@@ -10,8 +10,27 @@
  */
 
 module.exports.bootstrap = function(cb) {
-
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+    var settings = [
+        {
+            name: 'trendDataPoints',
+            value: 5
+        }, {
+            name: 'deleteReportsOlderThanDays',
+            value: 60
+        }
+    ];
+    
+    sails.on('lifted', function() {
+        Settings.find().exec(function(err, res) {
+            if (err) console.log(err);
+            
+            if (!res || !res.length) {
+                //Settings.create(settings).exec(function(err, res) { });
+            }
+        });
+    });
+    
+    // It's very important to trigger this callback method when you are finished
+    // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+    cb();
 };

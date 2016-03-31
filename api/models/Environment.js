@@ -8,7 +8,7 @@
 module.exports = {
 
   attributes: {
-      owner: {
+      report: {
           model: 'report'
       },
       

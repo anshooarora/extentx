@@ -27,13 +27,17 @@ var jsFilesToInject = [
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 
-  // Dependencies like jQuery, or Angular are brought in here
-  //'js/dependencies/**/*.js',
+  'js/dependencies/angular-1.5.3.min.js',
+  'js/dependencies/chart-1.0.1.min.js',
   
-  'js/dependencies/jquery-2.2.0.js',
-  'js/dependencies/chartjs-1.0.1.js',
-  'js/dependencies/materialize.min-0.95.0.js',
+  // Dependencies like jQuery, or Angular are brought in here
+  'js/dependencies/**/*.js',
 
+  // modules must come before all controllers
+  'js/api/ExtentX.js',
+  'js/api/common/services/RouteQuery.js',
+  'js/api/common/services/*.js',
+  
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
   'js/**/*.js',

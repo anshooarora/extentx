@@ -10,7 +10,7 @@ var ObjectId = require('mongodb').ObjectID;
 module.exports = {
 
   attributes: {
-      owner: {
+      test: {
           model: 'test'
       },
       
@@ -19,6 +19,16 @@ module.exports = {
       },
       
       parentTestName: 'text',
+      
+      /* A node can have one or more logs
+       * There is a one-to-many relationship between a node and log
+       * In Waterline, from the Node model, to find logs:
+       *   Node.find().populate('logs')..
+       */ 
+      logs: {
+        collection: 'log',
+        via: 'test'
+      },
       
       name: 'text',
       level: 'number',
@@ -33,45 +43,17 @@ module.exports = {
       childNodesCount: 'number',
   },
   
-  getLogDistributionByReport(id, cb) {
-      var dist = [];
-      var nodesToIterate = 0;
-      
-      Node.find({
-          report: id
-      }).exec(function(err, result) {
-          if (err) console.log(err);
-
-          nodesToIterate = result.length;
-        
-          (nodesToIterate === 0) && (cb(result));
-        
-            for (var ix = 0; ix < result.length; ix++) {
-
-            Log.native(function(err, collection) {
-                collection.aggregate(
-                [
-                    { $match: { owner: new ObjectId(result[ix].id) } },
-                    { $group: 
-                        { 
-                            _id: '$status',
-                            count: { $sum: 1 } 
-                        },
-                    },
-                ],
-                function(err, logs) {
-                    if (err) console.log(err);
-                    else dist.push(logs);
-
-                    if (--nodesToIterate === 0)
-                        cb(dist);
-                });
-            })
-            }  
+  getNode: function(json, cb) {
+      Node.findOne(
+          json
+      ).populateAll().exec(function(err, result) {
+          if (err) console.log('getNode -> ' + err);
+            
+          cb(result);
       });
   },
-  
-  getGroupsWithCounts(matcher, groupBy, sortBy, limit, cb) {
+
+  getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
         Node.native(function(err, collection) {
             collection.aggregate(
             [

@@ -1,0 +1,139 @@
+<div class='container main reports-view'>
+    <div class="row" ng-controller="ReportController">
+        <div class='col-md-12'>
+            <h1>Reports</h1>
+        </div>
+
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Total Tests
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.total.testsCount }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Tests Passed
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.total.testsPassed }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Tests Failed
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.total.testsFailed }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Total Steps
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.total.stepsCount }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Steps Passed
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.reports.length}}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-2'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    Steps Failed
+                </div>
+                <div class='segment-lead text-right'>
+                    <strong>{{ res.total.stepsFailed }}</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-12'>
+            <div class='panel panel-default padded'>
+                <div class='panel-heading float-left'>
+                    Reports
+                </div>
+                
+                <label class='label label-default float-right'>
+                    {{ res.reports.length }} Reports
+                </label>
+
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <th>#</th>
+                            <th>File</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Tests</th>
+                            <th>Test Distribution</th>
+                            <th>Steps</th>
+                            <th>Log Distribution</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="report in res.reports track by $index" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
+                                <td>{{ $index + 1 }}</td>
+                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'>{{ res.reports[$index].fileName }}</a></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].endTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td>{{ testDist.passed + testDist.failed + testDist.others }}</td>
+                                <td>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (testDist.passed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.passed }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (testDist.others / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.others }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ (testDist.failed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.failed }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ logDist.passed + logDist.failed + logDist.others }}</td>
+                                <td>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (logDist.passed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.passed }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (logDist.others / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.others }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ (logDist.failed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.failed }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'><i class='fa fa-external-link'></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div.
+            </div>
+        </div>
+        
+    </div>
+</div>

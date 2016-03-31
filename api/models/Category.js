@@ -8,14 +8,30 @@
 module.exports = {
 
   attributes: {
-      owner: {
-          model: 'test'
+      /* tests (many) <-> categories (many)
+       * tests and categories have a many to many relationship
+       *   - a test can be assigned with one or more categories
+       *   - a category can have one or more tests
+       *  In Waterline, from the Category model, to find tests:
+       *   Category.find().populate('tests')..
+       */
+      tests: {
+          collection: 'test',
+          via: 'categories'
+      },
+      
+      /* Owner
+       * A report can have one or more categories
+       * There is a one-to-many relationship between report and category
+       * In Waterline, from the Report model, it is possible to do:
+       *   Report.find().populate('categories').. 
+       */
+      report: {
+          model: 'report'
       },
       
       testName: 'string',
-      
-      reportId: 'string',
-      
+
       name: 'string',
       status: 'string'
   },

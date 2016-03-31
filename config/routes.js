@@ -24,7 +24,7 @@ module.exports.routes = {
 
   /***************************************************************************
   *                                                                          *
-  * Make the view located at `views/index.ejs` (or `views/index.jade`, *
+  * Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, *
   * etc. depending on your default view engine) your home page.              *
   *                                                                          *
   * (Alternatively, remove this and add an `index.html` file in your         *
@@ -32,7 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': 'AnalysisController.dashboard',
+  '/': {
+    view: 'layout'
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -43,13 +45,12 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  
-  '/dashboard': 'AnalysisController.dashboard',
-  
-  '/reports': 'ReportController.reports',
-  '/reportDetails': 'ReportController.details',
-  '/reportDistribution': 'ReportController.reportDistribution',
-  '/lastRunReport': 'ReportController.showLastRunReport',
+
+  '/aggregates': 'ReportController.aggregates',
+  '/details': 'ReportController.details',
   
   '/search': 'SearchController.search',
+  
+  '/getHistory': 'TestController.getHistory',
+  '/getTestsById': 'TestController.getTestById',
 };

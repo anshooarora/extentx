@@ -1,36 +1,54 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>extentX</title>
+    <title>ExtentX</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/dependencies/bootstrap.progress.css">
-    <link rel="stylesheet" href="/styles/dependencies/featherlight.css">
-    <link rel="stylesheet" href="/styles/dependencies/fontawesome.min-4.5.0.css">
-    <link rel="stylesheet" href="/styles/dependencies/jquery-ui.min.css">
-    <link rel="stylesheet" href="/styles/dependencies/semantic-2.1.8.css">
-    <link rel="stylesheet" href="/styles/extent.css">
+    <link rel="stylesheet" href="/styles/dependencies/fontawesome-4.5.0.min.css">
+    <link rel="stylesheet" href="/styles/dependencies/fonts/bootstrap-lumen-3.3.6.min.css">
+    <link rel="stylesheet" href="/styles/extentx.css">
+    <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
 
-  <body>
-    <%- body %>
+  <body ng-app='ExtentX'>
+ 
+    <% include partials/header.ejs %>
+        
+    <div ng-view></div>
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/js/dependencies/jquery-2.2.0.js"></script>
-    <script src="/js/dependencies/chartjs-1.0.1.js"></script>
-    <script src="/js/dependencies/jquery-ui.min.js"></script>
-    <script src="/js/dependencies/semantic-2.1.8.js"></script>
-    <script src="/js/extent.js"></script>
-    <script src="/js/featherlight-1.3.4.js"></script>
-    <script src="/js/pages/analysis.dashboard.js"></script>
-    <script src="/js/pages/analysis.trends.js"></script>
-    <script src="/js/pages/details.js"></script>
-    <script src="/js/pages/search.js"></script>
+    <script src="/js/dependencies/angular-1.5.3.min.js"></script>
+    <script src="/js/dependencies/chart-1.0.1.min.js"></script>
+    <script src="/js/dependencies/angular-bootstrap-1.2.5.min.js"></script>
+    <script src="/js/dependencies/angular-charts-0.9.0.min.js"></script>
+    <script src="/js/dependencies/angular-route-1.5.2.min.js"></script>
+    <script src="/js/dependencies/jquery-1.12.2-min.js"></script>
+    <script src="/js/api/ExtentX.js"></script>
+    <script src="/js/api/common/services/RouteQuery.js"></script>
+    <script src="/js/api/common/services/Aggregates.js"></script>
+    <script src="/js/api/common/services/DateTime.js"></script>
+    <script src="/js/api/common/services/Icon.js"></script>
+    <script src="/js/api/common/services/LineChartSettings.js"></script>
+    <script src="/js/api/common/services/LogDistribution.js"></script>
+    <script src="/js/api/common/services/PieChartSettings.js"></script>
+    <script src="/js/api/common/services/TestDistribution.js"></script>
+    <script src="/js/api/analysis/controllers/TestAnalysisController.js"></script>
+    <script src="/js/api/common/controllers/LogTrendsController.js"></script>
+    <script src="/js/api/common/controllers/TestTrendsController.js"></script>
+    <script src="/js/api/common/directives/startFrom.js"></script>
+    <script src="/js/api/navigation/controllers/NavigationController.js"></script>
+    <script src="/js/api/reports/controllers/ReportController.js"></script>
+    <script src="/js/api/search/controllers/SearchController.js"></script>
+    <script src="/js/api/search/directives/searchInit.js"></script>
+    <script src="/js/api/tests/controllers/HistoryController.js"></script>
+    <script src="/js/api/tests/controllers/TestDetailsController.js"></script>
+    <script src="/js/api/tests/directives/testDetailsViewer.js"></script>
+    <script src="/js/extentx.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>

@@ -8,8 +8,12 @@
 module.exports = {
 
   attributes: {
-      owner: {
+      test: {
           model: 'test'
+      },
+      
+      node: {
+          model: 'node'
       },
       
       report: {
@@ -27,6 +31,16 @@ module.exports = {
       stepName: 'text',
       details: 'text',
       timestamp: 'date'
+  },
+  
+  getLogs: function(json, cb) {
+      Log.find(
+          json
+      ).exec(function(err, result) {
+          if (err) console.log('getLogs -> ' + err);
+            
+          cb(result);
+      });
   },
   
   getGroupsWithCounts: function(matcher, groupBy, cb) {

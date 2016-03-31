@@ -1,37 +1,13 @@
-<div class='toc'>
+<div class='toc' ng-controller='NavigationController'>
     <ul id='slide-out' class='side-nav fixed'>
         <li class='no padding'>
             <a class='logo' title='ExtentX' href='http://extentreports.relevantcodes.com'>extentx</a>
         </li>
         
-        
-        <% 
-            var url = req.url; 
-            var active = '';
-        %>
-        
-        <li class='no-padding <%= (url === "/dashboard" || url === "/") && ("active") %>'>
-            <a alt='Dashboard' title='Dashboard' href='/dashboard'>
-                <i class='fa fa-th-large'></i>
-                <span class='item-name hidden'>Dashboard</span>
-            </a>
-        </li>
-        <li class='no-padding  <%= (url === "/reports") && ("active") %>'>
-            <a alt='Reports' title='Reports' href='/reports'>
-                <i class='fa fa-folder-o'></i>
-                <span class='item-name hidden'>Reports</span>
-            </a>
-        </li>
-        <li class='no-padding  <%= (url === "/lastRunReport") && ("active") %>'>
-            <a alt='Last Run Report' title='Last Run Report' href='/lastRunReport'>
-                <i class='fa fa-history'></i>
-                <span class='item-name hidden'>Last Run</span>
-            </a>
-        </li>        
-        <li class='no-padding  <%= (url === "/search") && ("active") %>'>
-            <a alt='Search' title='Search' href='/search'>
-                <i class='fa fa-search'></i>
-                <span class='item-name hidden'>Search</span>
+        <li ng-repeat="item in items" class="no-padding" ng-class="{'active': item.id == states.activeItem}" ng-click="states.activeItem=item.id">
+            <a href='{{ item.target }}' alt='{{ item.title }}' title='{{ item.title }}'>
+                <i class='fa {{ item.icon }}'></i>
+                <span class="item-name hidden">{{ item.title }}</span>
             </a>
         </li>
     </ul>

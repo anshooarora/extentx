@@ -1,0 +1,126 @@
+<div class='container main details-view' ng-controller="TestDetailsController">
+    <div class='row' test-details-viewer>
+        
+        <div class='col-md-12' ng-if="!tests.length">
+            <h1>Tests</h1>
+            <p>No tests.</p>
+        </div>
+        
+        <div class='row' ng-if="tests.length">
+            <div class='four wide column'>
+                <div class='test-names'>
+                    
+                    <h1 style='padding: 5px 0 10px 20px;'>
+                        Tests
+                    </h1>
+                    
+                    <div id='test-collection' class='list divided'>
+                        <div ng-repeat='test in tests'>
+                            <ng-include src="'partials/test.html'"></ng-include>
+                        </div>
+                    </div>
+                    <!-- /test-collection -->
+                    
+                </div>
+            </div>
+            
+            <div>
+                <div class='current-details'>
+                    <h2 class='test-name'>
+                        
+                    </h2>
+                    
+                    <div class='cloned-content'>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-controller="HistoryController">
+                <div class='historical-details hidden'>
+                    <h2 class='test-name'>
+                        {{ historicalTest.name }}
+                    </h2>
+                    
+                    <div class='test-content'>                        
+                        <div class='test-content'>                                            
+                            <div class='label green'>
+                                {{ historicalTest.startTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+                            </div>
+                            <div class='label red'>
+                                {{ historicalTest.endTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+                            </div>
+                            <div class='label label-default'>
+                                {{ getTimeDifference(historicalTest.endTime, historicalTest.startTime) }} ms
+                            </div>
+                            
+                            <div class='test-description'>
+                                {{ historicalTest.description }}
+                            </div>
+                            
+                            <div class='category-collection' ng-if="historicalTest.categories.length">
+                                <span class='label' ng-repeat='category in historicalTest.categories'>
+                                    <i class='fa fa-tag icon'></i> {{ category.name }}
+                                </span>
+                            </div>
+                            
+                            <div class='author-collection' ng-if="historicalTest.authors.length">
+                                <span class='label' ng-repeat='author in historicalTest.authors'>
+                                    <i class='fa fa-user icon'></i> {{ author.name }}
+                                </span>
+                            </div>
+                            
+                            <table class='table' ng-if="historicalTest.logs.length" style="margin-top:14px;">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Status</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat='log in historicalTest.logs' alt='{{ log.status }}' title='{{ log.status }}'>
+                                        <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                                        <td class='{{ log.status }}'>
+                                            <i class='{{ getIcon(log.status) }}'></i>
+                                        </td>
+                                        <td ng-bind-html='trust(log.details)'></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="ui styled fluid accordion" ng-if="historicalTest.nodes.length">
+                                <div class='accordion-wrap' ng-repeat='node in historicalTest.nodes track by $index'>
+                                    <div class="title" >
+                                        <i class="fa fa-caret-down icon"></i>
+                                        {{ node.name }}
+                                    </div>
+                                    <div class="content">
+                                        <table class='ui table logs' ng-if="node.logs.length">
+                                            <thead>
+                                                <tr>
+                                                    <th>Timestamp</th>
+                                                    <th>Status</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat='log in node.logs'>
+                                                    <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                                                    <td class='{{ log.status }}'>
+                                                        <i class='{{ getIcon(log.status) }}'></i>
+                                                    </td>
+                                                    <td ng-bind-html='trust(log.details)'></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+<div class='container main dashboard-view' ng-controller="ReportController">
+    <div class="row">
+        <div class='col-md-12'>
+            <h1>Dashboard</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class='col-md-6' class='col-md-8' ng-controller="TestTrendsController">
+            <div class="panel panel-default padded">
+                <div class='panel-heading'>
+                    Report Trends By Status - Test 
+                </div>
+                
+                <div class='panel-body'>
+                    <canvas id='test-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-md-6' ng-controller="LogTrendsController">
+            <div class='panel panel-default padded'>
+                <div class='panel-heading'>
+                    Report Trends By Status - Step 
+                </div>
+                <div class='panel-body'>
+                    <canvas id='log-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class='col-lg-8 col-md-7'>
+            <div class="panel panel-default padded">
+                <div class="panel-heading">
+                    Reports (Last 5 Runs)
+                </div>
+                
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <th>#</th>
+                            <th>File</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Test Distribution</th>
+                            <th>Log Distribution</th>
+                            <th></th>
+                        </thead>
+                        <tbody>            
+                            <tr ng-repeat="report in res.reports track by $index" ng-if="$index < 5" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
+                                <td>{{ $index + 1 }}</td>
+                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'>{{ res.reports[$index].fileName }}</a></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].endTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (testDist.passed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.passed }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (testDist.others / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.others }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ (testDist.failed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ testDist.failed }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (logDist.passed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.passed }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (logDist.others / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.others }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ (logDist.failed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
+                                            <span class='sr-only'>{{ logDist.failed }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'><i class='fa fa-external-link'></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class='col-lg-4 col-md-5' ng-controller='TestAnalysisController'>
+            <div class='panel panel-default padded inverted'>
+                <div class='panel-heading'>
+                    Analysis (Last 5 Runs)
+                </div>
+                
+                <div class='panel-body'>
+                    <div class='chart-box'>
+                        <canvas id='dashboard-test-analysis' class='chart chart-doughnut' chart-data="data" chart-labels="labels" chart-legend="true" chart-options="options" chart-colours="colors"></canvas>
+                    </div>
+                </div>
+                
+                <div class='ui segment-footer'>
+                    <div class='text-small'><strong>{{ pass + fail + fatal + error + warning + skip + unknown }}</strong> tests, <strong>{{ pass }}</strong> passed</div>
+                    <div class='text-small'><strong>{{ fail + fatal }}</strong> tests failed, <strong>{{ error + warning + skip + unknown}}</strong> others</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class='panel panel-default padded'>
+                <div class='panel-heading'>
+                    Top Passed
+                </div>
+                
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="test in res.trends.topPassed track by $index" ng-if="$index < 10">
+                                <td><a href='#/search?regex=exact&name={{ test._id.name }}'>{{ test._id.name }}</a></td>
+                                <td>{{ test.count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class='panel panel-default padded'>
+                <div class='panel-heading'>
+                    Top Failed
+                </div>
+                
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="test in res.trends.topFailed track by $index" ng-if="$index < 10">
+                                <td><a href='#/search?regex=exact&name={{ test._id.name }}'>{{ test._id.name }}</a></td>
+                                <td>{{ test.count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class='panel panel-default padded'>
+                <div class='panel-heading'>
+                    Categories
+                </div>
+                
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="category in res.categories">
+                                <td>{{ category }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

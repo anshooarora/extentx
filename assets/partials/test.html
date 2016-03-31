@@ -1,0 +1,122 @@
+<div class='test panel panel-default {{ test.status }}'>
+    <div class='content panel-body'>
+        <div class='test-name'>
+            {{ test.name }}
+        </div>
+        <div class='test-status'>
+            <span class='{{ test.status }}'>                
+                <i class='{{ getIcon(test.status) }}'></i>
+            </span>
+        </div>
+        
+        <div class='test-content {{ testContentDisplayClass }}'>                                            
+            <div class='label green'>
+                 {{ test.startTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+            </div>
+            <div class='label red'>
+                {{ test.endTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+            </div>
+            <div class='label label-default'>
+                {{ getTimeDifference(test.endTime, test.startTime) }} ms
+            </div>
+            
+            <div class='test-description'>
+                {{ test.description }}
+            </div>
+            
+            <div class='category-collection' ng-if="test.categories.length">
+                <span class='ui label' ng-repeat='category in test.categories'>
+                    <i class='fa fa-tag icon'></i> {{ category.name }}
+                </span>
+            </div>
+            
+            <div class='author-collection' ng-if="test.authors.length">
+                <span class='ui label' ng-repeat='author in test.authors'>
+                    <i class='fa fa-user icon'></i> {{ author.name }}
+                </span>
+            </div>
+            
+            <table class='table' ng-if="test.logs.length">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='log in test.logs' alt='{{ log.status }}' title='{{ log.status }}'>
+                        <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                        <td class='{{ log.status }}'>
+                            <i class='{{ getIcon(log.status) }}'></i>
+                        </td>
+                        <td ng-bind-html='trust(log.details)'></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <uib-accordion close-others="true" ng-if="test.nodes.length">
+                <uib-accordion-group class='extent-node' ng-repeat='node in test.nodes track by $index' is-open="false" is-disabled="false">
+                    <uib-accordion-heading>
+                        {{ node.name }}
+                        <div class='float-right {{ node.status }}'>
+                            <i class='{{ getIcon(node.status) }}'></i>
+                        </div>
+                    </uib-accordion-heading>    
+                    
+                    <div class="content">
+                        <table class='ui table logs' ng-if="node.logs.length">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='log in node.logs'>
+                                    <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                                    <td class='{{ log.status }}'>
+                                        <i class='{{ getIcon(log.status) }}'></i>
+                                    </td>
+                                    <td ng-bind-html='trust(log.details)'></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+
+            <div ng-if='showHistory' ng-controller="HistoryController">
+                <button class="btn btn-primary" ng-click="getHistory(test.name, test.id)">
+                    Show History
+                </button>
+                <p></p>
+                <table class='table history' ng-if="history.length > 0">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>ReportID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat='test in history track by $index' id='{{ test.id }}'>
+                            <td>{{ $index + 1 }}</td>
+                            <td class='history-link' ng-click="getTest(test.id)">{{ test.report.fileName }}</td>
+                            <td>{{ test.report.id }}</td>
+                            <td><span class='label history-link' ng-click="getTest(test.id)"><i class='fa fa-calendar icon'></i>{{ test.startTime | date: 'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                            <td class='{{ test.status }}'><i class='{{ getIcon(test.status) }}'></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class='ui ignored info message' ng-if="history.length === 0">
+                    No history available.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

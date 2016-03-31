@@ -1,0 +1,109 @@
+<div class="container main search-view" ng-controller="SearchController" search-init="">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Search</h1>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="panel panel-default padded">
+                <div class="panel-body">
+                    <form class="form" novalidate ng-model="query">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    
+                                    <div class="input-group">
+                                        <input type="text" placeholder="MM/dd/yyyy" class="form-control" uib-datepicker-popup="{{ dateFormat }}" ng-model="startDate" is-open="startDatePicker.opened" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="openStartDate()"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <div class="input-group">
+                                        <input type="text" placeholder="MM/dd/yyyy" class="form-control" uib-datepicker-popup="{{ dateFormat }}" ng-model="endDate" is-open="endDatePicker.opened" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="openEndDate()"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Regex</label>
+                                    <select class="form-control" id="regex" ng-model="query.regex">
+                                        <option value="contains">contains</option>
+                                        <option value="exact">exact</option>
+                                        <option value="startsWith">startsWith</option>
+                                        <option value="endsWith">endsWith</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Test Name</label>
+                                    <input class="form-control" placeholder="Test Name" type="text" id="name" ng-model="query.name">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select multiple="" class="form-control" name="status" ng-model="query.status">
+                                        <option value="">Select Status</option>
+                                        <option value="pass">Pass</option>
+                                        <option value="fail">Fail</option>
+                                        <option value="fatal">Fatal</option>
+                                        <option value="error">Error</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="skip">Skip</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="ui field" ng-controller="ReportController">
+                            <label>Category</label>
+                            <select multiple="" class="dropdown" name="category" ng-model="query.category">
+                                <option value="">Select Category</option>
+                                <option ng-repeat="category in res.categories" value="{{ category }}">{{ category }}</option>
+                            </select>
+                        </div>
+                        -->
+                        <a onclick="#!" class="btn btn-default">
+                            Clear
+                        </a>
+                        <button ng-click="search(query); initAccordion();" type="submit" class="btn btn-primary">
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8" ng-if="response.tests.length">
+            <div ng-repeat="test in response.tests | startFrom:currentPage*pageSize | limitTo:pageSize" style="background:white;padding:5px 10px 0;">
+                <ng-include src="'partials/test.html'"></ng-include>
+            </div>
+            
+            <button class="btn btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage = currentPage - 1">
+                Previous
+            </button>
+            <button class="btn btn-primary" ng-disabled="currentPage >= response.tests.length/pageSize - 1" ng-click="currentPage = currentPage + 1">
+                Next
+            </button>
+            
+            <span class="label">showing page {{ currentPage + 1 }} of {{ getNumberOfPages(response.tests.length) }}</span>
+        </div>
+    </div>
+</div>

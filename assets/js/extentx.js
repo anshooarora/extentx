@@ -1,7 +1,3 @@
-$(document).ready(function() {
-
-});
-
 $('#expand-sidenav').click(function() {
     $(this).children('i').toggleClass('fa-arrow-circle-o-right fa-arrow-circle-o-left');
     $('.side-nav').toggleClass('expanded');

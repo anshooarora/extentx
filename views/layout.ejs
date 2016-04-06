@@ -5,7 +5,9 @@
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <!-- csrf token -->
+    <meta name="csrf-token" content="<%= req.session.csrfSecret %>">
+    
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/dependencies/fontawesome-4.5.0.min.css">
     <link rel="stylesheet" href="/styles/dependencies/fonts/bootstrap-lumen-3.3.6.min.css">
@@ -26,11 +28,13 @@
     <script src="/js/dependencies/chart-1.0.1.min.js"></script>
     <script src="/js/dependencies/angular-bootstrap-1.2.5.min.js"></script>
     <script src="/js/dependencies/angular-charts-0.9.0.min.js"></script>
+    <script src="/js/dependencies/angular-cookies-1.5.3.min.js"></script>
     <script src="/js/dependencies/angular-route-1.5.2.min.js"></script>
     <script src="/js/dependencies/jquery-1.12.2-min.js"></script>
     <script src="/js/api/ExtentX.js"></script>
     <script src="/js/api/common/services/RouteQuery.js"></script>
     <script src="/js/api/common/services/Aggregates.js"></script>
+    <script src="/js/api/common/services/CSRFToken.js"></script>
     <script src="/js/api/common/services/DateTime.js"></script>
     <script src="/js/api/common/services/Icon.js"></script>
     <script src="/js/api/common/services/LineChartSettings.js"></script>
@@ -39,6 +43,7 @@
     <script src="/js/api/common/services/TestDistribution.js"></script>
     <script src="/js/api/analysis/controllers/TestAnalysisController.js"></script>
     <script src="/js/api/common/controllers/LogTrendsController.js"></script>
+    <script src="/js/api/common/controllers/ProjectController.js"></script>
     <script src="/js/api/common/controllers/TestTrendsController.js"></script>
     <script src="/js/api/common/directives/startFrom.js"></script>
     <script src="/js/api/navigation/controllers/NavigationController.js"></script>

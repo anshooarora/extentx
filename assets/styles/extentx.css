@@ -305,9 +305,15 @@ label, .label {
     text-transform: none;
     transition: background 0.1s ease 0s, box-shadow 0.1s ease 0s, color 0.1s ease 0s;
 }
-.navbar .item:first-child {
+.navbar > span.item:first-child {
     cursor: pointer;
     font-size: 15px;
+}
+.navbar a {
+    color: rgba(0,0,0,0.87);;
+}
+.navbar div.item {
+    display: inline-block;
 }
 .navbar.padded {
     left: 160px !important;

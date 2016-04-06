@@ -11,6 +11,22 @@
         <i class='fa fa-search'></i>
     </a>
     
+    <span class="item" uib-dropdown on-toggle="toggled(open)" ng-controller="ReportController">
+        <a href alt="Select Project" title="Select Project" id="simple-dropdown" uib-dropdown-toggle ng-if="res.projects.length > 1">
+            <i class="fa fa-folder-open"></i>
+        </a>
+        <ul uib-dropdown-menu aria-labelledby="simple-dropdown">
+            <li ng-repeat="project in res.projects">
+                <a href ng-controller="ProjectController" ng-click="update(project.name)">{{ project.name }}</a>
+            </li>
+            <li>
+                <a href ng-controller="ProjectController" ng-click="update('')"><span class='label green'>Reset</span></a>
+            </li>
+        </ul>
+    </span>
+    
+    <a class='item' href='#!'><span class='label'><%= typeof req.session.project !== 'undefined' && req.session.project != null && req.session.project !== '' ? req.session.project : '' %></span></a>
+    
     <div class='float-right menu'>
         <a class='item' href='http://extentreports.relevantcodes.com'>Extent</a>
         <a class='item' href='http://github.com/anshooarora/extentx'>GitHub</a>

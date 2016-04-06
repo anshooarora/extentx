@@ -1,6 +1,6 @@
 angular.module('ExtentX').
-    controller('SearchController', ['$scope', '$sce', '$http', '$location', '$timeout', 'Icon', 'DateTime', 
-    function($scope, $sce, $http, $location, $timeout, Icon, DateTime) {
+    controller('SearchController', ['$rootScope', '$scope', '$sce', '$http', '$location', '$timeout', 'Icon', 'DateTime', 
+    function($rootScope, $scope, $sce, $http, $location, $timeout, Icon, DateTime) {
         $scope.trust = $sce.trustAsHtml;
         $scope.testContentDisplayClass = '';
         $scope.showHistory = false;
@@ -45,10 +45,11 @@ angular.module('ExtentX').
                 }
             };
             
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
             $http(req).
                 success(function(response) {
                     $scope.response = response;
-                    console.log(response);
                 }).
                 error(function(response) {
                     console.log(response);

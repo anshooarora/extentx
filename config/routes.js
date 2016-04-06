@@ -46,6 +46,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  '/switchProject': 'ProjectController.switchProject',
+
   '/aggregates': 'ReportController.aggregates',
   '/details': 'ReportController.details',
   

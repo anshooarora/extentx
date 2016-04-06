@@ -1,12 +1,12 @@
 <div class='container main details-view' ng-controller="TestDetailsController">
     <div class='row' test-details-viewer>
         
-        <div class='col-md-12' ng-if="!tests.length">
+        <div class='col-md-12' ng-if="tests.length === 0">
             <h1>Tests</h1>
             <p>No tests.</p>
         </div>
         
-        <div class='row' ng-if="tests.length">
+        <div class='row'>
             <div class='four wide column'>
                 <div class='test-names'>
                     

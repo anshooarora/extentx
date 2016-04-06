@@ -1,9 +1,9 @@
 angular.module('ExtentX')
-    .controller('ReportController', ['$scope', '$http', 'Report', 'TestDistribution', 'LogDistribution', 
-    function($scope, $http, Report, TestDistribution, LogDistribution) {
+    .controller('ReportController', ['$scope', '$http', 'Aggregates', 'TestDistribution', 'LogDistribution', 
+    function($scope, $http, Aggregates, TestDistribution, LogDistribution) {
         var testDistribution = null, logDistribution = null;
         
-        Report.then(function(res) {
+        Aggregates.then(function(res) {
             $scope.res = res;
 
             testDistribution = res.testDistribution;

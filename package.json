@@ -2,7 +2,7 @@
   "name": "extentx",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "Report Server for ExtentReports",
   "keywords": [],
   "dependencies": {
     "ejs": "~0.8.4",
@@ -32,8 +32,8 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anonymous node/sails user/extentx.git"
+    "url": "git://github.com/anshooarora/extentx.git"
   },
-  "author": "anonymous node/sails user",
-  "license": ""
+  "author": "Anshoo Arora, Relevant Codes",
+  "license": "BSD-3"
 }

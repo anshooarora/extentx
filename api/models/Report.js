@@ -10,6 +10,10 @@ var ObjectId = require('mongodb').ObjectID;
 module.exports = {
 
   attributes: {
+      project: {
+          model: 'project',
+      },
+      
       /* A report can have one or more tests
        * There is a one-to-many relationship between report and test
        * In Waterline, from the Report model, it is possible to do:

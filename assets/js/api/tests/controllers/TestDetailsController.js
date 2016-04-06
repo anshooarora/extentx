@@ -1,6 +1,6 @@
 angular.module('ExtentX').
-    controller('TestDetailsController', ['$scope', '$sce', '$http', '$location', 'Icon', 'DateTime', 
-    function($scope, $sce, $http, $location, Icon, DateTime) {
+    controller('TestDetailsController', ['$rootScope', '$scope', '$sce', '$http', '$location', 'Icon', 'DateTime', 
+    function($rootScope, $scope, $sce, $http, $location, Icon, DateTime) {
         $scope.trust = $sce.trustAsHtml;
         $scope.showHistory = true;
         $scope.path = '/reportDetails';
@@ -23,6 +23,8 @@ angular.module('ExtentX').
                 }
             };
             
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
             $http(req).
                 success(function(response) {
                     console.log(response);
@@ -40,6 +42,8 @@ angular.module('ExtentX').
                     query: { id: id }
                 }
             };
+            
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
             
             $http(req).
                 success(function(response) {

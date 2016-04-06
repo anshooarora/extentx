@@ -1,4 +1,4 @@
-angular.module('ExtentX', ['ngRoute', 'chart.js', 'ui.bootstrap']).
+angular.module('ExtentX', ['ngRoute', 'ngCookies', 'chart.js', 'ui.bootstrap']).
     config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $routeProvider.
             when('/', { templateUrl: 'partials/analysis.html' }).

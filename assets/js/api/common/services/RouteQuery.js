@@ -5,7 +5,7 @@ angular.module('ExtentX').
                 var data = {};
                 var defer = $q.defer();
                 var service = {};
-                
+
                 $http.get(route).
                     success(function(response) {
                         defer.resolve(response);
@@ -27,12 +27,4 @@ angular.module('ExtentX').
                     });
             }
         }
-    }]).
-    
-    factory('Report', ['$http', '$q', 'RouteQuery', function($http, $q, dataFromRoute) {
-        return dataFromRoute.get('/aggregates');
-    }]).
-    
-    factory('Analysis', ['$http', '$q', 'RouteQuery', function($http, $q, dataFromRoute) {
-        return dataFromRoute.get('/analysis');
     }]);

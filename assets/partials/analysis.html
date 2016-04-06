@@ -5,7 +5,13 @@
         </div>
     </div>
     
-    <div class="row">
+    <div class="row" ng-if="res.resports.length === 0">
+        <div class="col-md-12">
+            No tests.
+        </div>
+    </div>
+    
+    <div class="row" ng-if="res.reports.length">
         <div class='col-md-6' class='col-md-8' ng-controller="TestTrendsController">
             <div class="panel panel-default padded">
                 <div class='panel-heading'>
@@ -30,7 +36,7 @@
         </div>
     </div>
         
-    <div class="row">
+    <div class="row" ng-if="res.reports.length">
         <div class='col-lg-8 col-md-7'>
             <div class="panel panel-default padded">
                 <div class="panel-heading">
@@ -108,7 +114,7 @@
         </div>
     </div>
     
-    <div class="row">
+    <div class="row" ng-if="res.reports.length">
         <div class="col-md-4">
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>

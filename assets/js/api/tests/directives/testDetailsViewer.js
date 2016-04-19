@@ -1,7 +1,13 @@
 angular.module('ExtentX').
-    directive('testDetailsViewer', function() {
-        const usedWidth = 480;
+    directive('testDetailsViewer', ['$rootScope', function($rootScope) {
+        var navWidth, testNamesColWidth, usedWidth;
         
+        function init() { 
+            navWidth = parseInt($('#slide-out').css('width').replace('px', ''));
+            testNamesColWidth = parseInt($('.details-view .test-names').css('width').replace('px', ''));
+            usedWidth = navWidth + testNamesColWidth;
+        }
+
         setDetailsViewContrainerWidths();
 
         $(window).resize(function() {
@@ -9,25 +15,40 @@ angular.module('ExtentX').
         });
 
         function setDetailsViewContrainerWidths() {
+            init();
+                
             if (!$('.details-view') || $('.details-view').length === 0) return;
+
+            var freeWidth = $(document).width() - usedWidth - 5;
+
+            /* test names column starts where side-nav ends */
+            $('.details-view .test-names').css('left', navWidth);
             
-            var freeWidth = $(document).width() - usedWidth;
+            /* current details start where test-names column ends*/
+            $('.details-view .current-details').css('left', usedWidth + 'px');
             
             if ($('.details-view .historical-details').hasClass('hidden')) {
                 $('.details-view .current-details').css('width', freeWidth);
             }
             else {
                 $('.details-view .current-details, .details-view .historical-details').css('width', (freeWidth / 2));
-                $('.details-view .historical-details').css('left', usedWidth + (freeWidth / 2) - 10);
+                $('.details-view .historical-details').css('left', usedWidth + (freeWidth / 2));
             }
         }
         
         $('body').click(function(evt) {
             var t = $(evt.target);
             
-            if (t.is('.test-name')) {
-                t = t.closest('.test');
+            if (t.is('#expand-sidenav') || t.is('#expand-sidenav i')) {
+                console.log('in');
+                setTimeout(function() {
+                    init();
+                    setDetailsViewContrainerWidths();
+                }, 300);
             }
+            
+            if (t.is('.test-name'))
+                t = t.closest('.test');
             
             if (t.is('.test')) {
                 var clonedTestContent = $('.cloned-content .test-content');
@@ -62,4 +83,4 @@ angular.module('ExtentX').
         return {
             restrict: 'A'
         }
-    });
+    }]);

@@ -4,6 +4,7 @@ angular.module('ExtentX').
         $scope.trust = $sce.trustAsHtml;
         $scope.testContentDisplayClass = '';
         $scope.showHistory = false;
+        $scope.padded = $rootScope.sideNavToggled ? 'padded': '';
         
         /* datepicker */
         $scope.dateFormat = 'MM/dd/yyyy';

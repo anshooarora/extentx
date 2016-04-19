@@ -374,7 +374,7 @@ label, .label {
     width: 100%;
 }
 .container.padded {
-    padding-left: 17.5rem !important;
+    padding-left: 18rem !important;
 }
 
 /* form */
@@ -481,6 +481,7 @@ table.report-summary th:first-child, table.report-summary td:first-child {
     overflow-y: auto;
     position: fixed;
     top: 48px;
+    transition: all ease .33s;
 }
 .details-view .current-details, .details-view .historical-details {
     padding: 0 20px;
@@ -553,7 +554,6 @@ table.report-summary th:first-child, table.report-summary td:first-child {
     text-decoration: none;
 }
 
-    
 /* search view */
 .search-view .test-name {
     font-size: 21px;
@@ -598,40 +598,9 @@ table.report-summary th:first-child, table.report-summary td:first-child {
     background: transparent !important;
 }
 
-
-
-/* dark thene */
-/*
-.details-view .ui.segment.test-names {
-    background: #222 none repeat scroll 0 0;
-    color: white;
-    left: 70px;
-    width: 400px;
+/* chrome */
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+    body {
+        font-size: 15px;
+    }
 }
-.details-view .ui.segment.test-names, .details-view .ui.segment.current-details, .details-view .ui.segment.historical-details {
-    border-left: 1px solid #333 !important;
-}
-.details-view #test-collection .test {
-    border-bottom: 1px solid #333 !important;
-}
-.details-view #test-collection .test:first-child {
-    border-top: 1px solid #333;
-}
-.details-view .ui.segment.current-details {
-    background: #222 none repeat scroll 0 0;
-    color: white;
-    left: 470px;
-}
-.ui.table {
-    background: #222 none repeat scroll 0 0;
-    color: white;
-    font-size: 1em;
-}
-.ui.table thead th, .ui.top.menu {
-    background: #222 none repeat scroll 0 0 !important;
-    color: white !important;
-}
-pre, .details-view #test-collection .test.active {
-    background: #333 !important;
-}
-*/

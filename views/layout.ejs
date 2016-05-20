@@ -9,8 +9,8 @@
     <meta name="csrf-token" content="<%= req.session.csrfSecret %>">
     
     <!--STYLES-->
+    <link rel="stylesheet" href="/styles/dependencies/bootstrap-lumen-3.3.6.min.css">
     <link rel="stylesheet" href="/styles/dependencies/fontawesome-4.5.0.min.css">
-    <link rel="stylesheet" href="/styles/dependencies/fonts/bootstrap-lumen-3.3.6.min.css">
     <link rel="stylesheet" href="/styles/extentx.css">
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
@@ -41,8 +41,13 @@
     <script src="/js/api/common/services/LogDistribution.js"></script>
     <script src="/js/api/common/services/PieChartSettings.js"></script>
     <script src="/js/api/common/services/TestDistribution.js"></script>
+    <script src="/js/api/admin/controllers/AdminController.js"></script>
     <script src="/js/api/analysis/controllers/TestAnalysisController.js"></script>
+    <script src="/js/api/authentication/controllers/SigninController.js"></script>
+    <script src="/js/api/authentication/controllers/SignoutController.js"></script>
+    <script src="/js/api/authentication/controllers/UserController.js"></script>
     <script src="/js/api/common/controllers/LogTrendsController.js"></script>
+    <script src="/js/api/common/controllers/ModalInstanceController.js"></script>
     <script src="/js/api/common/controllers/ProjectController.js"></script>
     <script src="/js/api/common/controllers/TestTrendsController.js"></script>
     <script src="/js/api/common/directives/startFrom.js"></script>

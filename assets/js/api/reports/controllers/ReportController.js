@@ -2,7 +2,7 @@ angular.module('ExtentX')
     .controller('ReportController', ['$rootScope', '$scope', '$http', 'Aggregates', 'TestDistribution', 'LogDistribution', 
     function($rootScope, $scope, $http, Aggregates, TestDistribution, LogDistribution) {
         $scope.padded = $rootScope.sideNavToggled ? 'padded': '';
-        
+        $scope.test = 'label label-primary';
         var testDistribution = null, logDistribution = null;
         
         Aggregates.then(function(res) {

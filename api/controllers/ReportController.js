@@ -8,6 +8,27 @@
 var ObjectId = require('mongodb').ObjectID;
 
 module.exports = {
+    archive: function(req, res) {
+        var reportId = req.body.query;
+        
+        // move all models to their archive
+        
+        res.send(200);
+    },
+    
+    destroy: function(req, res) {
+        var reportId = req.body.query;
+
+        Report.destroy({ id: reportId }).exec(function(err) {});
+        Author.destroy({ report: reportId }).exec(function(err) {});
+        Category.destroy({ report: reportId }).exec(function(err) {});
+        Log.destroy({ report: reportId }).exec(function(err) {});
+        Node.destroy({ report: reportId }).exec(function(err) {});
+        Test.destroy({ report: reportId }).exec(function(err) {});
+        
+        res.send(200);
+    },
+       
     aggregates: function(req, res) {
         var project = { $ne: null };
         if (typeof req.session.project !== 'undefined' && req.session.project != null) 

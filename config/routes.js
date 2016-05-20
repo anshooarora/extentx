@@ -46,10 +46,15 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  '/login': 'UserController.login',
+  '/isLoggedIn': 'UserController.isLoggedIn',
+  '/logout': 'UserController.logout',
+  
   '/switchProject': 'ProjectController.switchProject',
 
   '/aggregates': 'ReportController.aggregates',
   '/details': 'ReportController.details',
+  '/destroy': 'ReportController.destroy',
   
   '/search': 'SearchController.search',
   

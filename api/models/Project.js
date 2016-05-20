@@ -16,8 +16,8 @@ module.exports = {
         *   Report.find({ project: projectId }).. 
         */
         reports: {
-        collection: 'report',
-        via: 'project'
+            collection: 'report',
+            via: 'project'
         },
         
         name: 'string'

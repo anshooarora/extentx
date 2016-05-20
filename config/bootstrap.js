@@ -21,11 +21,29 @@ module.exports.bootstrap = function(cb) {
     ];
     
     sails.on('lifted', function() {
+        // default settings
         Settings.find().exec(function(err, res) {
             if (err) console.log(err);
             
             if (!res || !res.length) {
-                //Settings.create(settings).exec(function(err, res) { });
+                Settings.create(settings).exec(function(err, res) { });
+            }
+        });
+        
+        // default user [admin]
+        User.find({ user: 'admin' }).exec(function(err, user) {
+            if (err) throw (err);
+            
+            if (!user || !user.length) {
+                var bcrypt = require('bcryptjs');
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync('password', salt);
+
+                User.create({
+                    name: 'root',
+                    password: hash,
+                    admin: true
+                }).exec(function(err, created) { });
             }
         });
     });

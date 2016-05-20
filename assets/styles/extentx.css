@@ -67,7 +67,7 @@ i.icon {
     font-family: fontawesome;
 }
 
-/* bootstrap overrides */
+/* progress-bar */
 .progress {
     height: 20px;
     margin-bottom: 0;
@@ -78,11 +78,11 @@ i.icon {
 .progress > span, span.sr-only {
     position: initial;
 }
+
+/* table */
 table a:not(.btn), .table a:not(.btn) {
     text-decoration: none;
 }
-
-/* table */
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 0.714286em;
 }
@@ -152,6 +152,11 @@ td.info, td.warning, td.fail, td.fatal, td.error, td.pass {
 .panel-default > .panel-heading {
     background: none;
     padding-bottom: 15px;
+}
+
+/* dropdown */
+.dropdown-menu {
+    min-width: 100px;
 }
 
 /* labels */
@@ -305,8 +310,10 @@ label, .label {
     text-transform: none;
     transition: background 0.1s ease 0s, box-shadow 0.1s ease 0s, color 0.1s ease 0s;
 }
-.navbar > span.item:first-child {
+.navbar > span {
     cursor: pointer;
+}
+.navbar > span.item:first-child {
     font-size: 15px;
 }
 .navbar a {
@@ -600,7 +607,5 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 
 /* chrome */
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
-    body {
-        font-size: 15px;
-    }
+
 }

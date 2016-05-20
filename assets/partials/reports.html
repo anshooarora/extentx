@@ -92,6 +92,7 @@
                             <th>Steps</th>
                             <th>Log Distribution</th>
                             <th></th>
+                            <th ng-controller="AdminController" ng-if="isAdmin"></th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="report in res.reports track by $index" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
@@ -128,6 +129,17 @@
                                     </div>
                                 </td>
                                 <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'><i class='fa fa-external-link'></i></a></td>
+                                <td ng-controller="AdminController" ng-if="isAdmin">
+                                    <div class="btn-group" uib-dropdown is-open="status.isopen">
+                                        <button id="single-button" type="button" class="btn btn-default btn-xs" uib-dropdown-toggle ng-disabled="disabled">
+                                            <i class="fa fa-user"></i> &nbsp; <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                            <!-- <li role="menuitem"><a href="" ng-click="archiveReport(res.reports[$index].id)">Archive</a></li> -->
+                                            <li role="menuitem"><a href="" ng-click="destroyReport(res.reports[$index].id)">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

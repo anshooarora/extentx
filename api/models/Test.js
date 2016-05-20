@@ -146,7 +146,7 @@ module.exports = {
         });
     },
     
-    getGroupsWithCounts(matcher, groupBy, sortBy, limit, cb) {
+    getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
         Test.native(function(err, collection) {
             collection.aggregate(
             [

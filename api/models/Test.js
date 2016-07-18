@@ -93,7 +93,7 @@ module.exports = {
     getTests: function(json, cb) {
         Test.find(
             json
-        ).populateAll().exec(function(err, result) {
+        ).sort({"startTime": -1}).populateAll().exec(function(err, result) {
             if (err) console.log('TestService.getTests -> ' + err);
             
             cb(result);

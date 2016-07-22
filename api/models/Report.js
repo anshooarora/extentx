@@ -40,7 +40,7 @@ module.exports = {
           via: 'report'
       },
 
-      reportStatus: 'string',
+      status: 'string',
       fileName: 'string',
       startTime: 'date',
       endTime: 'date',

@@ -37,7 +37,7 @@ module.exports.bootstrap = function(cb) {
             // ensure each setting is available
             _(settings).forEach(function(el) {
                 Settings.findOne({ name: el.name }).exec(function(err, result) {
-                    if (typeof result === 'undefined') {
+                    if (typeof result === 'undefined' || result.length === 0) {
                         Settings.create({
                             name: el.name,
                             value: el.value

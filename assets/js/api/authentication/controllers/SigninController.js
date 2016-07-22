@@ -18,8 +18,6 @@ angular.module('ExtentX').
             
             $http(req).
                 success(function(response) {
-                    console.log(response);
-                    
                     $rootScope.loggedIn = true;
                     $rootScope.loggedInUserName = response.user.name;
                     $rootScope.isAdmin = response.user.admin;
@@ -43,7 +41,7 @@ angular.module('ExtentX').
         $scope.open = function (size) {
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
-                templateUrl: 'myModalContent.html',
+                templateUrl: 'signin.html',
                 controller: 'ModalInstanceController',
                 size: 'sm',
                 resolve: {

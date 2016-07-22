@@ -30,7 +30,9 @@
     <!-- check if a user is logged-in on page-load -->    
     <a class="hidden" ng-controller='UserController' ng-init="isLoggedIn();"></a>
     <!-- sign-in button -->
-    <span alt="Sign in" title="Sign in" ng-controller='SigninController' ng-if='loggedIn === undefined || loggedIn == false' ng-click='open()' class='item' href='#!'><i class='fa fa-user'></i></span>
+    <span alt="Sign in" title="Sign in" ng-controller='SigninController' ng-if='loggedIn === undefined || loggedIn == false' ng-click='open()' class='item' href='#!'>
+        <i class='fa fa-user'></i>
+    </span>
     <!-- if signed in, allow actions via the user-name label -->
     <span ng-if="loggedInUserName !== null" uib-dropdown on-toggle="toggled(open)">
         <a href alt="User {{ loggedInUserName }}" title="User {{ loggedInUserName }}" id="user-dropdown" uib-dropdown-toggle>
@@ -46,9 +48,10 @@
     <div class='float-right menu'>
         <a class='item' href='http://extentreports.relevantcodes.com'>Extent</a>
         <a class='item' href='http://github.com/anshooarora/extentx'>GitHub</a>
-        <a class='item' href='#!'>v0.1-alpha</a>
+        <a class='item' href='#!'>v0.2-alpha</a>
     </div>
 </div>
             
 <% include sidenav.ejs %>
 <% include signin.ejs %>
+<% include dataPointsSetting.ejs %>

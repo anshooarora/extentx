@@ -3,10 +3,12 @@ angular.module('ExtentX')
     function($rootScope, $scope, $http, Aggregates, TestDistribution, LogDistribution) {
         $scope.padded = $rootScope.sideNavToggled ? 'padded': '';
         $scope.test = 'label label-primary';
+
         var testDistribution = null, logDistribution = null;
         
         Aggregates.then(function(res) {
             $scope.res = res;
+            $scope.max = res.trendDataPoints;
 
             testDistribution = res.testDistribution;
             logDistribution = res.logDistribution;

@@ -60,4 +60,6 @@ module.exports.routes = {
   
   '/getHistory': 'TestController.getHistory',
   '/getTestsById': 'TestController.getTestById',
+
+  '/dataPointSettings': 'SettingsController.dataPointSettings',
 };

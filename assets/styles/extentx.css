@@ -66,6 +66,9 @@ strong {
 i.icon {
     font-family: fontawesome;
 }
+.pointer {
+    cursor: pointer;
+}
 
 /* progress-bar */
 .progress {
@@ -442,9 +445,9 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 
 /* analysis -> dashboard */
 #dashboard-test-analysis {
-    height: 135px !important;
+    height: 100px !important;
     margin: 0 auto;
-    width: 220px !important;
+    width: 170px !important;
 }
 .chart-box {
 	display: block;

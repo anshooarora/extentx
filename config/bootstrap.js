@@ -9,11 +9,16 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
+var _ = require('lodash');
+
 module.exports.bootstrap = function(cb) {
     var settings = [
         {
             name: 'trendDataPoints',
             value: 5
+        }, {
+            name: 'trendDataPointFormat',
+            value: 'long-dt'
         }, {
             name: 'deleteReportsOlderThanDays',
             value: 60
@@ -28,6 +33,18 @@ module.exports.bootstrap = function(cb) {
             if (!res || !res.length) {
                 Settings.create(settings).exec(function(err, res) { });
             }
+
+            // ensure each setting is available
+            _(settings).forEach(function(el) {
+                Settings.findOne({ name: el.name }).exec(function(err, result) {
+                    if (typeof result === 'undefined') {
+                        Settings.create({
+                            name: el.name,
+                            value: el.value
+                        }).exec(function(err, created) { });
+                    }
+                });
+            });
         });
         
         // default user [admin]

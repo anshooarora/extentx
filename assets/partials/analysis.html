@@ -12,10 +12,13 @@
     </div>
     
     <div class="row" ng-if="res.reports.length">
-        <div class='col-md-6' class='col-md-8' ng-controller="TestTrendsController">
+        <div class='col-md-6' ng-controller="TestTrendsController">
             <div class="panel panel-default padded">
                 <div class='panel-heading'>
-                    Report Trends By Status - Test 
+                    Report Trends By Status - Test
+                    <span class='pull-right pointer' ng-controller='DataPointsController' ng-click='open()' href='#!'>
+                        <i class='fa fa-gear'></i>
+                    </span>
                 </div>
                 
                 <div class='panel-body'>
@@ -28,6 +31,9 @@
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>
                     Report Trends By Status - Step 
+                    <span class='pull-right pointer' ng-controller='DataPointsController' ng-click='open()' href='#!'>
+                        <i class='fa fa-gear'></i>
+                    </span>
                 </div>
                 <div class='panel-body'>
                     <canvas id='log-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
@@ -55,7 +61,7 @@
                             <th></th>
                         </thead>
                         <tbody>            
-                            <tr ng-repeat="report in res.reports track by $index" ng-if="$index < 5" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
+                            <tr ng-repeat="report in res.reports track by $index" ng-if="$index < max" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
                                 <td>{{ $index + 1 }}</td>
                                 <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'>{{ res.reports[$index].fileName }}</a></td>
                                 <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>

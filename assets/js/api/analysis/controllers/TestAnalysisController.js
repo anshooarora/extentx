@@ -2,11 +2,11 @@ angular.module('ExtentX').
     controller('TestAnalysisController', ['$scope', 'Aggregates', 'PieChartSettings', function($scope, Aggregates, PieChartSettings) {
         Aggregates.then(function(response) {
             var testDistribution = response.testDistribution;
-            var max = testDistribution.length > 4 ? 5 : testDistribution.length;
+            $scope.max = response.trendDataPoints > testDistribution.length ? testDistribution.length : response.trendDataPoints;
 
             $scope.pass = 0, $scope.fail = 0, $scope.fatal = 0, $scope.error = 0, $scope.warning = 0, $scope.skip = 0, $scope.unknown = 0;
             
-            for (var ix = 0; ix < max; ix++) {
+            for (var ix = 0; ix < $scope.max; ix++) {
                 testDistribution[ix].distribution.forEach(function(item) {
                     switch (item._id) {
                         case 'pass': $scope.pass += item.count; break;

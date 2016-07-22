@@ -20,8 +20,7 @@
                 {{ getTimeDifference(test.endTime, test.startTime) }} ms
             </div>
             
-            <div class='test-description'>
-                {{ test.description }}
+            <div class='test-description' ng-bind-html='trust(test.description)'>
             </div>
             
             <div class='category-collection' ng-if="test.categories.length">

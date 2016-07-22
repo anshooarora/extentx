@@ -9,21 +9,8 @@ angular.module('ExtentX').
             var labels = [];
             var passed = [], failed = [], others = [];
             var length = res.length > dataPoints ? dataPoints : res.length;
-            
-            // function getDataPointFormat(ix) {
-            //     switch(dataPointFormat) {
-            //         case 'num':
-            //             return ix + 1;
-            //         case 'dt':
-            //             var date = new Date(res[ix].report.startTime);
-            //             return (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
-            //         default:
-            //             return (new Date(res[ix].report.startTime)).toLocaleString();
-            //     }
-            // }
 
             for (var ix = length - 1; ix >= 0; ix--) {
-                //labels.push(getDataPointFormat(ix));
                 labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, res, ix));
                 
                 var dist = TestDistribution.getTestDistribution(res[ix]);

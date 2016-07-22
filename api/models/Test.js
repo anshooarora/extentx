@@ -67,12 +67,23 @@ module.exports = {
       },
 
       name: 'text',
+      bdd: {
+          type: 'boolean',
+          defaultsTo: false
+      },
+      bddType: {
+          type: 'string',
+          enum: ['feature', 'background', 'scenario', 'given', 'when', 'then', 'and']
+      },
       status: {
           type: 'string',
           enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'unknown'],
           defaultsTo: 'unknown'
       },
-      categorized: 'boolean',
+      categorized: {
+          type: 'boolean',
+          defaultsTo: false
+      },
       description: 'text',
       warnings: 'text',
       startTime: 'date',

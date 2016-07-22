@@ -44,6 +44,35 @@ module.exports = {
       fileName: 'string',
       startTime: 'date',
       endTime: 'date',
+
+      /* 
+      * stats 
+      */
+      passParent: 'number',
+      failParent: 'number',
+      fatalParent: 'number',
+      errorParent: 'number',
+      warningParent: 'number',
+      skipParent: 'number',
+      unknownParent: 'number',
+
+      passChild: 'number',
+      failChild: 'number',
+      fatalChild: 'number',
+      errorChild: 'number',
+      warningChild: 'number',
+      skipChild: 'number',
+      unknownChild: 'number',
+      infoChild: 'number',
+
+      passGrandChild: 'number',
+      failGrandChild: 'number',
+      fatalGrandChild: 'number',
+      errorGrandChild: 'number',
+      warningGrandChild: 'number',
+      skipGrandChild: 'number',
+      unknownGrandChild: 'number',
+      infoGrandChild: 'number'
   },
   
   getReport: function(id, cb) {

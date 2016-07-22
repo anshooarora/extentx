@@ -39,6 +39,9 @@
             <span class="label label-info">{{ loggedInUserName }} &nbsp; <i class="fa fa-user"></i></span>
         </a>
         <ul uib-dropdown-menu aria-labelledby="user-dropdown">
+            <li ng-if="isAdmin">
+                <a href="#/admin"><i class='fa fa-user-secret'></i> &nbsp; Admin Panel</a>
+            </li>
             <li>
                 <a href ng-controller="SignoutController" ng-click="logout()">Logout</a>
             </li>

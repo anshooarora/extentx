@@ -12,7 +12,6 @@ angular.module('ExtentX').
                     url: '/isLoggedIn'
                 }).
                 success(function(response) {
-                    console.log(response);
                     $rootScope.loggedIn = true;
                     $rootScope.loggedInUserName = response.user.name;
                     $rootScope.isAdmin = response.user.admin;

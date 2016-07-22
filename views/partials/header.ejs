@@ -6,24 +6,6 @@
         <i class='fa fa-search'></i>
     </a>
     
-    <!-- project selection -->
-    <span class="item" uib-dropdown on-toggle="toggled(open)" ng-controller="ReportController">
-        <a href alt="Select Project" title="Select Project" id="project-dropdown" uib-dropdown-toggle ng-if="res.projects.length > 1">
-            <i class="fa fa-folder-open"></i>
-        </a>
-        <ul uib-dropdown-menu aria-labelledby="project-dropdown">
-            <li ng-repeat="project in res.projects">
-                <a href ng-controller="ProjectController" ng-click="update(project.name)">
-                    <span>{{ project.name }}</span>
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a href ng-controller="ProjectController" ng-click="update('')">Reset</a>
-            </li>
-        </ul>
-    </span>
-    
     <!-- current project -->
     <!---<a class='item' href=''><span class='label'><%= typeof req.session.project !== 'undefined' && req.session.project != null && req.session.project !== '' ? req.session.project : '' %></span></a>-->
 
@@ -46,7 +28,25 @@
                 <a href ng-controller="SignoutController" ng-click="logout()">Logout</a>
             </li>
         </ul>
-    </span>    
+    </span>
+
+    <!-- project selection -->
+    <span class="item" uib-dropdown on-toggle="toggled(open)" ng-controller="ReportController">
+        <a href alt="Select Project" title="Select Project" id="project-dropdown" uib-dropdown-toggle ng-if="res.projects.length > 1">
+            <i class="fa fa-folder-open"></i>
+        </a>
+        <ul uib-dropdown-menu aria-labelledby="project-dropdown">
+            <li ng-repeat="project in res.projects">
+                <a href ng-controller="ProjectController" ng-click="update(project.name)">
+                    <span>{{ project.name }}</span>
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href ng-controller="ProjectController" ng-click="update('')">Reset</a>
+            </li>
+        </ul>
+    </span>
     
     <div class='float-right menu'>
         <a class='item' href='http://extentreports.relevantcodes.com'>Extent</a>

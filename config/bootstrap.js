@@ -32,19 +32,19 @@ module.exports.bootstrap = function(cb) {
             
             if (!res || !res.length) {
                 Settings.create(settings).exec(function(err, res) { });
-            }
-
-            // ensure each setting is available
-            _(settings).forEach(function(el) {
-                Settings.findOne({ name: el.name }).exec(function(err, result) {
-                    if (typeof result === 'undefined' || result.length === 0) {
-                        Settings.create({
-                            name: el.name,
-                            value: el.value
-                        }).exec(function(err, created) { });
-                    }
+            } else {
+                // ensure each setting is available
+                _(settings).forEach(function(el) {
+                    Settings.findOne({ name: el.name }).exec(function(err, result) {
+                        if (typeof result === 'undefined' || result.length === 0) {
+                            Settings.create({
+                                name: el.name,
+                                value: el.value
+                            }).exec(function(err, created) { });
+                        }
+                    });
                 });
-            });
+            }
         });
         
         // default user [admin]

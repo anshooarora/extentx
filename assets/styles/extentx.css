@@ -435,6 +435,9 @@ table.ui-datepicker-calendar {
 table.report-summary th:first-child, table.report-summary td:first-child {
     width: 50px;
 }
+.progress-col {
+    width: 12%;
+}
 
 /* analysis -> trends */
 #test-trends, #log-trends {

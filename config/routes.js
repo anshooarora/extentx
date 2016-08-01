@@ -46,7 +46,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/destroyReport': 'AdminController.destroyReport',
   '/deleteOlderThanXDays': 'AdminController.deleteOlderThanXDays',
 
   '/login': 'UserController.login',
@@ -57,7 +56,8 @@ module.exports.routes = {
 
   '/aggregates': 'ReportController.aggregates',
   '/details': 'ReportController.details',
-  
+  '/destroyReport': 'ReportController.destroyReportWithDeps',
+
   '/search': 'SearchController.search',
   
   '/getHistory': 'TestController.getHistory',

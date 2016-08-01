@@ -9,19 +9,6 @@ var ObjectId = require('mongodb').ObjectID,
     _ = require('lodash');
 
 module.exports = {
-    destroyReport: function(req, res) {
-        var reportId = req.body.query;
-
-        Report.destroy({ id: reportId }).exec(function(err) {});
-        Author.destroy({ report: reportId }).exec(function(err) {});
-        Category.destroy({ report: reportId }).exec(function(err) {});
-        Log.destroy({ report: reportId }).exec(function(err) {});
-        Node.destroy({ report: reportId }).exec(function(err) {});
-        Test.destroy({ report: reportId }).exec(function(err) {});
-        
-        res.send(200);
-    },
-
     deleteOlderThanXDays: function(req, res) {
         var days = req.body.query,
             dt = new Date(),

@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var ObjectId = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID,
+    _ = require('lodash');
 
 module.exports = {
     archive: function(req, res) {
@@ -16,7 +17,7 @@ module.exports = {
         res.send(200);
     },
     
-    destroy: function(req, res) {
+    destroyReportWithDeps: function(req, res) {
         var reportId = req.body.query;
 
         Report.destroy({ id: reportId }).exec(function(err) {});
@@ -63,34 +64,26 @@ module.exports = {
                 var testDistribution = [], logDistribution = [];
                 var categories = [];
                 var topPassed = [], topFailed = [];
-                
+
                 var projects = null;
 
                 var view = function view() {
-                    res.json({
+                    var out = {
                         projects: projects,
                         reports: result,
                         categories: categories,
-                        testDistribution: testDistribution,
-                        logDistribution: logDistribution,
                         trendDataPoints: trendDataPoints,
                         trendDataPointFormat: trendDataPointFormat,
                         token: {
                             csrf: req.session.csrfSecret
                         },
-                        total: {
-                            testsCount: testsCount,
-                            testsPassed: testsPassed,
-                            testsFailed: testsFailed,
-                            stepsCount: stepsCount,
-                            stepsPassed: stepsPassed,
-                            stepsFailed: stepsFailed
-                        },
                         trends: {
                             topPassed: topPassed,
                             topFailed: topFailed
                         }
-                    });
+                    };
+                    
+                    res.json(out);
                 }
 
                 if (result.length == 0)
@@ -109,64 +102,9 @@ module.exports = {
                     // top failed tests
                     Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                         topFailed = e;
+                        view();
                     });
                 });
-
-                // tests count
-                Test.getGroupsWithCounts(
-                    { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] }, childNodesCount: 0 }, // matcher
-                    { status: '$status' }, // groupBy
-                    { count: -1 }, // sort
-                    10, // limit
-                    function(testsByStatus) {
-                        testsByStatus.forEach(function(item) {
-                            testsCount += item.count;
-
-                            (item._id.status === 'pass') && (testsPassed += item.count);
-                            (item._id.status === 'fail' || item._id.status === 'fatal') && (testsFailed += item.count);
-                        });
-                });
-
-                // nodes count
-                Node.getGroupsWithCounts(
-                    { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip'] } }, // matcher
-                    { status: '$status' }, // groupBy
-                    { count: -1 }, // sort
-                    10, // limit
-                    function(nodesByStatus) {
-                        nodesByStatus.forEach(function(item) {
-                            testsCount += item.count;
-
-                            (item._id.status === 'pass') && (testsPassed += item.count);
-                            (item._id.status === 'fail' || item._id.status === 'fatal') && (testsFailed += item.count);
-                        });
-                });
-
-                // steps count
-                Log.getGroupsWithCounts(
-                    { status: { $in: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'] } }, // matcher
-                    { status: '$status' }, // groupBy
-                    function(stepsByStatus) {
-                        stepsByStatus.forEach(function(item) {
-                            stepsCount += item.count;
-
-                            (item._id.status === 'pass') && (stepsPassed = item.count);
-                            (item._id.status === 'fail' || item._id.status === 'fatal') && (stepsFailed += item.count);
-                        });
-                });
-
-                var itemsToIterate = result.length;
-
-                for (var ix = 0; ix < result.length; ix++) {                    
-                    Report.getDistribution(result[ix].id, function(dist) {
-                        testDistribution.push(dist.testDistribution);
-                        logDistribution.push(dist.logDistribution);
-
-                        if (--itemsToIterate === 0)
-                            setTimeout(function() { view(); }, 50);
-                    });
-
-                }
             });
         });
     },

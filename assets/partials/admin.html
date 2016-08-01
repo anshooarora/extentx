@@ -1,0 +1,44 @@
+<div ng-if="!isAdmin" class='container main admin-view {{ padded }}'>
+    <div class="row">
+        <div class='col-md-6'>
+            &nbsp;
+            <div class="panel inverted padded">
+                <div class='panel-heading'>
+                    Not Authorized
+                    <span class='pull-right'><i class='fa fa-user-secret'></i></span>
+                </div>
+
+                <div class='panel-body'>
+                    You are not authorized to view this page.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="isAdmin" class='container main admin-view {{ padded }}' ng-controller="AdminController">
+    <div class="row">
+        <div class='col-md-12'>
+            <h1>Admin</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class='col-md-6'>
+            <div class="panel panel-default padded">
+                <div class='panel-heading'>
+                    Report Settings
+                </div>
+
+                <div class='panel-body'>
+                    &nbsp;
+                    <form class='form-inline' ng-model="query">
+                        Delete reports older than &nbsp; <input class='form-control' ng-model='query.days' type='number' style='width:100px;'> &nbsp; days
+
+                        <button class="pull-right btn btn-primary" type="button" ng-click="deleteOlderThanXDays(query.days)" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

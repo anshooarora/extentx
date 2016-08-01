@@ -34,6 +34,25 @@ module.exports = {
         if (typeof req.session.project !== 'undefined' && req.session.project != null) 
             project = req.session.project;
 
+        // system default data-points
+        var trendDataPoints = 5,
+            trendDataPointFormat = 'long-dt';
+        // override data-points if admin has set this value globally
+        Settings.findOne({ name: 'trendDataPoints' }).exec(function(err, result) {
+            trendDataPoints = result.value;
+
+            // if user has a local setting, override all others with this
+            if (typeof req.session.trendDataPoints !== 'undefined')
+                trendDataPoints = req.session.trendDataPoints;
+        })
+        Settings.findOne({ name: 'trendDataPointFormat' }).exec(function(err, result) {
+            trendDataPointFormat = result.value;
+
+            // if user has a local setting, override all others with this
+            if (typeof req.session.trendDataPointFormat !== 'undefined')
+                trendDataPointFormat = req.session.trendDataPointFormat;
+        })
+
         Project.find({ name: project }).exec(function(err, projects) {
             if (projects.length && projects.length === 1) project = projects[0].id;
             
@@ -54,6 +73,8 @@ module.exports = {
                         categories: categories,
                         testDistribution: testDistribution,
                         logDistribution: logDistribution,
+                        trendDataPoints: trendDataPoints,
+                        trendDataPointFormat: trendDataPointFormat,
                         token: {
                             csrf: req.session.csrfSecret
                         },

@@ -1,19 +1,15 @@
 angular.module('ExtentX').
     controller('AdminController', ['$scope', '$rootScope', '$http', '$window', function($scope, $rootScope, $http, $window) {
         $scope.archiveReport = function(reportId) {
-            console.log(reportId);
             var currentPageTemplate = $route.current.templateUrl;
                     $templateCache.remove(currentPageTemplate);
                     $route.reload();
-                    console.log(currentPageTemplate);
         };
         
         $scope.destroyReport = function(reportId) {
-            console.log(reportId);
-            
             var req = {
                 method: 'POST',
-                url: '/destroy',
+                url: '/destroyReport',
                 data: {
                     query: reportId
                 }
@@ -30,4 +26,26 @@ angular.module('ExtentX').
                     console.log('report not destroyed');
                 });
         };
+
+        $scope.deleteOlderThanXDays = function(days) {
+            if (days !== 'undefined' && typeof days !== 'undefined') {
+                var req = {
+                    method: 'POST',
+                    url: '/deleteOlderThanXDays',
+                    data: {
+                        query: days
+                    }
+                };
+                
+                $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+
+                $http(req).
+                    success(function(response) {
+                        $window.location.reload();
+                    }).
+                    error(function(response) {
+                        console.log(response);
+                    });
+            }
+        }
     }]);

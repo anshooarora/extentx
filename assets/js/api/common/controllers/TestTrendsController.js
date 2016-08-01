@@ -1,15 +1,17 @@
 angular.module('ExtentX').
-    controller('TestTrendsController', ['$scope', 'Aggregates', 'TestDistribution', 'DateTime', 'LineChartSettings', 
-      function($scope, Aggregates, TestDistribution, DateTime, LineChartSettings) {
+    controller('TestTrendsController', ['$scope', 'Aggregates', 'TestDistribution', 'DateTime', 'LineChartSettings', 'DataPointFormat', 
+      function($scope, Aggregates, TestDistribution, DateTime, LineChartSettings, DataPointFormat) {
         Aggregates.then(function(response) {
+            var dataPoints = response.trendDataPoints;
+            var dataPointFormat = response.trendDataPointFormat;
             var res = DateTime.sortByDate(response.testDistribution);
             
             var labels = [];
             var passed = [], failed = [], others = [];
-            var length = res.length > 5 ? 5 : res.length;
+            var length = res.length > dataPoints ? dataPoints : res.length;
 
             for (var ix = length - 1; ix >= 0; ix--) {
-                labels.push(new Date(res[ix].report.startTime).toLocaleString());
+                labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, res, ix));
                 
                 var dist = TestDistribution.getTestDistribution(res[ix]);
 

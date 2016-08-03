@@ -60,14 +60,12 @@ module.exports = {
             Report.find({ project: project }).sort({ startTime: 'desc' }).exec(function(err, result) {
                 if (err) console.log(err);
 
-                var testsCount = 0, testsPassed = 0, testsFailed = 0, stepsCount = 0, stepsPassed = 0, stepsFailed = 0;
-                var testDistribution = [], logDistribution = [];
                 var categories = [];
                 var topPassed = [], topFailed = [];
 
                 var projects = null;
 
-                var view = function view() {
+                var view = function() {
                     var out = {
                         projects: projects,
                         reports: result,

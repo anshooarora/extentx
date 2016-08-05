@@ -39,6 +39,11 @@ module.exports = {
         collection: 'log',
         via: 'test'
       },
+
+      media: {
+          collection: 'media',
+          via: 'test'
+      },
       
       /* tests (many) <-> categories (many)
        * tests and categories have a many to many relationship

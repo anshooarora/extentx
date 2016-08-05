@@ -64,4 +64,6 @@ module.exports.routes = {
   '/getTestsById': 'TestController.getTestById',
 
   '/dataPointSettings': 'SettingsController.dataPointSettings',
+
+  '/upload': 'FileController.upload',
 };

@@ -83,26 +83,28 @@ module.exports = {
                     
                     res.json(out);
                 }
-
-                if (result.length == 0)
+                
+                if (result.length === 0) {
                     view();
-
-                // list all projects
-                Project.getProjects(function(p) { projects = p });
-                
-                // list all categories
-                Category.getNames(function(cats) { categories = cats; })
-                
-                // top passed tests
-                Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
-                    topPassed = e;
+                }
+                else {
+                    // list all projects
+                    Project.getProjects(function(p) { projects = p });
                     
-                    // top failed tests
-                    Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
-                        topFailed = e;
-                        view();
+                    // list all categories
+                    Category.getNames(function(cats) { categories = cats; })
+                    
+                    // top passed tests
+                    Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                        topPassed = e;
+                        
+                        // top failed tests
+                        Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                            topFailed = e;
+                            view();
+                        });
                     });
-                });
+                }
             });
         });
     },

@@ -86,6 +86,13 @@
                 </uib-accordion-group>
             </uib-accordion>
 
+            <div class='media-collection' ng-if="test.media.length">
+                <span ng-repeat='media in test.media'>
+                    <img width='25%' class='report-img' src='{{ media.path }}' />
+                </span>
+                <div>&nbsp;</div>
+            </div>
+
             <div ng-if='showHistory' ng-controller="HistoryController">
                 <button class="btn btn-primary" ng-click="getHistory(test.name, test.id)">
                     Show History

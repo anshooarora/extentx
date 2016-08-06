@@ -12,7 +12,13 @@
 module.exports = function(grunt) {
 
 	grunt.config.set('clean', {
-		dev: ['.tmp/public/**'],
+		dev: [
+			'.tmp/public/js/**',
+			'.tmp/public/partials/**',
+			'.tmp/public/styles/**',
+			'.tmp/public/favicon.ico',
+			'.tmp/public/robots.txt'
+		],
 		build: ['www']
 	});
 

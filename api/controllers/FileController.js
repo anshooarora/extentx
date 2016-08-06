@@ -26,12 +26,14 @@ module.exports = {
                 return res.badRequest('No file was uploaded');
             }
 
-            var newPath = 'assets/images/' + testId + '/' + name;
-            FileService.moveFile(uploadedFile[0].fd, newPath);
+            var targetPath = 'uploads/' + reportId + '/' + testId + '/' + name,
+                movePath = '.tmp/public/' + targetPath;
+
+            FileService.moveFile(uploadedFile[0].fd, movePath);
 
             Media.update( 
                 { id: id }, 
-                { path: newPath }
+                { path: targetPath }
             ).exec(function afterwards(err, updated) { });
         });
 

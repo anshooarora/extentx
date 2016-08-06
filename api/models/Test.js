@@ -163,7 +163,6 @@ module.exports = {
     },
     
     getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
-        console.log(matcher);
         Test.native(function(err, collection) {
             collection.aggregate(
             [

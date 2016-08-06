@@ -62,7 +62,6 @@ module.exports = {
 
                 var categories = [];
                 var topPassed = [], topFailed = [];
-
                 var projects = null;
 
                 var view = function() {
@@ -86,8 +85,12 @@ module.exports = {
                 
                 if (result.length === 0) {
                     view();
-                }
-                else {
+                } else {
+                    var reportIds = [];
+                    _(result).forEach(function(report) {
+                        reportIds.push(ObjectId(report.id));
+                    });
+
                     // list all projects
                     Project.getProjects(function(p) { projects = p });
                     
@@ -95,11 +98,11 @@ module.exports = {
                     Category.getNames(function(cats) { categories = cats; })
                     
                     // top passed tests
-                    Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                    Test.getGroupsWithCounts([{ status: { $in: ['pass'] }}, { report: { $in: reportIds}}], { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                         topPassed = e;
                         
                         // top failed tests
-                        Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
+                        Test.getGroupsWithCounts([{ status: { $in: ['fail', 'fatal'] }}, { report: { $in: reportIds}}], { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                             topFailed = e;
                             view();
                         });

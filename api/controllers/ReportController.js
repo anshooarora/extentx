@@ -60,8 +60,15 @@ module.exports = {
             Report.find({ project: project }).sort({ startTime: 'desc' }).exec(function(err, result) {
                 if (err) console.log(err);
 
+                var parentCount = 0,
+                    parentPassed = 0,
+                    parentFailed = 0,
+                    childCount = 0,
+                    childPassed = 0,
+                    childFailed = 0;
                 var categories = [];
-                var topPassed = [], topFailed = [];
+                var topPassed = [],
+                    topFailed = [];
                 var projects = null;
 
                 var view = function() {
@@ -77,6 +84,14 @@ module.exports = {
                         trends: {
                             topPassed: topPassed,
                             topFailed: topFailed
+                        }, 
+                        aggregates: {
+                            parentCount: parentCount,
+                            parentPassed: parentPassed,
+                            parentFailed: parentFailed,
+                            childCount: childCount,
+                            childPassed: childPassed,
+                            childFailed: childFailed
                         }
                     };
                     
@@ -89,6 +104,12 @@ module.exports = {
                     var reportIds = [];
                     _(result).forEach(function(report) {
                         reportIds.push(ObjectId(report.id));
+                        parentCount += report.parentLength;
+                        parentPassed += report.passParentLength;
+                        parentFailed += report.failParentLength;
+                        childCount += report.childLength;
+                        childPassed += report.passChildLength;
+                        childFailed += report.failChildLength;
                     });
 
                     // list all projects
@@ -159,6 +180,15 @@ module.exports = {
                 })(ix)
             }
         })
-    }
+    },
+
+    getCategoryList: function(req, res) {
+        var id = req.body.id;
+
+        Report.find({ id: id }).populate('categories').exec(function(err, categories) {
+           if (err) res.json(null);
+           else res.json(categories);
+       })
+    },
 };
 

@@ -57,13 +57,16 @@ module.exports.routes = {
   '/aggregates': 'ReportController.aggregates',
   '/details': 'ReportController.details',
   '/destroyReport': 'ReportController.destroyReportWithDeps',
+  '/getCategoryListForReport': 'ReportController.getCategoryList',
 
   '/search': 'SearchController.search',
   
   '/getHistory': 'TestController.getHistory',
   '/getTestsById': 'TestController.getTestById',
-
+  '/getTestsForCategory': 'TestController.getTestsForCategory',
+  
   '/dataPointSettings': 'SettingsController.dataPointSettings',
+  '/themeSetting': 'SettingsController.themeSetting',
 
   '/upload': 'FileController.upload',
 };

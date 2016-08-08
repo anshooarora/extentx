@@ -16,7 +16,9 @@
     <!--STYLES END-->
   </head>
 
-  <body ng-app='ExtentX'>
+  <% var theme = ''; if (typeof req.session.theme !== 'undefined') theme = req.session.theme; %>
+
+  <body ng-app='ExtentX' class='<%= theme %>'>
  
     <% include partials/header.ejs %>
         
@@ -46,6 +48,8 @@
     <script src="/js/api/authentication/controllers/SigninController.js"></script>
     <script src="/js/api/authentication/controllers/SignoutController.js"></script>
     <script src="/js/api/authentication/controllers/UserController.js"></script>
+    <script src="/js/api/categories/controllers/CategoryViewController.js"></script>
+    <script src="/js/api/categories/directives/categoryFormats.js"></script>
     <script src="/js/api/common/controllers/LogTrendsController.js"></script>
     <script src="/js/api/common/controllers/ModalInstanceController.js"></script>
     <script src="/js/api/common/controllers/ProjectController.js"></script>

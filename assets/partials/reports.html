@@ -10,7 +10,7 @@
                     Total Tests
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsCount }}</strong>
+                    <strong>{{ res.aggregates.parentCount }}</strong>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                     Tests Passed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsPassed }}</strong>
+                    <strong>{{ res.aggregates.parentPassed }}</strong>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     Tests Failed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsFailed }}</strong>
+                    <strong>{{ res.aggregates.parentFailed }}</strong>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     Total Steps
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.stepsCount }}</strong>
+                    <strong>{{ res.aggregates.childCount }}</strong>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                     Steps Passed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.reports.length}}</strong>
+                    <strong>{{ res.aggregates.childPassed }}</strong>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     Steps Failed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.stepsFailed }}</strong>
+                    <strong>{{ res.aggregates.childFailed }}</strong>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@
                                 <td class='progress-col'>
                                     <div class='progress'>
                                         <div class='progress-bar progress-bar-success' style='width: {{ (report.passChildLength / (report.childLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.childLength }}</span>
+                                            <span class='sr-only'>{{ report.passChildLength }}</span>
                                         </div>
                                         <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength) / (report.childLength)) * 100 }}%'>
                                             <span class='sr-only'>{{ report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength }}</span>

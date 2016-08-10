@@ -22,7 +22,6 @@ module.exports = {
 
         Report.findOne({ id: reportId })
         .then(function(report) {
-            console.log(report.project);
             Report.find({ project: report.project }).exec(function(err, reports) {
                 if (reports.length === 1) {
                     Project.destroy({ id: reports[0].project }).exec(function(err) {});
@@ -165,7 +164,7 @@ module.exports = {
                 
                 for (var ix = 0; ix < nodeArray.length; ix++) {
                     (function(ix) {
-                        Log.getLogs({ test: nodeArray[ix].id }, function(logs) {
+                        Log.getLogs({ node: nodeArray[ix].id }, function(logs) {
                             nodeArray[ix].logs = logs;
                             
                             if (--itemsToIterateIn === 0) cb(nodeArray);

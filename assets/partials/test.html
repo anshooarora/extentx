@@ -35,7 +35,7 @@
                 </span>
             </div>
             
-            <table class='table' ng-if="test.logs.length">
+            <table class='table logs' ng-if="test.logs.length">
                 <thead>
                     <tr>
                         <th>Timestamp</th>
@@ -64,7 +64,7 @@
                     </uib-accordion-heading>    
                     
                     <div class="content">
-                        <table class='ui table logs' ng-if="node.logs.length">
+                        <table class='table logs' ng-if="node.logs.length">
                             <thead>
                                 <tr>
                                     <th>Timestamp</th>
@@ -82,6 +82,12 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class='grand-child-collection' ng-controller='NodeController' ng-init='getChildren(node.id)'>
+                        <div ng-repeat='child in children' ng-if='children'>
+                            <ng-include src="'partials/node.html'"></ng-include>
+                        </div>
                     </div>
                 </uib-accordion-group>
             </uib-accordion>

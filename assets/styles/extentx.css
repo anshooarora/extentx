@@ -415,13 +415,13 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 .report-img {
     border: 1px solid #e9e9e9;
 }
-.details-view .test-status {
+.details-view .test-status, .child-status {
     float: right;
 }
 .details-view .current-details {
     left: 470px;
 }
-.details-view .current-details .test-name, .details-view .historical-details .test-name, .category-view .test-name {
+.details-view .current-details .test-name, .details-view .historical-details .test-name, .category-view .test-name, .child-name {
     font-size: 21px;
     font-weight: 400;
 }
@@ -461,8 +461,11 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 }
 
 /* node */
-.extent-node {
+.extent-node, .child.panel {
     border: 1px solid #eee;
+}
+.child.panel {
+    margin-top: 20px;
 }
 .extent-node > .panel-heading {
     padding-bottom: 0;

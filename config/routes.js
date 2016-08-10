@@ -65,6 +65,8 @@ module.exports.routes = {
   '/getTestsById': 'TestController.getTestById',
   '/getTestsForCategory': 'TestController.getTestsForCategory',
   
+  '/getChildNodesByParentId': 'NodeController.getChildNodesByParentId',
+
   '/dataPointSettings': 'SettingsController.dataPointSettings',
   '/themeSetting': 'SettingsController.themeSetting',
 

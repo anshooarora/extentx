@@ -20,13 +20,26 @@ module.exports = {
     destroyReportWithDeps: function(req, res) {
         var reportId = req.body.query;
 
-        Report.destroy({ id: reportId }).exec(function(err) {});
-        Author.destroy({ report: reportId }).exec(function(err) {});
-        Category.destroy({ report: reportId }).exec(function(err) {});
-        Log.destroy({ report: reportId }).exec(function(err) {});
-        Node.destroy({ report: reportId }).exec(function(err) {});
-        Test.destroy({ report: reportId }).exec(function(err) {});
-        
+        Report.findOne({ id: reportId })
+        .then(function(report) {
+            console.log(report.project);
+            Report.find({ project: report.project }).exec(function(err, reports) {
+                if (reports.length === 1) {
+                    Project.destroy({ id: reports[0].project }).exec(function(err) {});
+                }
+            });
+        }).then(function() {
+            Report.destroy({ id: reportId }).exec(function(err) {});
+            Author.destroy({ report: reportId }).exec(function(err) {});
+            Category.destroy({ report: reportId }).exec(function(err) {});
+            Log.destroy({ report: reportId }).exec(function(err) {});
+            Node.destroy({ report: reportId }).exec(function(err) {});
+            Test.destroy({ report: reportId }).exec(function(err) {});
+            Media.destroy({ report: reportId }).exec(function(err) {});
+        }).catch(function(err) {
+            console.log(err);
+        });
+
         res.send(200);
     },
        

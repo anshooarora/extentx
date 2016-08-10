@@ -27,7 +27,6 @@ angular.module('ExtentX').
             
             $http(req).
                 success(function(response) {
-                    console.log(response);
                     $scope.historicalTest = response;
                 });
         };

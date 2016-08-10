@@ -18,5 +18,16 @@ module.exports = {
         }
 
         res.send(200);
-    }
+    },
+
+    themeSetting: function(req, res) {
+        var theme = req.body.theme;
+
+        if (typeof req.session.theme !== 'undefined' && req.session.theme === theme)
+            req.session.theme = '';
+        else
+            req.session.theme = theme;
+
+        res.send(200);
+    },
 };

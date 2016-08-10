@@ -16,7 +16,9 @@
     <!--STYLES END-->
   </head>
 
-  <body ng-app='ExtentX'>
+  <% var theme = ''; if (typeof req.session.theme !== 'undefined') theme = req.session.theme; %>
+
+  <body ng-app='ExtentX' class='<%= theme %>'>
  
     <% include partials/header.ejs %>
         
@@ -38,9 +40,7 @@
     <script src="/js/api/common/services/DateTime.js"></script>
     <script src="/js/api/common/services/Icon.js"></script>
     <script src="/js/api/common/services/LineChartSettings.js"></script>
-    <script src="/js/api/common/services/LogDistribution.js"></script>
     <script src="/js/api/common/services/PieChartSettings.js"></script>
-    <script src="/js/api/common/services/TestDistribution.js"></script>
     <script src="/js/api/admin/controllers/AdminController.js"></script>
     <script src="/js/api/analysis/controllers/DataPointsController.js"></script>
     <script src="/js/api/analysis/controllers/TestAnalysisController.js"></script>
@@ -48,6 +48,8 @@
     <script src="/js/api/authentication/controllers/SigninController.js"></script>
     <script src="/js/api/authentication/controllers/SignoutController.js"></script>
     <script src="/js/api/authentication/controllers/UserController.js"></script>
+    <script src="/js/api/categories/controllers/CategoryViewController.js"></script>
+    <script src="/js/api/categories/directives/categoryFormats.js"></script>
     <script src="/js/api/common/controllers/LogTrendsController.js"></script>
     <script src="/js/api/common/controllers/ModalInstanceController.js"></script>
     <script src="/js/api/common/controllers/ProjectController.js"></script>
@@ -59,6 +61,7 @@
     <script src="/js/api/search/controllers/SearchController.js"></script>
     <script src="/js/api/search/directives/searchInit.js"></script>
     <script src="/js/api/tests/controllers/HistoryController.js"></script>
+    <script src="/js/api/tests/controllers/NodeController.js"></script>
     <script src="/js/api/tests/controllers/TestDetailsController.js"></script>
     <script src="/js/api/tests/directives/testDetailsViewer.js"></script>
     <!--SCRIPTS END-->

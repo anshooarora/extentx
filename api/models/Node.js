@@ -53,6 +53,16 @@ module.exports = {
       });
   },
 
+  getChildren: function(json, cb) {
+      Node.find(
+          json
+      ).populateAll().exec(function(err, children) {
+          if (err) console.log('getChildren -> ' + err);
+
+          cb(children);
+      });
+  },
+
   getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
         Node.native(function(err, collection) {
             collection.aggregate(

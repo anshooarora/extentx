@@ -39,6 +39,11 @@ module.exports = {
         collection: 'log',
         via: 'test'
       },
+
+      media: {
+          collection: 'media',
+          via: 'test'
+      },
       
       /* tests (many) <-> categories (many)
        * tests and categories have a many to many relationship
@@ -161,7 +166,7 @@ module.exports = {
         Test.native(function(err, collection) {
             collection.aggregate(
             [
-                { $match: matcher },
+                { $match: { $and: matcher }},
                 { $group: 
                     { 
                         _id: groupBy,

@@ -1,23 +1,22 @@
 angular.module('ExtentX').
-    controller('LogTrendsController', ['$scope', 'Aggregates', 'LogDistribution', 'DateTime', 'LineChartSettings', 'DataPointFormat', 
-      function($scope, Aggregates, LogDistribution, DateTime, LineChartSettings, DataPointFormat) {
+    controller('LogTrendsController', ['$scope', 'Aggregates', 'DateTime', 'LineChartSettings', 'DataPointFormat', 
+      function($scope, Aggregates, DateTime, LineChartSettings, DataPointFormat) {
         Aggregates.then(function(response) {
             var dataPoints = response.trendDataPoints;
             var dataPointFormat = response.trendDataPointFormat;
-            var res = DateTime.sortByDate(response.logDistribution);
             
             var labels = [];
             var passed = [], failed = [], others = [];
-            var length = res.length > dataPoints ? dataPoints : res.length;
+            var length = response.reports.length > dataPoints ? dataPoints : response.reports.length;
 
             for (var ix = length - 1; ix >= 0; ix--) {
-                labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, res, ix));
-                
-                var dist = LogDistribution.getLogDistribution(res[ix]);
+                var report = response.reports[ix];
 
-                passed.push(dist.passed);
-                failed.push(dist.failed);
-                others.push(dist.others);
+                labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, report, ix));
+
+                passed.push(report.passChildLength);
+                failed.push(report.failChildLength + report.fatalChildLength);
+                others.push(report.errorChildLength + report.warningChildLength + report.skipChildLength + report.infoChildLength + report.unknownChildLength);
             }
             
             $scope.labels = labels;

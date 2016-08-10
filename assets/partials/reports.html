@@ -10,7 +10,7 @@
                     Total Tests
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsCount }}</strong>
+                    <strong>{{ res.aggregates.parentCount }}</strong>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                     Tests Passed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsPassed }}</strong>
+                    <strong>{{ res.aggregates.parentPassed }}</strong>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     Tests Failed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.testsFailed }}</strong>
+                    <strong>{{ res.aggregates.parentFailed }}</strong>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     Total Steps
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.stepsCount }}</strong>
+                    <strong>{{ res.aggregates.childCount }}</strong>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                     Steps Passed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.reports.length}}</strong>
+                    <strong>{{ res.aggregates.childPassed }}</strong>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     Steps Failed
                 </div>
                 <div class='segment-lead text-right'>
-                    <strong>{{ res.total.stepsFailed }}</strong>
+                    <strong>{{ res.aggregates.childFailed }}</strong>
                 </div>
             </div>
         </div>
@@ -87,48 +87,65 @@
                             <th>File</th>
                             <th>Start Time</th>
                             <th>End Time</th>
-                            <th>Tests</th>
-                            <th>Test Distribution</th>
-                            <th>Steps</th>
-                            <th>Log Distribution</th>
+                            <th>Parent</th>
+                            <th>Parent Distribution</th>
+                            <th>Child</th>
+                            <th>Child Distribution</th>
+                            <th ng-if='hasBDD'>GrandChild</th>
+                            <th ng-if='hasBDD'>GrandChild Distribution</th>
                             <th></th>
                             <th ng-controller="AdminController" ng-if="isAdmin"></th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="report in res.reports track by $index" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
+                            <tr ng-repeat="report in res.reports track by $index">
                                 <td>{{ $index + 1 }}</td>
-                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'>{{ res.reports[$index].fileName }}</a></td>
-                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
-                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ res.reports[$index].endTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
-                                <td>{{ testDist.passed + testDist.failed + testDist.others }}</td>
-                                <td>
+                                <td><a href='#/reportDetails?id={{ report.id }}'>{{ report.fileName }}</a></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ report.startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ report.endTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
+                                <td>{{ report.parentLength }}</td>
+                                <td class='progress-col'>
                                     <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: {{ (testDist.passed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ testDist.passed }}</span>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passParentLength / (report.parentLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.passParentLength }}</span>
                                         </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (testDist.others / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ testDist.others }}</span>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorParentLength + report.warningParentLength + report.skipParentLength + report.unknownParentLength) / (report.parentLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.errorParentLength + report.warningParentLength + report.skipParentLength + report.unknownParentLength }}</span>
                                         </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: {{ (testDist.failed / (testDist.passed + testDist.failed + testDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ testDist.failed }}</span>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failParentLength + report.fatalParentLength) / (report.parentLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.failParentLength + report.fatalParentLength }}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ logDist.passed + logDist.failed + logDist.others }}</td>
-                                <td>
+                                <td>{{ report.childLength }}</td>
+                                <td class='progress-col'>
                                     <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: {{ (logDist.passed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ logDist.passed }}</span>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passChildLength / (report.childLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.passChildLength }}</span>
                                         </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ (logDist.others / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ logDist.others }}</span>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength) / (report.childLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength }}</span>
                                         </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: {{ (logDist.failed / (logDist.passed + logDist.failed + logDist.others)) * 100 }}%'>
-                                            <span class='sr-only'>{{ logDist.failed }}</span>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failChildLength + report.fatalChildLength) / (report.childLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.failChildLength + report.fatalChildLength }}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'><i class='fa fa-external-link'></i></a></td>
+                                <td ng-if='hasBDD'>{{ report.grandChildLength }}</td>
+                                <td class='progress-col' ng-if='hasBDD && report.grandChildLength > 0'>
+                                    <div class='progress'>
+                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passGrandChildLength / (report.grandChildLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.passGrandChildLength }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorGrandChildLength + report.warningGrandChildLength + report.skipGrandChildLength + report.unknownGrandChildLength + report.infoGrandChildLength) / (report.grandChildLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.errorGrandChildLength + report.warningGrandChildLength + report.skipGrandChildLength + report.unknownGrandChildLength + report.infoGrandChildLength }}</span>
+                                        </div>
+                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failGrandChildLength + report.fatalGrandChildLength) / (report.grandChildLength)) * 100 }}%'>
+                                            <span class='sr-only'>{{ report.failGrandChildLength + report.fatalGrandChildLength }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if='hasBDD && report.grandChildLength === 0' style='text-align:center;'>N/A</td>
+                                <td><a href='#/reportDetails?id={{ report.id }}'><i class='fa fa-external-link'></i></a></td>
                                 <td ng-controller="AdminController" ng-if="isAdmin">
                                     <div class="btn-group" uib-dropdown is-open="status.isopen">
                                         <button id="single-button" type="button" class="btn btn-default btn-xs" uib-dropdown-toggle ng-disabled="disabled">

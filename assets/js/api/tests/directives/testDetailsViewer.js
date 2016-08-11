@@ -40,7 +40,6 @@ angular.module('ExtentX').
             var t = $(evt.target);
             
             if (t.is('#expand-sidenav') || t.is('#expand-sidenav i')) {
-                console.log('in');
                 setTimeout(function() {
                     init();
                     setDetailsViewContrainerWidths();

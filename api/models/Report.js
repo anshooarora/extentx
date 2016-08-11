@@ -48,31 +48,34 @@ module.exports = {
       /* 
       * stats 
       */
-      passParent: 'number',
-      failParent: 'number',
-      fatalParent: 'number',
-      errorParent: 'number',
-      warningParent: 'number',
-      skipParent: 'number',
-      unknownParent: 'number',
+      parentLength: 'number',
+      passParentLength: 'number',
+      failParentLength: 'number',
+      fatalParentLength: 'number',
+      errorParentLength: 'number',
+      warningParentLength: 'number',
+      skipParentLength: 'number',
+      unknownParentLength: 'number',
+    
+      childLength: 'number',
+      passChildLength: 'number',
+      failChildLength: 'number',
+      fatalChildLength: 'number',
+      errorChildLength: 'number',
+      warningChildLength: 'number',
+      skipChildLength: 'number',
+      unknownChildLength: 'number',
+      infoChildLength: 'number',
 
-      passChild: 'number',
-      failChild: 'number',
-      fatalChild: 'number',
-      errorChild: 'number',
-      warningChild: 'number',
-      skipChild: 'number',
-      unknownChild: 'number',
-      infoChild: 'number',
-
-      passGrandChild: 'number',
-      failGrandChild: 'number',
-      fatalGrandChild: 'number',
-      errorGrandChild: 'number',
-      warningGrandChild: 'number',
-      skipGrandChild: 'number',
-      unknownGrandChild: 'number',
-      infoGrandChild: 'number'
+      grandChildLength: 'number',
+      passGrandChildLength: 'number',
+      failGrandChildLength: 'number',
+      fatalGrandChildLength: 'number',
+      errorGrandChildLength: 'number',
+      warningGrandChildLength: 'number',
+      skipGrandChildLength: 'number',
+      unknownGrandChildLength: 'number',
+      infoGrandChildLength: 'number'
   },
   
   getReport: function(id, cb) {
@@ -84,79 +87,5 @@ module.exports = {
         cb(result);
     });
   },
-  
-  getDistribution: function(id, cb) {
-      var dist = {
-          testDistribution: null,
-          logDistribution: null
-      };
-      
-      Report.getTestDistribution(id, function(d1) {
-          dist.testDistribution = d1;
-
-          Report.getLogDistribution(id, function(d2) {
-              dist.logDistribution = d2;
-
-              cb(dist);
-          })
-      });
-  },
-
-  getTestDistribution: function(id, cb) {
-      Test.native(function(err, collection) {
-        collection.aggregate(
-        [
-            { $match: { report: new ObjectId(id), childNodesCount: 0 } },
-            { $group: 
-                { 
-                    _id: '$status', 
-                    count: { $sum: 1 }
-                }, 
-             }, 
-        ],
-        function(err, result) {
-            if (err) console.log(err);
-            else {
-                Report.findOne({ id: id }).exec(function(err, report) { 
-                    Test.getNodeDistributionByReport(id, function(nodes) {
-                        if (nodes && nodes.distribution.length)
-                            result = nodes.distribution.concat(result);
-                        
-                        cb({
-                            report: report,
-                            distribution: result
-                        });
-                    });
-              });
-            }
-        });
-    });
-  },
-  
-  getLogDistribution: function(id, cb) {
-      Report.findOne({
-          id: id
-      }).exec(function(err, report) {
-        Log.native(function(err, collection) {
-            collection.aggregate(
-            [
-                { $match: { report: new ObjectId(report.id) } },
-                { $group: 
-                    { 
-                        _id: '$status',
-                        count: { $sum: 1 } 
-                    },
-                },
-            ],
-            function(err, logs) {
-                if (err) console.log(err);
-                else cb({
-                    report: report,
-                    distribution: logs
-                });
-            });
-        })
-      });
-  }
 };
 

@@ -46,7 +46,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/destroyReport': 'AdminController.destroyReport',
   '/deleteOlderThanXDays': 'AdminController.deleteOlderThanXDays',
 
   '/login': 'UserController.login',
@@ -57,11 +56,19 @@ module.exports.routes = {
 
   '/aggregates': 'ReportController.aggregates',
   '/details': 'ReportController.details',
-  
+  '/destroyReport': 'ReportController.destroyReportWithDeps',
+  '/getCategoryListForReport': 'ReportController.getCategoryList',
+
   '/search': 'SearchController.search',
   
   '/getHistory': 'TestController.getHistory',
   '/getTestsById': 'TestController.getTestById',
+  '/getTestsForCategory': 'TestController.getTestsForCategory',
+  
+  '/getChildNodesByParentId': 'NodeController.getChildNodesByParentId',
 
   '/dataPointSettings': 'SettingsController.dataPointSettings',
+  '/themeSetting': 'SettingsController.themeSetting',
+
+  '/upload': 'FileController.upload',
 };

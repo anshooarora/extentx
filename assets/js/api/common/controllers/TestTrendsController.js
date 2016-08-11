@@ -1,23 +1,22 @@
 angular.module('ExtentX').
-    controller('TestTrendsController', ['$scope', 'Aggregates', 'TestDistribution', 'DateTime', 'LineChartSettings', 'DataPointFormat', 
-      function($scope, Aggregates, TestDistribution, DateTime, LineChartSettings, DataPointFormat) {
+    controller('TestTrendsController', ['$scope', 'Aggregates', 'DateTime', 'LineChartSettings', 'DataPointFormat', 
+      function($scope, Aggregates, DateTime, LineChartSettings, DataPointFormat) {
         Aggregates.then(function(response) {
             var dataPoints = response.trendDataPoints;
             var dataPointFormat = response.trendDataPointFormat;
-            var res = DateTime.sortByDate(response.testDistribution);
             
             var labels = [];
             var passed = [], failed = [], others = [];
-            var length = res.length > dataPoints ? dataPoints : res.length;
+            var length = response.reports.length > dataPoints ? dataPoints : response.reports.length;
 
             for (var ix = length - 1; ix >= 0; ix--) {
-                labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, res, ix));
+                var report = response.reports[ix];
                 
-                var dist = TestDistribution.getTestDistribution(res[ix]);
-
-                passed.push(dist.passed);
-                failed.push(dist.failed);
-                others.push(dist.others);
+                labels.push(DataPointFormat.getDataPointFormat(dataPointFormat, report, ix));
+                
+                passed.push(report.passParentLength);
+                failed.push(report.failParentLength + report.fatalParentLength);
+                others.push(report.errorParentLength + report.warningParentLength + report.skipParentLength + report.unknownParentLength);
             }
             
             $scope.labels = labels;

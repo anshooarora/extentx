@@ -452,7 +452,7 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 .details-view #test-collection > div:last-child .test {
     border-bottom: 1px solid #eee;
 }
-.details-view #test-collection .test.active {
+.details-view #test-collection .test.active, .report-name.active, .category-name.active {
     background: #f7f7f7;
     font-weight: 600;
 }
@@ -505,6 +505,10 @@ table.report-summary th:first-child, table.report-summary td:first-child {
 }
 .category-view .test-list {
     left: 710px;
+}
+.category-view .test {
+    border: 1px solid #eee;
+    margin: 10px 20px;
 }
 
 /* search view */

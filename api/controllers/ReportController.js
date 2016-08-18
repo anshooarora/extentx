@@ -116,12 +116,14 @@ module.exports = {
                     var reportIds = [];
                     _(result).forEach(function(report) {
                         reportIds.push(ObjectId(report.id));
-                        parentCount += report.parentLength;
-                        parentPassed += report.passParentLength;
-                        parentFailed += report.failParentLength;
-                        childCount += report.childLength;
-                        childPassed += report.passChildLength;
-                        childFailed += report.failChildLength;
+                        if (typeof report.parentLength !== 'undefined' && report.parentLength >= 0) {
+                            parentCount += report.parentLength;
+                            parentPassed += report.passParentLength;
+                            parentFailed += report.failParentLength;
+                            childCount += report.childLength;
+                            childPassed += report.passChildLength;
+                            childFailed += report.failChildLength;
+                        }
                     });
 
                     // list all projects

@@ -33,6 +33,17 @@ angular.module('ExtentX').
                     setDetailsViewContrainerWidths();
                 }, 300);
             }
+
+            if (t.is('.report-name')) {
+                $('.test').remove();
+                $('.report-name').removeClass('active');
+                t.addClass('active');
+            }
+
+            if (t.is('.category-name')) {
+                $('.category-name').removeClass('active');
+                t.addClass('active');
+            }
         })
 
         return {

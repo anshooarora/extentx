@@ -1,0 +1,104 @@
+<div class='test panel panel-default {{ test.status }}'>
+    <div class='content panel-body'>
+        <div class='test-name'>
+            {{ historicalTest.name }}
+        </div>
+        <div class='test-status'>
+            <span class='{{ historicalTest.status }}'>                
+                <i class='{{ getIcon(historicalTest.status) }}'></i>
+            </span>
+        </div>
+        
+        <div class='test-content {{ testContentDisplayClass }}'>                                            
+            <div class='label green'>
+                 {{ historicalTest.startTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+            </div>
+            <div class='label red'>
+                {{ historicalTest.endTime | date: 'MM-dd-yyyy HH:mm:ss' }}
+            </div>
+            <div class='label label-default'>
+                {{ getTimeDifference(historicalTest.endTime, historicalTest.startTime) }} ms
+            </div>
+            
+            <div class='test-description' ng-bind-html='trust(historicalTest.description)'>
+            </div>
+            
+            <div class='category-collection' ng-if="historicalTest.categories.length">
+                <span class='ui label' ng-repeat='category in historicalTest.categories'>
+                    <i class='fa fa-tag icon'></i> {{ category.name }}
+                </span>
+            </div>
+            
+            <div class='author-collection' ng-if="historicalTest.authors.length">
+                <span class='ui label' ng-repeat='author in historicalTest.authors'>
+                    <i class='fa fa-user icon'></i> {{ author.name }}
+                </span>
+            </div>
+            
+            <table class='table logs' ng-if="historicalTest.logs.length">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='log in historicalTest.logs' alt='{{ log.status }}' title='{{ log.status }}'>
+                        <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                        <td class='{{ log.status }}'>
+                            <i class='{{ getIcon(log.status) }}'></i>
+                        </td>
+                        <td ng-bind-html='trust(log.details)'></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <uib-accordion close-others="true" ng-if="historicalTest.nodes.length">
+                <uib-accordion-group class='extent-node' ng-repeat='node in historicalTest.nodes track by $index' is-open="false" is-disabled="false">
+                    <uib-accordion-heading>
+                        {{ node.name }}
+                        <div class='float-right {{ node.status }}'>
+                            <i class='{{ getIcon(node.status) }}'></i>
+                        </div>
+                    </uib-accordion-heading>    
+                    
+                    <div class="content">
+                        <table class='table logs' ng-if="node.logs.length">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='log in node.logs'>
+                                    <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                                    <td class='{{ log.status }}'>
+                                        <i class='{{ getIcon(log.status) }}'></i>
+                                    </td>
+                                    <td ng-bind-html='trust(log.details)'></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class='grand-child-collection' ng-controller='NodeController' ng-init='getChildren(node.id)'>
+                        <div ng-repeat='child in children' ng-if='children'>
+                            <ng-include src="'partials/node.html'"></ng-include>
+                        </div>
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+
+            <div class='media-collection' ng-if="historicalTest.media.length">
+                <span ng-repeat='media in historicalTest.media'>
+                    <img width='25%' class='report-img' src='{{ media.path }}' />
+                </span>
+                <div>&nbsp;</div>
+            </div>
+
+        </div>
+    </div>
+</div>

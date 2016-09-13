@@ -30,6 +30,11 @@ module.exports = {
         via: 'test'
       },
       
+      media: {
+          collection: 'media',
+          via: 'node'
+      },
+
       name: 'text',
       level: 'number',
       status: {

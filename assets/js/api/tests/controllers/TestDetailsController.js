@@ -49,4 +49,22 @@ angular.module('ExtentX').
                     $scope.tests = response;
                 });
         }
+
+        $scope.getMediaByNodeId = function(id) {
+            var req = {
+                method: 'POST',
+                url: '/getMediaByNodeId',
+                data: {
+                    id: id
+                }
+            };
+            
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
+            $http(req).
+                success(function(response) {
+                    console.log(response);
+                    $scope.nodeMedia = response;
+                });
+        };
     }]);

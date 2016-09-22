@@ -63,7 +63,7 @@
                         </div>
                     </uib-accordion-heading>    
                     
-                    <div class="content">
+                    <div class="content" ng-init="getMediaByNodeId(node.id)">
                         <table class='table logs' ng-if="node.logs.length">
                             <thead>
                                 <tr>
@@ -82,6 +82,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                        
+                        <div class='media-collection' ng-if="nodeMedia.media.length">
+                            <span ng-repeat='media in nodeMedia.media'>
+                                <img width='25%' class='report-img' src='{{ media.path }}' />
+                            </span>
+                            <div>&nbsp;</div>
+                        </div>
                     </div>
 
                     <div class='grand-child-collection' ng-controller='NodeController' ng-init='getChildren(node.id)'>

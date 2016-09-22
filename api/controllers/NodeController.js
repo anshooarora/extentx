@@ -13,5 +13,13 @@ module.exports = {
             res.json(children);
         });
     },
+
+    getMediaByNodeId: function(req, res) {
+        var id = req.body.id;
+
+        Node.findOne({ id: id }).populate('media').exec(function(err, media) {
+            res.json(media);
+        })
+    },
 };
 

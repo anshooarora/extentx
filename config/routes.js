@@ -66,7 +66,8 @@ module.exports.routes = {
   '/getTestsForCategory': 'TestController.getTestsForCategory',
   
   '/getChildNodesByParentId': 'NodeController.getChildNodesByParentId',
-
+  '/getMediaByNodeId': 'NodeController.getMediaByNodeId',
+  
   '/dataPointSettings': 'SettingsController.dataPointSettings',
   '/themeSetting': 'SettingsController.themeSetting',
 

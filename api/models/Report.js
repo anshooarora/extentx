@@ -23,6 +23,11 @@ module.exports = {
         collection: 'test',
         via: 'report'
       },
+
+      exceptions: {
+          collection: 'exception',
+          via: 'report'
+      },
       
       /* A report can have one or more categories
        * There is a one-to-many relationship between report and category
@@ -40,10 +45,16 @@ module.exports = {
           via: 'report'
       },
 
+      environment: {
+          collection: 'environment',
+          via: 'report'
+      },
+
       status: 'string',
-      fileName: 'string',
+      name: 'string',
       startTime: 'date',
       endTime: 'date',
+      duration: 'integer',
 
       /* 
       * stats 
@@ -55,8 +66,8 @@ module.exports = {
       errorParentLength: 'number',
       warningParentLength: 'number',
       skipParentLength: 'number',
-      unknownParentLength: 'number',
-    
+      exceptionsParentLength: 'number',
+
       childLength: 'number',
       passChildLength: 'number',
       failChildLength: 'number',
@@ -64,8 +75,8 @@ module.exports = {
       errorChildLength: 'number',
       warningChildLength: 'number',
       skipChildLength: 'number',
-      unknownChildLength: 'number',
       infoChildLength: 'number',
+      exceptionsChildLength: 'number',
 
       grandChildLength: 'number',
       passGrandChildLength: 'number',
@@ -74,18 +85,8 @@ module.exports = {
       errorGrandChildLength: 'number',
       warningGrandChildLength: 'number',
       skipGrandChildLength: 'number',
-      unknownGrandChildLength: 'number',
-      infoGrandChildLength: 'number'
-  },
-  
-  getReport: function(id, cb) {
-    Report.findOne({
-        id: id
-    }).exec(function(err, result) {
-        if (err) console.log('ReportService.getReport -> ' + err);
-        
-        cb(result);
-    });
-  },
+      infoGrandChildLength: 'number',
+      exceptionsGrandChildLength: 'number',
+  }
 };
 

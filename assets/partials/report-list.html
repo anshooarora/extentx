@@ -1,0 +1,109 @@
+<div class="container main" ng-controller="ReportController" ng-init="getReportList(1);setViewName('Reports');">
+    
+    <div class="row" ng-if="">
+        <div class="col-md-12">
+            No tests.
+        </div>
+    </div>
+
+    <div class="row no-gutter" ng-controller="AnalysisController" ng-init="getReportTestsCounts()">
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.featureLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Total Features
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.featurePassLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Features Passed
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.featureFailLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Features Failed
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.scenarioLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Total Scenarios
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.scenarioPassLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Scenarios Passed
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel b-l b-t b-b b-r no-bg no-bs">
+                <div class="panel-body text-center">
+                    <div class="text-lead">
+                        {{reportTestCounts.scenarioFailLength}}
+                    </div>
+                    <div class="text-lighter">
+                        Scenarios Failed
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class='panel-heading'>
+                    Report List
+                    <div class="pull-right">
+                        <span class="label label-default">Page: {{page}}</span>
+                    </div>
+                </div>
+                
+                <div class='panel-body'>
+                    <ng-include src="'partials/report-template.html'"></ng-include>
+
+                    <br />
+                    
+                    <button class="btn btn-default btn-raised" ng-click="page=page-1;getReportList(page)" ng-if="page>1">
+                        Previous
+                    </button>
+                    <button class="btn btn-default btn-raised" ng-click="page=page+1;getReportList(page)" ng-if="reportList.length>9">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div> <!-- /col -->
+    </div> <!-- /row --> 
+</div> <!-- /container -->

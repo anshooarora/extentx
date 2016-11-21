@@ -1,213 +1,128 @@
-<div class='container main dashboard-view {{ padded }}' ng-controller="ReportController">
-    <div class="row">
-        <div class='col-md-12'>
-            <h1>Dashboard</h1>
-        </div>
-    </div>
+<div class="container main" ng-controller="ReportController" ng-init="getReportList(1);setViewName('Analysis');setNodesPanelHeight();">
+    <div analysis-view-config></div>
     
-    <div class="row" ng-if="res.reports.length === 0">
+    <div class="row" ng-if="topReportList.length === 0">
         <div class="col-md-12">
             No tests.
         </div>
     </div>
-    
-    <div class="row" ng-if="res.reports.length">
-        <div class='col-md-6' ng-controller="TestTrendsController">
-            <div class="panel panel-default padded">
-                <div class='panel-heading'>
-                    Report Trends By Status - Test
-                    <span class='pull-right pointer' ng-controller='DataPointsController' ng-click='open()' href='#!'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </div>
-                
-                <div class='panel-body'>
-                    <canvas id='test-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <div class='col-md-6' ng-controller="LogTrendsController">
-            <div class='panel panel-default padded'>
-                <div class='panel-heading'>
-                    Report Trends By Status - Step 
-                    <span class='pull-right pointer' ng-controller='DataPointsController' ng-click='open()' href='#!'>
-                        <i class='fa fa-gear'></i>
-                    </span>
-                </div>
-                <div class='panel-body'>
-                    <canvas id='log-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-        
-    <div class="row" ng-if="res.reports.length">
-        <div class='col-lg-8 col-md-7'>
-            <div class="panel panel-default padded">
+
+    <div class="row" ng-if="topReportList.length > 0" ng-controller="AnalysisController" ng-init="createTrendChartData(topReportList)">
+        <div class="clearfix"></div>
+
+        <div class="col-md-2 pull-right">
+            <div class="panel panel-default" id="author-list" ng-init="setNodesPanelHeight()">
                 <div class="panel-heading">
-                    Reports (Last 5 Runs)
+                    Authors
                 </div>
-                
-                <div class='panel-body'>
-                    <table class='table'>
-                        <thead>
-                            <th>#</th>
-                            <th>File</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Parent Distribution</th>
-                            <th>Child Distribution</th>
-                            <th ng-if='hasBDD'>GrandChild Distribution</th>
-                            <th></th>
-                        </thead>
-                        <tbody>            
-                            <tr ng-repeat="report in res.reports track by $index" ng-if="$index < max">
-                                <td>{{ $index + 1 }}</td>
-                                <td><a href='#/reportDetails?id={{ report.id }}'>{{ report.fileName }}</a></td>
-                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ report.startTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
-                                <td><span class='ui label'><i class='fa fa-calendar icon'></i>{{ report.endTime | date:'MM-dd-yyyy HH:mm:ss' }}</span></td>
-                                <td>
-                                    <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passParentLength / (report.parentLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.passParentLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorParentLength + report.warningParentLength + report.skipParentLength + report.unknownParentLength) / (report.parentLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.errorParentLength + report.warningParentLength + report.skipParentLength + report.unknownParentLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failParentLength + report.fatalParentLength) / (report.parentLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.failParentLength + report.fatalParentLength }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passChildLength / (report.childLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.childLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength) / (report.childLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.errorChildLength + report.warningChildLength + report.skipChildLength + report.unknownChildLength + report.infoChildLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failChildLength + report.fatalChildLength) / (report.childLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.failChildLength + report.fatalChildLength }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td ng-if='hasBDD && report.grandChildLength > 0'>
-                                    <div class='progress'>
-                                        <div class='progress-bar progress-bar-success' style='width: {{ (report.passGrandChildLength / (report.grandChildLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.passGrandChildLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-info progress-bar-striped' style='width: {{ ((report.errorGrandChildLength + report.warningGrandChildLength + report.skipGrandChildLength + report.unknownGrandChildLength + report.infoGrandChildLength) / (report.grandChildLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.errorGrandChildLength + report.warningGrandChildLength + report.skipGrandChildLength + report.unknownGrandChildLength + report.infoGrandChildLength }}</span>
-                                        </div>
-                                        <div class='progress-bar progress-bar-danger' style='width: {{ ((report.failGrandChildLength + report.fatalGrandChildLength) / (report.grandChildLength)) * 100 }}%'>
-                                            <span class='sr-only'>{{ report.failGrandChildLength + report.fatalGrandChildLength }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td ng-if='hasBDD && report.grandChildLength === 0' style='text-align:center;'>N/A</td>
-                                <td><a href='#/reportDetails?id={{ report.id }}'><i class='fa fa-external-link'></i></a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <div class='col-lg-4 col-md-5' ng-controller='TestAnalysisController'>
-            <div class='panel panel-default padded inverted'>
-                <div class='panel-heading'>
-                    Analysis (Last 5 Runs)
-                </div>
-                
-                <div class='panel-body'>
-                    <div class='chart-box'>
-                        <canvas id='dashboard-test-analysis' class='chart chart-doughnut' chart-data="data" chart-labels="labels" chart-legend="true" chart-options="options" chart-colours="colors"></canvas>
+
+                <div class="panel-body" ng-controller="AuthorController" ng-init="getAuthorNamesWithTestCountsByProject(false)">
+                    <div ng-repeat="obj in authorTestCounts" class="label author" style="margin-bottom:3px !important; display:inline-block;">
+                        {{obj._id.name}}
+                        &nbsp;
+                        <span class="badge">{{obj.count}}</span>
                     </div>
                 </div>
-                
-                <div class='ui segment-footer'>
-                    <div class='text-small'><strong>{{ pass + fail + fatal + error + warning + skip + unknown }}</strong> tests, <strong>{{ pass }}</strong> passed</div>
-                    <div class='text-small'><strong>{{ fail + fatal }}</strong> tests failed, <strong>{{ error + warning + skip + unknown}}</strong> others</div>
-                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="row" ng-if="res.reports.length">
-        <div class="col-md-4">
-            <div class='panel panel-default padded'>
-                <div class='panel-heading'>
-                    Top Passed
-                </div>
-                
-                <div class='panel-body'>
-                    <table class='table'>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="test in res.trends.topPassed track by $index" ng-if="$index < 10">
-                                <td><a href='#/search?regex=exact&name={{ test._id.name }}'>{{ test._id.name }}</a></td>
-                                <td>{{ test.count }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class='panel panel-default padded'>
-                <div class='panel-heading'>
-                    Top Failed
-                </div>
-                
-                <div class='panel-body'>
-                    <table class='table'>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="test in res.trends.topFailed track by $index" ng-if="$index < 10">
-                                <td><a href='#/search?regex=exact&name={{ test._id.name }}'>{{ test._id.name }}</a></td>
-                                <td>{{ test.count }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class='panel panel-default padded'>
+
+            <div class="panel panel-default" ng-controller="CategoryController" ng-init="getCategoryNamesWithTestCountsByProject()">
                 <div class='panel-heading'>
                     Categories
                 </div>
                 
                 <div class='panel-body'>
-                    <table class='table'>
+                    <div ng-repeat="(name,cnt) in categoryTestCounts" class="label category" style="margin-bottom:3px !important; display:inline-block;" ng-if="cnt>0">
+                        {{name}}
+                        &nbsp;
+                        <span class="badge">{{cnt}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-md-10'>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default test-trends" id="test-trends-container">
+                        <div class='panel-heading'>
+                            Feature Trends By Status 
+                        </div>
+                        
+                        <div class='panel-body'>
+                            <canvas id='test-trends' width="{{width}}" height="270" class='chart chart-bar' chart-dataset-override="datasetOverride" chart-data="testTrendData" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="analysisOptions"></canvas>
+                        </div>
+                    </div>
+                </div> <!-- /col -->
+                <div class="col-md-6">
+                    <div class="panel panel-default child-trends" id="child-trends-container">
+                        <div class='panel-heading'>
+                            Scenario Trends By Status 
+                        </div>
+                        
+                        <div class='panel-body'>
+                            <canvas id='child-trends' width="{{width}}" height="270" class='chart chart-bar' chart-dataset-override="datasetOverride" chart-data="childTrendData" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="analysisOptions"></canvas>
+                        </div>
+                    </div>
+                </div> <!-- /col -->
+
+                <div class='col-md-12' ng-init="createReportPerformanceChart(reportList)">
+                    <div class="panel panel-default report-performance-chart" id="report-performance-container">
+                        <div class='panel-heading'>
+                            Report Performance
+                        </div>
+                        
+                        <div class='panel-body'>
+                            <canvas id='report-performance-chart' width="{{perChartWidth}}" height="270" class='chart chart-line' chart-dataset-override="perfDatasetOverride" chart-data="reportPerfData" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="analysisOptions" chart-colors="colors"></canvas>
+                        </div>
+                    </div>
+                </div> <!-- /col -->
+            </div> <!-- row -->
+        </div>
+
+        <div class="col-md-10">
+            <div class="panel panel-default" id="report-list-summary">
+                <div class='panel-heading'>
+                    Report List
+                </div>
+                
+                <div class='panel-body'>
+                    <ng-include src="'partials/report-template.html'"></ng-include>
+
+                    <button class="btn btn-default" ng-click="page=page-1;getReportList(page)" ng-if="page>1">
+                        Previous
+                    </button>
+                    <button class="btn btn-default" ng-click="page=page+1;getReportList(page)">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div> <!-- /col -->
+
+        <div class="col-md-4" ng-init="getTopFailedTestsByProject()">
+            <div class="panel panel-default" id="top-failed">
+                <div class='panel-heading'>
+                    Top Failed
+                </div>
+                
+                <div class='panel-body'>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Count</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="category in res.categories">
-                                <td>{{ category }}</td>
+                            <tr ng-repeat="test in topFailedTests" ng-if="$index<5">
+                                <td><a href="#/test?name={{test._id.name}}">{{test._id.name}}</a></td>
+                                <td>{{test.count}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </div> <!-- /col -->
+        
+    </div> <!-- /row -->
 
-    </div>
-</div>
+</div> <!-- /container -->

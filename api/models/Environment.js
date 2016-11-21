@@ -8,12 +8,14 @@
 module.exports = {
 
   attributes: {
+      project: {
+          model: 'project'
+      },
+      
       report: {
           model: 'report'
       },
-      
-      reportId: 'string',
-      
+
       name: 'string',
       value: 'string'
   }

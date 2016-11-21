@@ -12,8 +12,8 @@ module.exports = {
           model: 'test'
       },
       
-      node: {
-          model: 'node'
+      project: {
+          model: 'project'
       },
       
       report: {
@@ -22,13 +22,12 @@ module.exports = {
       
       testName: 'text',
       
-      logSequence: 'number',
+      sequence: 'number',
       status: {
           type: 'string',
-          enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info', 'unknown'],
+          enum: ['pass', 'fail', 'fatal', 'error', 'warning', 'skip', 'info'],
           defaultsTo: 'unknown'
       },
-      stepName: 'text',
       details: 'text',
       timestamp: 'date'
   },

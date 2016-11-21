@@ -10,6 +10,10 @@ var ObjectId = require('mongodb').ObjectID;
 module.exports = {
 
   attributes: {
+      project: {
+          model: 'project'
+      },
+
       /* Owner
        * A report can have one or more tests
        * There is a one-to-many relationship between report and test
@@ -19,17 +23,7 @@ module.exports = {
       report: {
           model: 'report'
       },
-      
-      /* A test can have one or more nodes (child tests)
-       * There is a one-to-many relationship between parent-test and node
-       * In Waterline, from the Test model, to find nodes:
-       *   Test.find().populate('nodes')..
-       */ 
-      nodes: {
-          collection: 'node',
-          via: 'test'
-      },
-      
+
       /* A test can have one or more logs
        * There is a one-to-many relationship between a test and log
        * In Waterline, from the Test model, to find logs:
@@ -55,7 +49,6 @@ module.exports = {
       categories: {
           collection: 'category',
           via: 'tests',
-          
       },
       
       /* tests (many) <-> authors (many)
@@ -68,8 +61,18 @@ module.exports = {
       authors: {
           collection: 'author',
           via: 'tests',
-          
       },
+
+      exception: {
+          model: 'exception'
+      },
+
+      parent: {
+          model: 'test'
+      },
+
+      parentName: 'string',
+      level: 'integer',
 
       name: 'text',
       bdd: {
@@ -90,10 +93,10 @@ module.exports = {
           defaultsTo: false
       },
       description: 'text',
-      warnings: 'text',
       startTime: 'date',
       endTime: 'date',
-      childNodesCount: 'string'
+      duration: 'integer',
+      childNodesLength: 'integer'
   },
   
   getTest: function(json, cb) {
@@ -115,53 +118,7 @@ module.exports = {
             cb(result);
         });
     },
-    
-    getLogs: function(json, cb) {
-        Test.find(
-            json
-        ).populate('logs').exec(function(err, result) {
-            if (err) console.log('TestService.getLogs -> ' + err);
-            
-            cb(result);
-        });
-    },
-    
-    getChildren: function(json, cb) {
-        Test.find(
-            json
-        ).populateAll().exec(function(err, result) {
-            if (err) console.log('TestService.getChildren -> ' + err);
-            
-            cb(result);
-        });
-    },
-    
-    getNodeDistributionByReport: function(id, cb) {
-        Node.native(function(err, collection) {
-            collection.aggregate(
-            [
-                { $match: { report: new ObjectId(id) } },
-                { $group: 
-                    { 
-                        _id: '$status', 
-                        count: { $sum: 1 }
-                    }, 
-                }
-            ],
-            function(err, result) {
-                if (err) console.log(err);
-                else {
-                    Report.getReport(id, function(report) {
-                        cb({
-                            report: report,
-                            distribution: result
-                        });
-                    });
-                }
-            });
-        });
-    },
-    
+
     getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
         Test.native(function(err, collection) {
             collection.aggregate(

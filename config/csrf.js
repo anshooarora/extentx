@@ -48,7 +48,7 @@
 *                                                                           *
 ****************************************************************************/
 
-module.exports.csrf = true;
+// module.exports.csrf = false;
 
 /****************************************************************************
 *                                                                           *
@@ -58,7 +58,7 @@ module.exports.csrf = true;
 *                                                                           *
 ****************************************************************************/
 
-module.exports.csrf = {
-   grantTokenViaAjax: true,
-   origin: ''
-}
+// module.exports.csrf = {
+//    grantTokenViaAjax: true,
+//    origin: ''
+// }

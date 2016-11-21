@@ -1,11 +1,12 @@
 /**
  * FileController
  *
- * @description :: Server-side logic for managing File details
+ * @description :: Server-side logic for managing Files
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
+
     upload: function(req, res) {
         var reportId = req.body.reportId,
             testId = req.body.testId,
@@ -13,10 +14,7 @@ module.exports = {
             name = req.body.name,
             mediaType = req.body.mediaType;
 
-        req.file('f').upload({
-            // don't allow the total upload size to exceed ~10MB
-            maxBytes: 10000000
-        }, function whenDone(err, uploadedFile) {
+        req.file('f').upload({}, function whenDone(err, uploadedFile) {
             if (err) {
                 return res.negotiate(err);
             }
@@ -31,7 +29,7 @@ module.exports = {
 
             FileService.moveFile(uploadedFile[0].fd, movePath);
 
-            Media.update( 
+            Media.update(
                 { id: id }, 
                 { path: targetPath }
             ).exec(function afterwards(err, updated) { });
@@ -39,4 +37,6 @@ module.exports = {
 
         res.send(200);
     }
+
 };
+

@@ -1,21 +1,23 @@
 /**
  * UserController
  *
- * @description :: Server-side logic for managing users
+ * @description :: Server-side logic for managing Users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 var bcrypt = require('bcryptjs');
 
 module.exports = {
-    
-    login: function(req, res) {
+	
+    signon: function(req, res) {
         var name = req.body.query.name;
         var password = req.body.query.password;
         
+        console.log("user: " + name)
+
         User.findOne({ name: name }).exec(function(err, user) {
             if (err) throw (err);
-            
+
             if (typeof user !== 'undefined' && typeof password !== 'undefined' && bcrypt.compareSync(password, user.password)) {
                 req.session.user = user;
                 req.session.authenticated = true;
@@ -23,14 +25,16 @@ module.exports = {
                 var user = req.session.user;
                 delete user.password;
                 
-                res.send(200, { user: user } );
+                res.send(200, { 
+                    user: user
+                });
             } else {
                 res.send(401);
             }
         });
     },
     
-    isLoggedIn: function(req, res) {
+    isSignedOn: function(req, res) {
         if (req.session.authenticated) {
             var user = req.session.user;
             delete user.password;
@@ -75,4 +79,6 @@ module.exports = {
         req.session.destroy();
         res.send(200);
     },    
-}
+
+};
+

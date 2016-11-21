@@ -12,8 +12,8 @@ module.exports = {
           model: 'test'
       },
       
-      node: {
-          model: 'node'
+      project: {
+          model: 'project'
       },
       
       report: {
@@ -23,7 +23,11 @@ module.exports = {
       testName: 'text',
       
       sequence: 'number',
-      path: 'string'
+      path: 'string',
+      mediaType: {
+          type: 'string',
+          enum: ['img', 'vid']
+      }
   },
 
 };

@@ -1,0 +1,125 @@
+<div class='test-content'>                                            
+    <div class='test-description' ng-bind-html='trust(test.description)'></div>
+    
+    <div class='category-collection' ng-if="test.categories.length">
+        <span class='label label-default' ng-repeat='category in test.categories'>
+            <i class='material-icons'>local_offer</i> &nbsp; {{category.name}}
+        </span>
+    </div>
+    
+    <div class='author-collection' ng-if="test.authors.length">
+        <span class='label label-default' ng-repeat='author in test.authors'>
+            <i class='material-icons'>person</i> &nbsp; {{author.name}}
+        </span>
+    </div>
+    
+    <table class='table logs' ng-if="test.logs.length">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='log in test.logs' alt='{{ log.status }}' title='{{ log.status }}'>
+                <td>{{log.timestamp | date: 'HH:mm:ss'}}</td>
+                <td class='{{log.status}}'>
+                    <i class='material-icons'>{{getIcon(log.status)}}</i>
+                </td>
+                <td ng-bind-html='trust(log.details)'></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class='media-collection' ng-if="test.media.length>0">
+        <span ng-repeat='media in test.media'>
+            <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' ng-if="media.mediaType=='img'" />
+            <video width="320" height="240" controls ng-if="media.mediaType=='vid'">
+                <source src="{{media.path}}" type="video/mp4">
+                <source src="{{media.path}}" type="video/ogg">
+                <source src="{{media.path}}" type="video/avi">
+                Your browser does not support the video tag.
+            </video>
+        </span>
+        <div>&nbsp;</div>
+    </div>
+    
+    <div uib-accordion close-others="true" ng-if="test.nodes.length">
+        <div uib-accordion-group class='extent-node' ng-repeat='node in test.nodes' is-open="false" is-disabled="false">
+            <div uib-accordion-heading>
+                <span ng-click="loadNodeById(node.id)">{{ node.name }}</span>
+                <div class='pull-right {{node.status}}'>
+                    <i class='material-icons'>{{getIcon(node.status)}}</i>
+                </div>
+            </div>
+
+            <div class="content">
+                <table class='table logs' ng-if="node.logs.length">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat='log in node.logs'>
+                            <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                            <td class='{{ log.status }}'>
+                                <i class='material-icons'>{{getIcon(log.status)}}</i>
+                            </td>
+                            <td ng-bind-html='trust(log.details)'></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class='media-collection' ng-if="node.media.length>0">
+                    <span ng-repeat='media in node.media'>
+                        <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' />
+                    </span>
+                    <div>&nbsp;</div>
+                </div>
+                
+                <div uib-accordion close-others="true" ng-if="node.nodes.length">
+                    <div uib-accordion-group class='extent-node level-3' ng-repeat='node in node.nodes' is-open="false" is-disabled="false">
+                        <div uib-accordion-heading>
+                            <span ng-click="loadNodeById(node.id)">{{ node.name }}</span>
+                            <div class='pull-right {{node.status}}'>
+                                <i class='material-icons'>{{getIcon(node.status)}}</i>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <table class='table logs' ng-if="node.logs.length">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Status</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat='log in node.logs'>
+                                        <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                                        <td class='{{ log.status }}'>
+                                            <i class='material-icons'>{{getIcon(log.status)}}</i>
+                                        </td>
+                                        <td ng-bind-html='trust(log.details)'></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class='media-collection' ng-if="node.media.length">
+                                <span ng-repeat='media in node.media'>
+                                    <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' />
+                                </span>
+                                <div>&nbsp;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

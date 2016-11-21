@@ -19,6 +19,11 @@ module.exports = {
             collection: 'report',
             via: 'project'
         },
+
+        environment: {
+            collection: 'environment',
+            via: 'project'
+        },
         
         name: 'string'
     },

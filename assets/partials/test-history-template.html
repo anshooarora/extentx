@@ -1,0 +1,31 @@
+<br/>
+
+<button class="btn btn-raised btn-default" ng-click="getCompleteTestHistory()">
+    Show History
+</button>
+
+<br/>
+<br/>
+
+<table class="table" ng-if="historicalTestList.length>0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Report ID</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="histTest in historicalTestList">
+            <td class="cursor-pointer" ng-click="loadHistoryById(histTest.id);setContrainerWidths();">{{histTest.name}}</td>
+            <td>{{histTest.report.id}}</td>
+            <td><span class="label label-default">{{histTest.startTime|date: 'MMM-dd-yyyy HH:mm:ss'}}</span></td>
+            <td class="test-status {{histTest.status}}"><i class='material-icons'>{{getIcon(histTest.status)}}</i></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="alert alert-warning" ng-if="historicalTestList.length===0">
+    No history exists for this test.
+</div>

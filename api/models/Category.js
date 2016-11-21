@@ -5,6 +5,9 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var ObjectId = require('mongodb').ObjectID,
+    _ = require("lodash");
+    
 module.exports = {
 
   attributes: {
@@ -18,6 +21,10 @@ module.exports = {
       tests: {
           collection: 'test',
           via: 'categories'
+      },
+      
+      project: {
+          model: 'project'
       },
       
       /* Owner
@@ -36,7 +43,7 @@ module.exports = {
       status: 'string'
   },
   
-  getNames: function(cb) {
+  getDistinctNames: function(cb) {
     Category.native(function(err, collection) {
         collection.distinct('name', function(err, result) {
             if (err) console.log(err);
@@ -63,5 +70,33 @@ module.exports = {
         });
     });
   },
+
+  getCategoryNamesWithTestCountsByProject: function(req, filterStatus, cb) {
+    var project = { $ne: null };
+    if (typeof req.session.project !== 'undefined' && req.session.project != null) 
+        project = req.session.project;
+
+    var dic = {},
+        cntr = 0;
+
+    Project.find({ name: project }).exec(function(err, projects) {
+        if (projects.length && projects.length === 1)
+            project = ObjectId(projects[0].id);
+
+        Category.find({ project: project }).populate("tests", { where: { status: { "!": filterStatus }, level: 0 }}).exec(function(err, categoryTests) {
+            for (var ix = 0; ix < categoryTests.length; ix++) {
+                var category = categoryTests[ix];
+                if (typeof dic[category.name] === "undefined")
+                    dic[category.name] = 0;
+                    
+                dic[category.name] = dic[category.name] + category.tests.length;
+
+                if (++cntr == categoryTests.length)
+                    cb(dic);
+            }
+        });
+    });
+  },
+
 };
 

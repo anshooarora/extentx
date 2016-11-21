@@ -5,18 +5,20 @@
  * compiled and linked from your views and static HTML files.
  *
  * (Note that you can take advantage of Grunt-style wildcard/glob/splat expressions
- * for matching multiple files, and the ! prefix for excluding files.)
+ * for matching multiple files, and ! in front of an expression to ignore files.)
+ *
+ * For more information see:
+ *   https://github.com/balderdashy/sails-docs/blob/master/anatomy/myApp/tasks/pipeline.js.md
  */
 
-// Path to public folder
-var tmpPath = '.tmp/public/';
 
 // CSS files to inject in order
 //
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'styles/**/*.css'
+  'styles/dependencies/**/*.css',
+  'styles/*.css'
 ];
 
 
@@ -27,23 +29,19 @@ var jsFilesToInject = [
   // Load sails.io before everything else
   'js/dependencies/sails.io.js',
 
-  'js/dependencies/angular-1.5.3.min.js',
-  'js/dependencies/chart-1.0.1.min.js',
-  
+  'js/dependencies/jquery-2.2.4.min.js',
+  'js/dependencies/angular-1.5.8.min.js',
+  'js/dependencies/chartjs-2.3.0.min.js',
+
   // Dependencies like jQuery, or Angular are brought in here
   'js/dependencies/**/*.js',
 
-  // modules must come before all controllers
   'js/api/ExtentX.js',
-  'js/api/common/services/RouteQuery.js',
-  'js/api/common/services/*.js',
-  
+  'js/api/services/*.js',
+
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js',
-
-  // Use the "exclude" operator to ignore files
-  // '!js/ignore/these/files/*.js'
+  'js/**/*.js'
 ];
 
 
@@ -62,15 +60,36 @@ var templateFilesToInject = [
 
 
 
+
+
+
+
+// Default path for public folder (see documentation for more information)
+var tmpPath = '.tmp/public/';
+
 // Prefix relative paths to source files so they point to the proper locations
 // (i.e. where the other Grunt tasks spit them out, or in some cases, where
 // they reside in the first place)
-module.exports.cssFilesToInject = cssFilesToInject.map(transformPath);
-module.exports.jsFilesToInject = jsFilesToInject.map(transformPath);
-module.exports.templateFilesToInject = templateFilesToInject.map(transformPath);
+module.exports.cssFilesToInject = cssFilesToInject.map(function(cssPath) {
+  // If we're ignoring the file, make sure the ! is at the beginning of the path
+  if (cssPath[0] === '!') {
+    return require('path').join('!.tmp/public/', cssPath.substr(1));
+  }
+  return require('path').join('.tmp/public/', cssPath);
+});
+module.exports.jsFilesToInject = jsFilesToInject.map(function(jsPath) {
+  // If we're ignoring the file, make sure the ! is at the beginning of the path
+  if (jsPath[0] === '!') {
+    return require('path').join('!.tmp/public/', jsPath.substr(1));
+  }
+  return require('path').join('.tmp/public/', jsPath);
+});
+module.exports.templateFilesToInject = templateFilesToInject.map(function(tplPath) {
+  // If we're ignoring the file, make sure the ! is at the beginning of the path
+  if (tplPath[0] === '!') {
+    return require('path').join('!assets/', tplPath.substr(1));
+  }
+  return require('path').join('assets/',tplPath);
+});
 
-// Transform paths relative to the "assets" folder to be relative to the public
-// folder, preserving "exclude" operators.
-function transformPath(path) {
-  return (path.substring(0,1) == '!') ? ('!' + tmpPath + path.substring(1)) : (tmpPath + path);
-}
+

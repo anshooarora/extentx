@@ -1,0 +1,39 @@
+<div uib-accordion close-others="true" ng-if="nodes.length">
+    <div uib-accordion-group class='extent-node level-3' ng-repeat='node in nodes' is-open="true" is-disabled="false">
+        <div uib-accordion-heading>
+            {{node.name}}
+            <div class='float-right {{node.status}}'>
+                <i class='{{node.status}}'></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <table class='table logs' ng-if="node.logs.length">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='log in node.logs'>
+                        <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
+                        <td class='{{ log.status }}'>
+                            <i class='{{ getIcon(log.status) }}'></i>
+                        </td>
+                        <td ng-bind-html='trust(log.details)'></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class='media-collection' ng-if="node.media.length">
+                <span ng-repeat='media in node.media'>
+                    <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' />
+                </span>
+                <div>&nbsp;</div>
+            </div>
+        </div>
+
+    </div>
+</div>

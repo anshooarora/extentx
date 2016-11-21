@@ -20,6 +20,10 @@ module.exports = {
           via: 'authors'
       },
       
+      project: {
+          model: 'project'
+      },
+
       /* Owner
        * A report can have one or more authors
        * There is a one-to-many relationship between report and author
@@ -36,7 +40,7 @@ module.exports = {
       status: 'string'
   },
   
-  getNames: function(cb) {
+  getDistinctNames: function(cb) {
     Author.native(function(err, collection) {
         collection.distinct('name', function(err, result) {
             if (err) console.log(err);

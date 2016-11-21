@@ -1,52 +1,128 @@
 /**
  * ReportController
  *
- * @description :: Server-side logic for managing Report details
+ * @description :: Server-side logic for managing Reports
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 var ObjectId = require('mongodb').ObjectID,
-    _ = require('lodash');
+    _ = require("lodash");
 
 module.exports = {
-    archive: function(req, res) {
-        var reportId = req.body.query;
-        
-        // move all models to their archive
-        
-        res.send(200);
-    },
-    
-    destroyReportWithDeps: function(req, res) {
-        var reportId = req.body.query;
-
-        Report.findOne({ id: reportId })
-        .then(function(report) {
-            Report.find({ project: report.project }).exec(function(err, reports) {
-                if (reports.length === 1) {
-                    Project.destroy({ id: reports[0].project }).exec(function(err) {});
-                }
-            });
-        }).then(function() {
-            Report.destroy({ id: reportId }).exec(function(err) {});
-            Author.destroy({ report: reportId }).exec(function(err) {});
-            Category.destroy({ report: reportId }).exec(function(err) {});
-            Log.destroy({ report: reportId }).exec(function(err) {});
-            Node.destroy({ report: reportId }).exec(function(err) {});
-            Test.destroy({ report: reportId }).exec(function(err) {});
-            Media.destroy({ report: reportId }).exec(function(err) {});
-        }).catch(function(err) {
-            console.log(err);
-        });
-
-        res.send(200);
-    },
-       
-    aggregates: function(req, res) {
+	
+    getReportAndTestsCounts: function(req, res) {
         var project = { $ne: null };
         if (typeof req.session.project !== 'undefined' && req.session.project != null) 
             project = req.session.project;
 
+        var d = new Date();
+        d.setHours(0,0,0,0);
+
+        Project.find({ name: project })
+        .then(function(projects) {
+            if (projects.length && projects.length === 1)
+                project = projects[0].id;
+
+            var reportLength = Report.count({ project: project })
+            .then(function(reportLength) {
+                return reportLength;
+            });
+
+            var reportTodayLength =  Report.count({ project: project, startTime: { ">=": d}} )
+            .then(function(reportTodayLength) {
+                return reportTodayLength;
+            });
+            
+            var featureLength = Test.count({ project: project, level: 0 })
+            .then(function(featureLength) {
+                return featureLength;
+            });
+
+            var featurePassLength = Test.count({ project: project, level: 0, status: 'pass' })
+            .then(function(featurePassLength) {
+                return featurePassLength;
+            });
+
+            var featureFailLength = Test.count({ project: project, level: 0, status: { '!': ['pass', 'info'] } })
+            .then(function(featureFailLength) {
+                return featureFailLength;
+            });
+
+            var featureTodayLength = Test.count({ project: project, startTime: { ">=": d}, level: 0 })
+            .then(function(featureTodayLength) {
+                return featureTodayLength;
+            })
+
+            var scenarioLength = Test.count({ project: project, level: 1 })
+            .then(function(scenarioLength) {
+                return scenarioLength;
+            });
+
+            var scenarioPassLength = Test.count({ project: project, level: 1, status: 'pass' })
+            .then(function(scenarioPassLength) {
+                return scenarioPassLength;
+            });
+
+            var scenarioFailLength = Test.count({ project: project, level: 1, status: { '!': ['pass', 'info'] } })
+            .then(function(scenarioFailLength) {
+                return scenarioFailLength;
+            });
+
+            var scenarioTodayLength = Test.count({ project: project, startTime: { ">=": d}, level: 1 })
+            .then(function(scenarioTodayLength) {
+                return scenarioTodayLength;
+            })
+
+            return [ 
+                reportLength, 
+                reportTodayLength, 
+                featureLength,
+                featurePassLength,
+                featureFailLength,
+                featureTodayLength, 
+                scenarioLength, 
+                scenarioPassLength,
+                scenarioFailLength,
+                scenarioTodayLength 
+            ];
+        })
+        .spread(function(reportLength, reportTodayLength, featureLength, featurePassLength, featureFailLength, featureTodayLength, scenarioLength, scenarioPassLength, scenarioFailLength, scenarioTodayLength) {
+            res.json({
+                reportLength: reportLength,
+                reportTodayLength: reportTodayLength,
+                featureLength: featureLength,
+                featurePassLength: featurePassLength,
+                featureFailLength: featureFailLength,
+                featureTodayLength: featureTodayLength,
+                scenarioLength: scenarioLength,
+                scenarioPassLength: scenarioPassLength,
+                scenarioFailLength: scenarioFailLength,
+                scenarioTodayLength: scenarioTodayLength
+            });
+        })
+        .fail(function(err) {
+            console.log(err);
+            res.json(data);
+        });
+    },
+
+    getReportById: function(req, res) {
+        var id = req.body.query.id;
+
+        Report.findOne({ id: id }).populateAll().exec(function(err, report) {
+            res.json(report);
+        });
+    },
+
+    getReportList: function(req, res) {
+        var page = 1;
+        if (typeof req.body !== 'undefined' && typeof req.body.query.page !== 'undefined')
+            page = req.body.query.page;
+
+        var project = { $ne: null };
+        if (typeof req.session.project !== 'undefined' && req.session.project != null) 
+            project = req.session.project;
+        
         // system default data-points
         var trendDataPoints = 5,
             trendDataPointFormat = 'long-dt';
@@ -66,143 +142,52 @@ module.exports = {
                 trendDataPointFormat = req.session.trendDataPointFormat;
         })
 
+        var out = {};
+        function sendRes() {
+            res.json(out);
+        }
+
         Project.find({ name: project }).exec(function(err, projects) {
-            if (projects.length && projects.length === 1) project = projects[0].id;
+            if (projects.length && projects.length === 1)
+                project = projects[0].id;
             
-            Report.find({ project: project }).sort({ startTime: 'desc' }).exec(function(err, result) {
-                if (err) console.log(err);
-
-                var parentCount = 0,
-                    parentPassed = 0,
-                    parentFailed = 0,
-                    childCount = 0,
-                    childPassed = 0,
-                    childFailed = 0;
-                var categories = [];
-                var topPassed = [],
-                    topFailed = [];
-                var projects = null;
-
-                var view = function() {
-                    var out = {
-                        projects: projects,
-                        reports: result,
-                        categories: categories,
-                        trendDataPoints: trendDataPoints,
-                        trendDataPointFormat: trendDataPointFormat,
-                        token: {
-                            csrf: req.session.csrfSecret
-                        },
-                        trends: {
-                            topPassed: topPassed,
-                            topFailed: topFailed
-                        }, 
-                        aggregates: {
-                            parentCount: parentCount,
-                            parentPassed: parentPassed,
-                            parentFailed: parentFailed,
-                            childCount: childCount,
-                            childPassed: childPassed,
-                            childFailed: childFailed
-                        }
-                    };
-                    
-                    res.json(out);
-                }
-                
-                if (result.length === 0) {
-                    view();
-                } else {
-                    var reportIds = [];
-                    _(result).forEach(function(report) {
-                        reportIds.push(ObjectId(report.id));
-                        if (typeof report.parentLength !== 'undefined' && report.parentLength >= 0) {
-                            parentCount += report.parentLength;
-                            parentPassed += report.passParentLength;
-                            parentFailed += report.failParentLength;
-                            childCount += report.childLength;
-                            childPassed += report.passChildLength;
-                            childFailed += report.failChildLength;
-                        }
-                    });
-
-                    // list all projects
-                    Project.getProjects(function(p) { projects = p });
-                    
-                    // list all categories
-                    Category.getNames(function(cats) { categories = cats; })
-                    
-                    // top passed tests
-                    Test.getGroupsWithCounts([{ status: { $in: ['pass'] }}, { report: { $in: reportIds}}], { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
-                        topPassed = e;
-                        
-                        // top failed tests
-                        Test.getGroupsWithCounts([{ status: { $in: ['fail', 'fatal'] }}, { report: { $in: reportIds}}], { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
-                            topFailed = e;
-                            view();
-                        });
-                    });
-                }
+            Report.find({ project: project }).sort({ startTime: 'desc' }).paginate({ page: page, limit: 10 }).populate('project').exec(function(err, reports) {
+                var dataPointSetting = {
+                    trendDataPointLength: trendDataPoints,
+                    trendDataPointFormat: trendDataPointFormat
+                };
+                out.dataPointSetting = dataPointSetting;
+                out.reports = reports;
+                sendRes();
             });
         });
     },
 
-    details: function(req, res) {
-        req.query = req.body.query;
-        
-        Test.find({ report: req.query.id }).populateAll().exec(function(err, result) {
-            if (err) console.log(err);
+    destroyReportAndDepsByReportId: function(req, res) {
+        var reportId = req.body.query;
 
-            var out = [];
-            
-            var sendRes = function() {
-                res.json(out);
-            };
-
-            var getNodesWithLogs = function(nodeArray, cb) {
-                if (nodeArray.length === 0) cb(nodeArray);
-
-                var itemsToIterateIn = nodeArray.length;
-                
-                for (var ix = 0; ix < nodeArray.length; ix++) {
-                    (function(ix) {
-                        Log.getLogs({ node: nodeArray[ix].id }, function(logs) {
-                            nodeArray[ix].logs = logs;
-                            
-                            if (--itemsToIterateIn === 0) cb(nodeArray);
-                        });
-                    })(ix);
+        Report.findOne({ id: reportId })
+        .then(function(report) {
+            Report.find({ project: report.project }).exec(function(err, reports) {
+                if (reports.length === 1) {
+                    Project.destroy({ id: reports[0].project }).exec(function(err) {});
                 }
-            }
-            
-            var itemsToIterate = result.length;
-            
-            for (var ix = 0; ix < result.length; ix++) {
-                (function(ix) {
-                    out[ix] = result[ix].toJSON();
-                    
-                    if (result[ix].nodes.length > 0) {
-                        getNodesWithLogs(result[ix].toJSON().nodes, function(nodes) {
-                            out[ix].nodes = nodes;
-                            
-                            (--itemsToIterate === 0) && sendRes();
-                        });
-                    }
-                    else {
-                        (--itemsToIterate === 0) && sendRes();
-                    }
-                })(ix)
-            }
+            });
         })
+        .then(function() {
+            Report.destroy({ id: reportId }).exec(function(err) {});
+            Author.destroy({ report: reportId }).exec(function(err) {});
+            Category.destroy({ report: reportId }).exec(function(err) {});
+            Log.destroy({ report: reportId }).exec(function(err) {});
+            Test.destroy({ report: reportId }).exec(function(err) {});
+            Media.destroy({ report: reportId }).exec(function(err) {});
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+
+        res.send(200);
     },
 
-    getCategoryList: function(req, res) {
-        var id = req.body.id;
-
-        Report.find({ id: id }).populate('categories').exec(function(err, categories) {
-           if (err) res.json(null);
-           else res.json(categories);
-       })
-    },
 };
 

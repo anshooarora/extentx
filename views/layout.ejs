@@ -1,69 +1,64 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ExtentX</title>
+    <title>ExtentX Report Server - AventStack</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <!-- csrf token -->
-    <meta name="csrf-token" content="<%= req.session.csrfSecret %>">
-    
+
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/dependencies/bootstrap-lumen-3.3.6.min.css">
-    <link rel="stylesheet" href="/styles/dependencies/fontawesome-4.5.0.min.css">
-    <link rel="stylesheet" href="/styles/extentx.css">
-    <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/dependencies/bootstrap-3.3.7-min.css">
+    <link rel="stylesheet" href="/styles/dependencies/featherlight-1.5.0.min.css">
+    <link rel="stylesheet" href="/styles/dependencies/material-icons.css">
+    <link rel="stylesheet" href="/styles/css.css">
     <!--STYLES END-->
   </head>
 
   <% var theme = ''; if (typeof req.session.theme !== 'undefined') theme = req.session.theme; %>
 
   <body ng-app='ExtentX' class='<%= theme %>'>
- 
+
     <% include partials/header.ejs %>
-        
+
     <div ng-view></div>
+
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
-    <script src="/js/dependencies/angular-1.5.3.min.js"></script>
-    <script src="/js/dependencies/chart-1.0.1.min.js"></script>
-    <script src="/js/dependencies/angular-bootstrap-1.2.5.min.js"></script>
-    <script src="/js/dependencies/angular-charts-0.9.0.min.js"></script>
-    <script src="/js/dependencies/angular-cookies-1.5.3.min.js"></script>
-    <script src="/js/dependencies/angular-route-1.5.2.min.js"></script>
-    <script src="/js/dependencies/jquery-1.12.2-min.js"></script>
+    <script src="/js/dependencies/jquery-2.2.4.min.js"></script>
+    <script src="/js/dependencies/angular-1.5.8.min.js"></script>
+    <script src="/js/dependencies/chartjs-2.3.0.min.js"></script>
+    <script src="/js/dependencies/angular-animate-1.5.8.min.js"></script>
+    <script src="/js/dependencies/angular-charts-1.0.3.min.js"></script>
+    <script src="/js/dependencies/angular-cookies-1.5.8.min.js"></script>
+    <script src="/js/dependencies/angular-route-1.5.8.min.js"></script>
+    <script src="/js/dependencies/angular-ui-bootstrap-tpls-2.1.4.min.js"></script>
+    <script src="/js/dependencies/featherlight-1.5.0.min.js"></script>
     <script src="/js/api/ExtentX.js"></script>
-    <script src="/js/api/common/services/RouteQuery.js"></script>
-    <script src="/js/api/common/services/Aggregates.js"></script>
-    <script src="/js/api/common/services/CSRFToken.js"></script>
-    <script src="/js/api/common/services/DateTime.js"></script>
-    <script src="/js/api/common/services/Icon.js"></script>
-    <script src="/js/api/common/services/LineChartSettings.js"></script>
-    <script src="/js/api/common/services/PieChartSettings.js"></script>
-    <script src="/js/api/admin/controllers/AdminController.js"></script>
-    <script src="/js/api/analysis/controllers/DataPointsController.js"></script>
-    <script src="/js/api/analysis/controllers/TestAnalysisController.js"></script>
-    <script src="/js/api/analysis/services/DataPointFormat.js"></script>
-    <script src="/js/api/authentication/controllers/SigninController.js"></script>
-    <script src="/js/api/authentication/controllers/SignoutController.js"></script>
-    <script src="/js/api/authentication/controllers/UserController.js"></script>
-    <script src="/js/api/categories/controllers/CategoryViewController.js"></script>
-    <script src="/js/api/categories/directives/categoryFormats.js"></script>
-    <script src="/js/api/common/controllers/LogTrendsController.js"></script>
-    <script src="/js/api/common/controllers/ModalInstanceController.js"></script>
-    <script src="/js/api/common/controllers/ProjectController.js"></script>
-    <script src="/js/api/common/controllers/TestTrendsController.js"></script>
-    <script src="/js/api/common/directives/startFrom.js"></script>
-    <script src="/js/api/navigation/controllers/NavigationController.js"></script>
-    <script src="/js/api/navigation/directives/navigationState.js"></script>
-    <script src="/js/api/reports/controllers/ReportController.js"></script>
-    <script src="/js/api/search/controllers/SearchController.js"></script>
-    <script src="/js/api/search/directives/searchInit.js"></script>
-    <script src="/js/api/tests/controllers/HistoryController.js"></script>
-    <script src="/js/api/tests/controllers/NodeController.js"></script>
-    <script src="/js/api/tests/controllers/TestDetailsController.js"></script>
-    <script src="/js/api/tests/directives/testDetailsViewer.js"></script>
+    <script src="/js/api/services/BarChartSettings.js"></script>
+    <script src="/js/api/services/ChartSettings.js"></script>
+    <script src="/js/api/services/DataPointFormat.js"></script>
+    <script src="/js/api/services/Icon.js"></script>
+    <script src="/js/api/services/LineChartSettings.js"></script>
+    <script src="/js/api/services/PieChartSettings.js"></script>
+    <script src="/js/api/services/ViewNameSetter.js"></script>
+    <script src="/js/api/controllers/AdminController.js"></script>
+    <script src="/js/api/controllers/AnalysisController.js"></script>
+    <script src="/js/api/controllers/AuthorController.js"></script>
+    <script src="/js/api/controllers/CategoryController.js"></script>
+    <script src="/js/api/controllers/HeaderController.js"></script>
+    <script src="/js/api/controllers/ModalInstanceController.js"></script>
+    <script src="/js/api/controllers/NavigationController.js"></script>
+    <script src="/js/api/controllers/ProjectController.js"></script>
+    <script src="/js/api/controllers/ReportController.js"></script>
+    <script src="/js/api/controllers/SearchController.js"></script>
+    <script src="/js/api/controllers/TestController.js"></script>
+    <script src="/js/api/controllers/UserController.js"></script>
+    <script src="/js/api/directives/analysisViewConfig.js"></script>
+    <script src="/js/api/directives/reportDetailsView.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>

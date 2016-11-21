@@ -46,30 +46,41 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/deleteOlderThanXDays': 'AdminController.deleteOlderThanXDays',
+  '/deleteReportsOlderThanXDays': 'AdminController.deleteReportsOlderThanXDays',
 
-  '/login': 'UserController.login',
-  '/isLoggedIn': 'UserController.isLoggedIn',
-  '/logout': 'UserController.logout',
-  
+  '/getProjects': 'ProjectController.getProjects',
   '/switchProject': 'ProjectController.switchProject',
+  '/getProjectsWithDeps': 'ProjectController.getProjectsWithDeps',
 
-  '/aggregates': 'ReportController.aggregates',
-  '/details': 'ReportController.details',
-  '/destroyReport': 'ReportController.destroyReportWithDeps',
-  '/getCategoryListForReport': 'ReportController.getCategoryList',
+  '/getTestHistory': 'TestController.getTestHistory',
+  '/getTestById': 'TestController.getTestById',
+  '/getTopFailedTestsByProject': 'TestController.getTopFailedTestsByProject',
+  '/getMostRecentTestByName': 'TestController.getMostRecentTestByName',
 
-  '/search': 'SearchController.search',
+  '/getExceptionNamesWithTestCountsByProject': 'ExceptionController.getExceptionNamesWithTestCountsByProject',
+  '/getExceptionDistributionByReportByProject': 'ExceptionController.getExceptionDistributionByReportByProject',
+  '/getExceptionsByReportId': 'ExceptionController.getExceptionsByReportId',
+  '/getTestsByExceptionId': 'ExceptionController.getTestsByExceptionId',
   
-  '/getHistory': 'TestController.getHistory',
-  '/getTestsById': 'TestController.getTestById',
-  '/getTestsForCategory': 'TestController.getTestsForCategory',
-  
-  '/getChildNodesByParentId': 'NodeController.getChildNodesByParentId',
-  '/getMediaByNodeId': 'NodeController.getMediaByNodeId',
-  
-  '/dataPointSettings': 'SettingsController.dataPointSettings',
-  '/themeSetting': 'SettingsController.themeSetting',
-
   '/upload': 'FileController.upload',
+
+  '/getCategoryListByReportId': 'CategoryController.getCategoryListByReportId',
+  '/getTestsByCategoryId': 'CategoryController.getTestsByCategoryId',
+  '/getCategoryNamesWithTestCountsByProject': 'CategoryController.getCategoryNamesWithTestCountsByProject',
+  '/getDistinctCategoryNamesByProject': 'CategoryController.getDistinctCategoryNamesByProject',
+  
+  '/getAuthorListByReportId': 'AuthorController.getAuthorListByReportId',
+  '/getAuthorNamesWithTestCountsByProject': 'AuthorController.getAuthorNamesWithTestCountsByProject',
+
+  '/getReportById': 'ReportController.getReportById',
+  '/getReportList': 'ReportController.getReportList',
+  '/destroyReportAndDepsByReportId': 'ReportController.destroyReportAndDepsByReportId',
+  '/getReportAndTestsCounts': 'ReportController.getReportAndTestsCounts',
+
+  '/signon': 'UserController.signon',
+  '/isSignedOn': 'UserController.isSignedOn',
+  '/signup': 'UserController.signup',
+  '/logout': 'UserController.logout',
+
+  '/searchTests': 'SearchController.searchTests',
 };

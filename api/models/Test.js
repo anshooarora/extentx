@@ -119,6 +119,26 @@ module.exports = {
         });
     },
 
+    deepPopulateLogElements: function(test, cb) {
+        var cntr = 0;
+
+        if (test.logs.length === 0)
+            cb(test);
+
+        var t = test.toObject();
+
+        for (var ix = 0; ix < t.logs.length; ix++) {
+            (function(ix) {
+                Log.findOne({ id: t.logs[ix].id }).populateAll().exec(function(err, log) {
+                    t.logs[ix] = log;
+
+                    if (++cntr == t.logs.length)
+                        cb(t);
+                })
+            })(ix)
+        }
+    },
+
     getGroupsWithCounts: function(matcher, groupBy, sortBy, limit, cb) {
         Test.native(function(err, collection) {
             collection.aggregate(

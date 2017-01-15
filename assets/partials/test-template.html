@@ -27,7 +27,14 @@
                 <td class='{{log.status}}'>
                     <i class='material-icons'>{{getIcon(log.status)}}</i>
                 </td>
-                <td ng-bind-html='trust(log.details)'></td>
+                <td>
+                    <span ng-bind-html='trust(log.details)'></span>
+                    <span ng-if='log.media.length>0'>
+                        <span ng-repeat='media in log.media'>
+                            <img width='30%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' ng-if="media.mediaType=='img'" />
+                        </span>
+                    </span>
+                </td>
             </tr>
         </tbody>
     </table>

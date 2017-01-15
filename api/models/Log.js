@@ -19,6 +19,11 @@ module.exports = {
       report: {
           model: 'report'
       },
+
+      media: {
+          collection: 'media',
+          via: 'log'
+      },
       
       testName: 'text',
       

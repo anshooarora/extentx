@@ -12,6 +12,10 @@ module.exports = {
           model: 'test'
       },
       
+      log: {
+          model: 'log'
+      },
+      
       project: {
           model: 'project'
       },

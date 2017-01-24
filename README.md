@@ -4,5 +4,6 @@ Report Server for ExtentReports
 
 ### Supported ExtentReports Versions
 
-To be announced soon.
+* ExtentReports Java Pro 3.0.0+
+* ExtentReports Java 3.0.1+
 

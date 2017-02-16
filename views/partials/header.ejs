@@ -23,6 +23,7 @@
         
         <div class="item" uib-dropdown ng-if="signedOn">
             <a href alt="User {{user}}" title="User {{user}}" id="user-dropdown" uib-dropdown-toggle>
+                <span class="label label-default"><i class="material-icons">person</i> &nbsp; {{user}}</span>
             </a>
             <ul uib-dropdown-menu aria-labelledby="user-dropdown" class="pull-right">
                 <li ng-if="isAdmin">

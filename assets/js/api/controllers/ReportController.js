@@ -1,6 +1,6 @@
 angular.module('ExtentX')
-    .controller('ReportController', ['$rootScope', '$scope', '$http', '$location', 'Icon', 'PieChartSettings', 'LineChartSettings', 'ViewNameSetter',
-    function($rootScope, $scope, $http, $location, Icon, PieChartSettings, LineChartSettings, ViewNameSetter) {
+    .controller('ReportController', ['$rootScope', '$scope', '$http', '$location', '$timeout', 'Icon', 'PieChartSettings', 'LineChartSettings', 'ViewNameSetter',
+    function($rootScope, $scope, $http, $location, $timeout, Icon, PieChartSettings, LineChartSettings, ViewNameSetter) {
         $scope.path = [ '/report-summary', '/report' ];
         $scope.page = 1;
         $scope.topReportList = [];
@@ -8,6 +8,7 @@ angular.module('ExtentX')
         $scope.datasetOverride = LineChartSettings.datasetOverrideGreen;
         $scope.perfChartColWidth = 6;
         $scope.setViewName = ViewNameSetter.setViewName; 
+        $scope.reportChkSelected = false;
 
         $scope.hideNav = function() {
             angular.element(".navbar").addClass("hidden");
@@ -15,6 +16,11 @@ angular.module('ExtentX')
 
         $scope.getIcon = function(status) {
             return Icon.getIcon(status);
+        };
+
+        $scope.countChecked = function() {
+            var count = 0;
+            return angular.element('input:checkbox:checked').length;
         };
 
         $scope.getReportList = function(page) {
@@ -138,4 +144,34 @@ angular.module('ExtentX')
                     }
                 });
         }
+
+        $scope.deleteReports = function() {
+            var ids = [];
+            for (var ix = 0; ix < angular.element('input:checkbox:checked').length; ix++) {
+                ids.push(angular.element('input:checkbox:checked')[ix].attributes['id'].nodeValue);
+            }
+            
+            for (var ix = 0; ix < ids.length; ix++) {
+                var req = {
+                    method: 'POST',
+                    url: '/destroyReportAndDepsByReportId',
+                    data: {
+                        query: { 
+                            id: ids[ix] 
+                        }
+                    }
+                };
+
+                $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
+                $http(req).
+                    success(function(res) { });
+            }
+
+            var fn = function () {
+                $scope.getReportList($scope.page);
+            };
+
+            $timeout(fn, 500);
+        };
     }]);

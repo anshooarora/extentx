@@ -19,7 +19,7 @@
     <tbody>
         <tr ng-repeat='report in reportList track by $index' ng-if="$index < length">
             <td ng-controller="UserController" ng-if="isAdmin">
-                <input type="checkbox">
+                <input type="checkbox" id="{{report.id}}" ng-click="countChecked()">
             </td>
             <td>{{$index+1}}</td>
             <td>{{report.project.name}}</td>

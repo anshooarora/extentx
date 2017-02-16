@@ -10,7 +10,7 @@
             <a href alt="Select Project" title="Select Project" id="project-dropdown" uib-dropdown-toggle>
                 Select Project
             </a>
-            <ul uib-dropdown-menu aria-labelledby="project-dropdown">
+            <ul uib-dropdown-menu aria-labelledby="project-dropdown" class="pull-right">
                 <li ng-repeat="project in projects">
                     <a href ng-click="switchProject(project.name)">{{project.name}}</a>
                 </li>
@@ -20,24 +20,23 @@
                 </li>
             </ul>
         </div>
-        <% if (typeof req.session.user !== "undefined") { %>
-            <div class="item" uib-dropdown>
-                <a href alt="User {{user}}" title="User {{user}}" id="user-dropdown" uib-dropdown-toggle>
-                    <span class="label label-default"><i class="material-icons">person</i> &nbsp; <%= req.session.user.name %></span>
-                </a>
-                <ul uib-dropdown-menu aria-labelledby="user-dropdown">
-                    <li ng-if="isAdmin">
-                        <a href="#/admin">Admin Panel</a>
-                    </li>
-                    <li>
-                        <a href="#/change-password">Change Password</a>
-                    </li>
-                    <li>
-                        <a href ng-controller="UserController" ng-click="logout()">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        <% } %>
+        
+        <div class="item" uib-dropdown ng-if="signedOn">
+            <a href alt="User {{user}}" title="User {{user}}" id="user-dropdown" uib-dropdown-toggle>
+            </a>
+            <ul uib-dropdown-menu aria-labelledby="user-dropdown" class="pull-right">
+                <li ng-if="isAdmin">
+                    <a href="#/admin">Admin Panel</a>
+                </li>
+                <li>
+                    <a href="#/change-password">Change Password</a>
+                </li>
+                <li>
+                    <a href ng-controller="UserController" ng-click="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
+        
         <div class="item" ng-controller="UserController" ng-init="isSignedOn()" ng-if="!signedOn">
             <a href ng-click="open('sm')">Login</a>
         </div>

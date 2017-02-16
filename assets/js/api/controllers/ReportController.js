@@ -19,7 +19,8 @@ angular.module('ExtentX')
 
         $scope.getReportList = function(page) {
             $scope.page = page;
-            
+            angular.element('input:checkbox').attr('checked',false);
+
             var req = {
                 method: 'POST',
                 url: '/getReportList',

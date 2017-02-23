@@ -8,3 +8,6 @@ Report Server for ExtentReports
 * ExtentReports Java Community 3.0.1+
 * ExtentReports .NET Community 3.0.0+
 
+### Download
+
+Download from [extentreports.com](http://extentreports.com/community/)

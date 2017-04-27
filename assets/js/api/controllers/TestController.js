@@ -43,7 +43,7 @@ angular.module('ExtentX')
                 });
         };
 
-        $scope.loadNodeById = function(testId) {
+        $scope.loadNodeById = function(testId, level) {
             var req = {
                 method: 'POST',
                 url: '/getTestById',
@@ -58,7 +58,10 @@ angular.module('ExtentX')
             
             $http(req).
                 success(function(res) {
-                    $scope.nodes = res.nodes;
+                    if (level === 1)
+                        $scope.node1 = res;
+                    if (level === 2)
+                        $scope.node2 = res;
                 });
         };
 

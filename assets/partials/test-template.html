@@ -27,7 +27,14 @@
                 <td class='{{log.status}}'>
                     <i class='material-icons'>{{getIcon(log.status)}}</i>
                 </td>
-                <td ng-bind-html='trust(log.details)'></td>
+                <td>
+                    <span ng-bind-html='trust(log.details)'></span>
+                    <span ng-if='log.media.length>0'>
+                        <span ng-repeat='media in log.media'>
+                            <img width='30%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' ng-if="media.mediaType=='img'" />
+                        </span>
+                    </span>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -48,14 +55,14 @@
     <div uib-accordion close-others="true" ng-if="test.nodes.length">
         <div uib-accordion-group class='extent-node' ng-repeat='node in test.nodes' is-open="false" is-disabled="false">
             <div uib-accordion-heading>
-                <span ng-click="loadNodeById(node.id)">{{ node.name }}</span>
+                <span ng-click="loadNodeById(node.id, 1)">{{ node.name }}</span>
                 <div class='pull-right {{node.status}}'>
                     <i class='material-icons'>{{getIcon(node.status)}}</i>
                 </div>
             </div>
 
             <div class="content">
-                <table class='table logs' ng-if="node.logs.length">
+                <table class='table logs' ng-if="node1.logs.length">
                     <thead>
                         <tr>
                             <th>Timestamp</th>
@@ -64,18 +71,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat='log in node.logs'>
+                        <tr ng-repeat='log in node1.logs'>
                             <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
                             <td class='{{ log.status }}'>
                                 <i class='material-icons'>{{getIcon(log.status)}}</i>
                             </td>
-                            <td ng-bind-html='trust(log.details)'></td>
+                            <td>
+                                <span ng-bind-html='trust(log.details)'></span>
+                                <span ng-if='log.media.length>0'>
+                                    <span ng-repeat='media in log.media'>
+                                        <img width='30%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' ng-if="media.mediaType=='img'" />
+                                    </span>
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div class='media-collection' ng-if="node.media.length>0">
-                    <span ng-repeat='media in node.media'>
+                <div class='media-collection' ng-if="node1.media.length>0">
+                    <span ng-repeat='media in node1.media'>
                         <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' />
                     </span>
                     <div>&nbsp;</div>
@@ -84,14 +98,14 @@
                 <div uib-accordion close-others="true" ng-if="node.nodes.length">
                     <div uib-accordion-group class='extent-node level-3' ng-repeat='node in node.nodes' is-open="false" is-disabled="false">
                         <div uib-accordion-heading>
-                            <span ng-click="loadNodeById(node.id)">{{ node.name }}</span>
+                            <span ng-click="loadNodeById(node.id, 2)">{{ node.name }}</span>
                             <div class='pull-right {{node.status}}'>
                                 <i class='material-icons'>{{getIcon(node.status)}}</i>
                             </div>
                         </div>
 
                         <div class="content">
-                            <table class='table logs' ng-if="node.logs.length">
+                            <table class='table logs' ng-if="node2.logs.length">
                                 <thead>
                                     <tr>
                                         <th>Timestamp</th>
@@ -100,17 +114,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat='log in node.logs'>
+                                    <tr ng-repeat='log in node2.logs'>
                                         <td>{{ log.timestamp | date: 'HH:mm:ss' }}</td>
                                         <td class='{{ log.status }}'>
                                             <i class='material-icons'>{{getIcon(log.status)}}</i>
                                         </td>
-                                        <td ng-bind-html='trust(log.details)'></td>
+                                        <td>
+                                            <span ng-bind-html='trust(log.details)'></span>
+                                            <span ng-if='log.media.length>0'>
+                                                <span ng-repeat='media in log.media'>
+                                                    <img width='30%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' ng-if="media.mediaType=='img'" />
+                                                </span>
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <div class='media-collection' ng-if="node.media.length">
+                            <div class='media-collection' ng-if="node2.media.length">
                                 <span ng-repeat='media in node.media'>
                                     <img width='25%' class='report-img' data-featherlight='{{media.path}}' src='{{media.path}}' />
                                 </span>

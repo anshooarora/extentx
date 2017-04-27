@@ -19,6 +19,10 @@ module.exports = {
       report: {
           model: 'report'
       },
+
+      log: {
+          model: 'log'
+      },
       
       testName: 'text',
       

@@ -19,11 +19,11 @@
     <tbody>
         <tr ng-repeat='report in reportList track by $index' ng-if="$index < length">
             <td ng-controller="UserController" ng-if="isAdmin">
-                <input type="checkbox">
+                <input type="checkbox" id="{{report.id}}" ng-click="countChecked()">
             </td>
             <td>{{$index+1}}</td>
             <td>{{report.project.name}}</td>
-            <td><a href='#/report-summary?id={{report.id}}'>{{ report.name }}</a></td>
+            <td><a href='#/report?id={{report.id}}'>{{ report.name }}</a></td>
             <td><span class="label label-default">{{ report.startTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span></td>
             <td><span class="label label-default">{{ report.endTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span></td>
             <td><span class="label label-default">{{report.duration}} ms</span></td>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </td>
-            <td><a href='#/report-summary?id={{report.id}}'><i class="material-icons">open_in_new</i></a></td>
+            <td><a href='#/report?id={{report.id}}'><i class="material-icons">open_in_new</i></a></td>
         </tr>
     </tbody>
 </table>

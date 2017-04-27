@@ -44,6 +44,7 @@ angular.module('ExtentX')
                         $scope.showCategoryPanel = true;
 
                     $scope.categoryTestCounts = res;
+                    $scope.categoryTestCountLength = Object.keys(res).length;
 
                     if (drawChart) {
                         $scope.categoryDistributionLabels = [],
@@ -62,6 +63,28 @@ angular.module('ExtentX')
                 }).
                 error(function(err) {
                     console.log(err);
+                });
+        };
+
+        $scope.getCategoryNamesWithFailedTestCountsByProject = function() {
+            var req = {
+                method: 'GET',
+                url: '/getCategoryNamesWithFailedTestCountsByProject'
+            };
+
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+
+            $http(req).
+                success(function(res) {
+                    var labels = [], data = [];
+
+                    for (var prop in res) {
+                        labels.push(prop);
+                        data.push(res[prop]);
+                    }
+
+                    $scope.categoryFailedTestDistributionLabels = labels;
+                    $scope.categoryFailedTestDistributionData = data;
                 });
         };
 

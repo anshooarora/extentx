@@ -7,6 +7,20 @@
 
 module.exports = {
 	
+    updateDataPointSetting: function(req, res) {
+        if (typeof req.body.query !== 'undefined') {
+            var pts = req.body.query.dataPoints;
+            if (typeof pts !== 'undefined')
+                req.session.trendDataPoints = pts;
+
+            var format = req.body.query.dataPointFormat;
+            if (typeof format !== 'undefined')
+                req.session.trendDataPointFormat = format;
+        }
+
+        res.send(200);
+    },
+
     setTheme: function(req, res) {
         var theme = req.body.query.theme;
 

@@ -5,20 +5,14 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var ObjectId = require('mongodb').ObjectID;
-
 module.exports = {
 
     upload: function(req, res) {
         var reportId = req.body.reportId,
             testId = req.body.testId,
-            logId = req.body.logId,
             id = req.body.id,
             name = req.body.name,
             mediaType = req.body.mediaType;
-
-        if (typeof logId !== 'undefined')
-            logId = ObjectId(logId);
 
         req.file('f').upload({}, function whenDone(err, uploadedFile) {
             if (err) {
@@ -37,10 +31,7 @@ module.exports = {
 
             Media.update(
                 { id: id }, 
-                { 
-                    path: targetPath,
-                    log: logId
-                }
+                { path: targetPath }
             ).exec(function afterwards(err, updated) { });
         });
 

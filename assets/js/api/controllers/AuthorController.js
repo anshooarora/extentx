@@ -19,6 +19,7 @@ angular.module('ExtentX')
                         $scope.showAuthorPanel = true;
 
                     $scope.authorTestCounts = res;
+                    $scope.authorTestCountLength = Object.keys(res).length;
 
                     if (drawChart) {
                         $scope.options = BarChartSettings.options;
@@ -35,6 +36,28 @@ angular.module('ExtentX')
                 }).
                 error(function(err) {
                     console.log(err);
+                });
+        };
+
+        $scope.getAuthorNamesWithFailedTestCountsByProject = function() {
+            var req = {
+                method: 'GET',
+                url: '/getAuthorNamesWithFailedTestCountsByProject'
+            };
+
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+
+            $http(req).
+                success(function(res) {
+                    var labels = [], data = [];
+
+                    for (var prop in res) {
+                        labels.push(prop);
+                        data.push(res[prop]);
+                    }
+
+                    $scope.authorFailedTestDistributionLabels = labels;
+                    $scope.authorFailedTestDistributionData = data;
                 });
         };
 

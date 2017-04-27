@@ -1,0 +1,40 @@
+<span ng-controller="ReportController" ng-init="setViewName('Exceptions')"></span>
+
+<div class="container main exception-view" ng-controller="ExceptionController">
+    <div class="row">
+        <div class='col-md-12'>
+            <div class="alert alert-info" ng-if="exceptionTestCounts.length===0">
+                <strong>Kudos!</strong>
+                No Exceptions were found in your reports.
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" ng-if="exceptionTestCounts.length!==0">
+
+        <!-- exception distribution -->
+        <div class="col-md-12">
+            <div class="panel panel-default exception-distribution-report-chart" ng-init="getExceptionDistributionByReportByProject(10)">
+                <div class='panel-heading'>
+                    Exception Distibution By Report
+                </div>
+                <div class='panel-body' id="exception-dist-report-container">
+                    <canvas id='exception-distribution-report' height="270" width="{{exceptionDistributionChartWidth}}" class='chart chart-line' chart-dataset-override="datasetOverride" chart-data="exceptionReportDistData" chart-labels="exceptionReportDistLabels" chart-legend="true" chart-series="series" chart-options="exceptionReportDistOptions" chart-colours="colors"></canvas>
+                </div>
+            </div>
+        </div> <!-- /col -->
+
+        <!-- exception distribution -->
+        <div class="col-md-6">
+            <div class="panel panel-default exception-distribution-chart" ng-init="getExceptionNamesWithTestCountsByProject(true)">
+                <div class='panel-heading'>
+                    Exception Distibution
+                </div>
+                <div class='panel-body' id="exception-dist-container">
+                    <canvas id='exception-distribution' height="270" width="{{exceptionDistributionChartWidth}}" class='chart chart-bar' chart-data="exceptionDistributionData" chart-labels="exceptionDistributionLabels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
+                </div>
+            </div>
+        </div> <!-- /col -->
+    </div> <!-- /row -->
+    
+</div>

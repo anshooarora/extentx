@@ -65,5 +65,11 @@ module.exports = {
         })
     },
 
+    getCategoryNamesWithFailedTestCountsByProject: function(req, res) {
+        Category.getCategoryNamesWithTestCountsByProject(req, "pass", function(categoryTestCounts) {
+            res.json(categoryTestCounts);
+        })
+    },
+
 };
 

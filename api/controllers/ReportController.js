@@ -164,15 +164,17 @@ module.exports = {
     },
 
     destroyReportAndDepsByReportId: function(req, res) {
-        var reportId = req.body.query.id;
+        var reportId = req.body.query;
 
         Report.findOne({ id: reportId })
         .then(function(report) {
-            Report.find({ project: report.project }).exec(function(err, reports) {
-                if (reports.length === 1) {
-                    Project.destroy({ id: reports[0].project }).exec(function(err) {});
-                }
-            });
+            if (report.project != null) {
+                Report.find({ project: report.project }).exec(function(err, reports) {
+                    if (reports.length === 1) {
+                        Project.destroy({ id: reports[0].project }).exec(function(err) {});
+                    }
+                });
+            }
         })
         .then(function() {
             Report.destroy({ id: reportId }).exec(function(err) {});

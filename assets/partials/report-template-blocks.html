@@ -1,0 +1,18 @@
+<div class="col-md-3" ng-repeat="report in reportList track by $index" ng-if="$index < length">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                {{$index+1}}. {{report.project.name}}
+            </div>
+            <div>
+                <a href='#/report-summary?id={{report.id}}'>{{ report.name }}</a>
+            </div>                
+            <div>
+                <span class="label label-default">{{ report.startTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span>
+                <span class="label label-default">{{ report.endTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span>
+                <span class="label label-default">{{report.duration}} ms</span>
+            </div>
+        </div>
+    </div>
+</div>
+

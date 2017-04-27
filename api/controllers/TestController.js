@@ -32,25 +32,23 @@ module.exports = {
         Test.findOne({ id: id }).populateAll().exec(function(err, test) {
             if (err) console.log('Test.getTestById -> ' + err);
 
-            Test.deepPopulateLogElements(test, function(test) {
-                Test.find({ parent: id }).populateAll().exec(function(err, nodes) {
-                    test.nodes = nodes;
+            Test.find({ parent: id }).populateAll().exec(function(err, nodes) {
+                test.nodes = nodes;
 
-                    if (nodes.length === 0)
-                        res.json(test);
+                if (nodes.length === 0)
+                    res.json(test);
 
-                    for (var ix = 0; ix < nodes.length; ix++) {
-                        (function(ix) {
-                        Test.find({ parent: nodes[ix].id }).populateAll().exec(function(err, grandchildren) {
-                            test.nodes[ix].nodes = grandchildren;
+                for (var ix = 0; ix < nodes.length; ix++) {
+                    (function(ix) {
+                    Test.find({ parent: nodes[ix].id }).populateAll().exec(function(err, grandchildren) {
+                        test.nodes[ix].nodes = grandchildren;
 
-                            if (++cntr == nodes.length)
-                                res.json(test);
-                        })
-                        })(ix)
-                    }
-                });
-            })
+                        if (++cntr == nodes.length)
+                            res.json(test);
+                    })
+                    })(ix)
+                }
+            });
         });
     },
 

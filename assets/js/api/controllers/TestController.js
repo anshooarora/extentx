@@ -27,7 +27,7 @@ angular.module('ExtentX')
                     }
                 }
             };
-            
+
             $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
             
             $http(req).
@@ -43,7 +43,7 @@ angular.module('ExtentX')
                 });
         };
 
-        $scope.loadNodeById = function(testId, level) {
+        $scope.loadNodeById = function(testId, level, historical) {
             var req = {
                 method: 'POST',
                 url: '/getTestById',
@@ -53,15 +53,20 @@ angular.module('ExtentX')
                     }
                 }
             };
-            
             $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
             
             $http(req).
                 success(function(res) {
                     if (level === 1)
-                        $scope.node1 = res;
+                        if (historical)
+                            $scope.node3 = res;    
+                        else
+                            $scope.node1 = res;
                     if (level === 2)
-                        $scope.node2 = res;
+                        if (historical)
+                            $scope.node4 = res;
+                        else
+                            $scope.node2 = res;
                 });
         };
 

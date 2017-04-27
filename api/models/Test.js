@@ -122,7 +122,7 @@ module.exports = {
     deepPopulateLogElements: function(test, cb) {
         var cntr = 0;
 
-        if (test.logs.length === 0)
+        if (test.logs == null || test.logs.length === 0)
             cb(test);
 
         var t = test.toObject();

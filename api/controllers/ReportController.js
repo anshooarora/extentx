@@ -168,7 +168,7 @@ module.exports = {
 
         Report.findOne({ id: reportId })
         .then(function(report) {
-            if (report.project != null) {
+            if (typeof report.project !== 'undefined' && report.project !== null) {
                 Report.find({ project: report.project }).exec(function(err, reports) {
                     if (reports.length === 1) {
                         Project.destroy({ id: reports[0].project }).exec(function(err) {});

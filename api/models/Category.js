@@ -84,15 +84,19 @@ module.exports = {
             project = ObjectId(projects[0].id);
 
         Category.find({ project: project }).populate("tests", { where: { status: { "!": filterStatus }, level: 0 }}).exec(function(err, categoryTests) {
-            for (var ix = 0; ix < categoryTests.length; ix++) {
-                var category = categoryTests[ix];
-                if (typeof dic[category.name] === "undefined")
-                    dic[category.name] = 0;
-                    
-                dic[category.name] = dic[category.name] + category.tests.length;
+            if (typeof categoryTests !== 'undefined' && categoryTests != null) {
+                for (var ix = 0; ix < categoryTests.length; ix++) {
+                    var category = categoryTests[ix];
+                    if (typeof dic[category.name] === "undefined")
+                        dic[category.name] = 0;
+                        
+                    dic[category.name] = dic[category.name] + category.tests.length;
 
-                if (++cntr == categoryTests.length)
-                    cb(dic);
+                    if (++cntr == categoryTests.length)
+                        cb(dic);
+                }
+            } else {
+                cb ([]);
             }
         });
     });

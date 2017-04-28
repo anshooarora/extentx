@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var ObjectId = require('mongodb').ObjectID;
+
 module.exports = {
 
     upload: function(req, res) {

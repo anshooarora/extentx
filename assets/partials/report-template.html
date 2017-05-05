@@ -23,7 +23,7 @@
             </td>
             <td>{{$index+1}}</td>
             <td>{{report.project.name}}</td>
-            <td><a href='#/report?id={{report.id}}'>{{ report.name }}</a></td>
+            <td><a href='#/report-summary?id={{report.id}}'>{{ report.name }}</a></td>
             <td><span class="label label-default">{{ report.startTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span></td>
             <td><span class="label label-default">{{ report.endTime | date: 'MMM-dd-yyyy HH:mm:ss' }}</span></td>
             <td><span class="label label-default">{{report.duration}} ms</span></td>

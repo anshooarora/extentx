@@ -1,6 +1,25 @@
 angular.module('ExtentX')
     .controller('ProjectController', ['$rootScope', '$scope', '$http', '$location', 'Icon', 'ChartSettings', 'PieChartSettings', 
     function($rootScope, $scope, $http, $location, Icon, ChartSettings, PieChartSettings) {
+
+        $scope.destroyProjectWithDepsByProjectId = function(projectId) {
+            console.log(projectId)
+            var req = {
+                    method: 'POST',
+                    url: '/destroyProjectWithDepsByProjectId',
+                    data: {
+                        query: { 
+                            id: projectId
+                        }
+                    }
+                };
+
+                $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
+                $http(req).
+                    success(function(res) { });
+        };
+
         $scope.getProjectsWithDeps = function() {
             var req = {
                 method: "GET",

@@ -30,5 +30,26 @@ module.exports = {
         });
     },
 
+    destroyProjectWithDepsByProjectId: function(req, res) {
+        var projectId = req.body.query.id;
+
+        Project.findOne({ id: projectId })
+        .then(function(project) {
+            Project.destroy({ id: projectId }).exec(function(err) {});
+            Report.destroy({ project: projectId }).exec(function(err) {});
+            Author.destroy({ project: projectId }).exec(function(err) {});
+            Category.destroy({ project: projectId }).exec(function(err) {});
+            Log.destroy({ project: projectId }).exec(function(err) {});
+            Test.destroy({ project: projectId }).exec(function(err) {});
+            Media.destroy({ project: projectId }).exec(function(err) {});
+            
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+
+        res.send(200);
+    },
+
 };
 

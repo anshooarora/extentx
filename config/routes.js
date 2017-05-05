@@ -53,6 +53,7 @@ module.exports.routes = {
   '/getProjects': 'ProjectController.getProjects',
   '/switchProject': 'ProjectController.switchProject',
   '/getProjectsWithDeps': 'ProjectController.getProjectsWithDeps',
+  '/destroyProjectWithDepsByProjectId': 'ProjectController.destroyProjectWithDepsByProjectId',
 
   '/getTestHistory': 'TestController.getTestHistory',
   '/getTestById': 'TestController.getTestById',
@@ -71,7 +72,7 @@ module.exports.routes = {
   '/getCategoryNamesWithTestCountsByProject': 'CategoryController.getCategoryNamesWithTestCountsByProject',
   '/getDistinctCategoryNamesByProject': 'CategoryController.getDistinctCategoryNamesByProject',
   '/getCategoryNamesWithFailedTestCountsByProject': 'CategoryController.getCategoryNamesWithFailedTestCountsByProject',
-  
+
   '/getAuthorListByReportId': 'AuthorController.getAuthorListByReportId',
   '/getAuthorNamesWithTestCountsByProject': 'AuthorController.getAuthorNamesWithTestCountsByProject',
   '/getAuthorNamesWithFailedTestCountsByProject': 'AuthorController.getAuthorNamesWithFailedTestCountsByProject',

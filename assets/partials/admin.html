@@ -29,9 +29,20 @@
                         <div class='panel-body'>
                             &nbsp;
                             <form class='form-inline' ng-model="query">
-                                Delete reports older than &nbsp; <input class='form-control' ng-model='query.days' type='number' style='width:100px;'> &nbsp; days
+                                <div>
+                                    Delete reports older than &nbsp; <input class='form-control' ng-model='query.days' type='number' style='width:200px;'> &nbsp; days
+                                    <button class="pull-right btn btn-primary" type="button" ng-click="deleteReportsOlderThanXDays(query.days)" type="submit">Delete</button>
+                                </div>
+                                <br/>
+                                <div ng-controller="ProjectController">
+                                    Delete projects with all dependencies &nbsp; 
 
-                                <button class="pull-right btn btn-primary" type="button" ng-click="deleteReportsOlderThanXDays(query.days)" type="submit">Delete</button>
+                                    <select class='form-control' ng-init="loadProjects()" ng-model='query.projectId' style='width:200px;'>
+                                        <option value="">Select Project</option>
+                                        <option ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+                                    </select>
+                                    <button class="pull-right btn btn-primary" type="button" ng-click="destroyProjectWithDepsByProjectId(query.projectId)" type="submit">Delete</button>
+                                </div>
                             </form>
                         </div>
                     </div>

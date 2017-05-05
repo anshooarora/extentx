@@ -70,9 +70,11 @@ module.exports.routes = {
   '/getTestsByCategoryId': 'CategoryController.getTestsByCategoryId',
   '/getCategoryNamesWithTestCountsByProject': 'CategoryController.getCategoryNamesWithTestCountsByProject',
   '/getDistinctCategoryNamesByProject': 'CategoryController.getDistinctCategoryNamesByProject',
+  '/getCategoryNamesWithFailedTestCountsByProject': 'CategoryController.getCategoryNamesWithFailedTestCountsByProject',
   
   '/getAuthorListByReportId': 'AuthorController.getAuthorListByReportId',
   '/getAuthorNamesWithTestCountsByProject': 'AuthorController.getAuthorNamesWithTestCountsByProject',
+  '/getAuthorNamesWithFailedTestCountsByProject': 'AuthorController.getAuthorNamesWithFailedTestCountsByProject',
 
   '/getReportById': 'ReportController.getReportById',
   '/getReportList': 'ReportController.getReportList',

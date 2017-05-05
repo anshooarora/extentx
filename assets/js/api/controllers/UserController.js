@@ -18,7 +18,8 @@ angular.module("ExtentX")
                     }
                 }).
                 error(function(response) {
-                    console.log(response);
+                    if (typeof response !== 'undefined' && response != null)
+                        console.log(response);
                 });
             }, 50);
         };

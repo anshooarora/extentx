@@ -48,6 +48,8 @@ module.exports.routes = {
 
   '/deleteReportsOlderThanXDays': 'AdminController.deleteReportsOlderThanXDays',
 
+  '/updateDataPointSetting': 'SettingsController.updateDataPointSetting',
+  
   '/getProjects': 'ProjectController.getProjects',
   '/switchProject': 'ProjectController.switchProject',
   '/getProjectsWithDeps': 'ProjectController.getProjectsWithDeps',
@@ -61,7 +63,7 @@ module.exports.routes = {
   '/getExceptionDistributionByReportByProject': 'ExceptionController.getExceptionDistributionByReportByProject',
   '/getExceptionsByReportId': 'ExceptionController.getExceptionsByReportId',
   '/getTestsByExceptionId': 'ExceptionController.getTestsByExceptionId',
-  
+
   '/upload': 'FileController.upload',
 
   '/getCategoryListByReportId': 'CategoryController.getCategoryListByReportId',

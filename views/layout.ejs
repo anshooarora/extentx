@@ -5,7 +5,9 @@
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+    <!-- csrf token -->
+    <meta name="csrf-token" content="<%= req.session.csrfSecret %>">
+    
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/dependencies/bootstrap-3.3.7-min.css">
     <link rel="stylesheet" href="/styles/dependencies/featherlight-1.5.0.min.css">

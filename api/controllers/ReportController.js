@@ -164,7 +164,7 @@ module.exports = {
     },
 
     destroyReportAndDepsByReportId: function(req, res) {
-        var reportId = req.body.query;
+        var reportId = req.body.query.id;
 
         Report.findOne({ id: reportId })
         .then(function(report) {

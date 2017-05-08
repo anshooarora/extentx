@@ -10,9 +10,11 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class='panel-heading'>
-                    {{test.name}}
-                    <span class="pull-right">
-                        <i class="material-icons status {{test.status}}" alt="{{test.status}}" title="{{test.status}}">{{test.status}}</i>
+                    <span class="label green">{{test.startTime | date: 'MMM dd, yyyy HH:mm:ss'}}</span>
+                    <span class="label red">{{test.endTime | date: 'MMM dd, yyyy HH:mm:ss'}}</span>
+                    <span class="label label-default">{{test.duration}} ms</span>
+                    <span class="pull-right {{test.status}} test-status">
+                        <i class="material-icons">{{getIcon(test.status)}}</i>
                     </span>
                 </div>
                 
@@ -26,9 +28,11 @@
         <div class="col-md-6" ng-if="historicalTest">
             <div class="panel panel-default">
                 <div class='panel-heading'>
-                    {{historicalTest.name}}
-                     <span class="pull-right">
-                        <i class="material-icons status {{historicalTest.status}}" alt="{{historicalTest.status}}" title="{{historicalTest.status}}">{{historicalTest.status}}</i>
+                    <span class="label green">{{historicalTest.startTime | date: 'MMM dd, yyyy HH:mm:ss'}}</span>
+                    <span class="label red">{{historicalTest.endTime | date: 'MMM dd, yyyy HH:mm:ss'}}</span>
+                    <span class="label label-default">{{historicalTest.duration}} ms</span>
+                    <span class="pull-right {{historicalTest.status}} test-status">
+                        <i class="material-icons">{{getIcon(historicalTest.status)}}</i>
                     </span>
                 </div>
                 

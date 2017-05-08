@@ -8,7 +8,7 @@ angular.module('ExtentX')
         $scope.datasetOverride = LineChartSettings.datasetOverrideGreen;
         $scope.perfChartColWidth = 6;
         $scope.setViewName = ViewNameSetter.setViewName; 
-        $scope.reportChkSelected = false;
+        $scope.reportChkAllSelected = false;
 
         $scope.hideNav = function() {
             angular.element(".navbar").addClass("hidden");
@@ -174,4 +174,9 @@ angular.module('ExtentX')
 
             $timeout(fn, 500);
         };
+
+        $scope.checkAll = function() {
+            $scope.reportChkAllSelected = $scope.reportChkAllSelected === true ? false : true;
+        };
+
     }]);

@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th ng-controller="UserController" ng-if="isAdmin">
-                &nbsp;<input type="checkbox">
+                &nbsp;<input ng-click="checkAll()" type="checkbox">
             </th>
             <th>#</th>
             <th>Project</th>
@@ -19,7 +19,7 @@
     <tbody>
         <tr ng-repeat='report in reportList track by $index' ng-if="$index < length">
             <td ng-controller="UserController" ng-if="isAdmin">
-                <input type="checkbox" id="{{report.id}}" ng-click="countChecked()">
+                <input type="checkbox" id="{{report.id}}" ng-click="countChecked()" ng-checked="reportChkAllSelected">
             </td>
             <td>{{$index+1}}</td>
             <td>{{report.project.name}}</td>

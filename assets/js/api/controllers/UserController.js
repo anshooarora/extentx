@@ -4,7 +4,8 @@ angular.module("ExtentX")
             $rootScope.signedOn = false;
             $rootScope.user = null;
             $rootScope.isAdmin = false;
-            
+            $scope.changeSuccess = false;
+
             setTimeout(function() { 
                 $http({
                     method: 'GET',
@@ -82,4 +83,30 @@ angular.module("ExtentX")
 
             $rootScope.modal = modalInstance;
         };
+
+        $scope.changePassword = function(query) {
+            query.user = $scope.user;
+
+            var req = {
+                method: 'POST',
+                url: '/changePassword',
+                data: {
+                    query: query
+                }
+            };
+
+            $scope.query = null;
+            
+            $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+            
+            $http(req).
+                success(function(response) {
+                    $scope.changeSuccess = true;
+                    $scope.changeError = null;
+                }).
+                error(function(response) {
+                    $scope.changeError = response.message;
+                });
+        };
+
     }]);

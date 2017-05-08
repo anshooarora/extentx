@@ -12,8 +12,6 @@ module.exports = {
     signon: function(req, res) {
         var name = req.body.query.name;
         var password = req.body.query.password;
-        
-        console.log("user: " + name)
 
         User.findOne({ name: name }).exec(function(err, user) {
             if (err) throw (err);
@@ -78,7 +76,38 @@ module.exports = {
     logout: function(req, res) {
         req.session.destroy();
         res.send(200);
-    },    
+    },
+
+    changePassword: function(req, res) {
+        var userName = req.body.query.user,
+            oldPassword = req.body.query.oldPassword,
+            newPassword = req.body.query.newPassword;
+
+        if (typeof userName !== 'undefined' && typeof oldPassword !== 'undefined' && typeof newPassword !== 'undefined') {
+            User.findOne({ name: userName }).exec(function(err, user) {
+                if (bcrypt.compareSync(oldPassword, user.password)) {
+                    console.log(newPassword)
+                    var salt = bcrypt.genSaltSync(10);
+                    var hash = bcrypt.hashSync(newPassword, salt);
+
+                    User.update(
+                        { id: user.id },
+                        { password: hash }
+                    ).exec(function() { 
+                        res.send(200, { status: 'success', message: 'Password changed successfully' });
+                    })
+                } else {
+                    res.send(400, {
+                        message: 'Current password is invalid'
+                    })
+                }
+            });
+        } else {
+            res.send(400, {
+                message: 'Password is a required field, it cannot be undefined'
+            });
+        }
+    }
 
 };
 

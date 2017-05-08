@@ -86,6 +86,7 @@ module.exports.routes = {
   '/isSignedOn': 'UserController.isSignedOn',
   '/signup': 'UserController.signup',
   '/logout': 'UserController.logout',
+  '/changePassword': 'UserController.changePassword',
 
   '/searchTests': 'SearchController.searchTests',
 };

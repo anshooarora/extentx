@@ -1,5 +1,7 @@
 angular.module('ExtentX').
     controller('AdminController', ['$scope', '$rootScope', '$http', '$window', function($scope, $rootScope, $http, $window) {
+        $scope.resetComplete = false;
+
         $scope.archiveReport = function(reportId) {
             var currentPageTemplate = $route.current.templateUrl;
                     $templateCache.remove(currentPageTemplate);
@@ -45,5 +47,23 @@ angular.module('ExtentX').
                         console.log(res);
                     });
             }
-        }
+        };
+
+        $scope.resetDatabase = function() {
+            var req = {
+                    method: 'POST',
+                    url: '/resetDatabase',
+                };
+                
+                $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
+
+                $http(req).
+                    success(function(res) {
+                        $scope.resetComplete = true;
+                    }).
+                    error(function(res) {
+                        $scope.resetComplete = false;
+                    });
+        };
+
     }]);

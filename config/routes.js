@@ -47,6 +47,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/deleteReportsOlderThanXDays': 'AdminController.deleteReportsOlderThanXDays',
+  '/resetDatabase': 'AdminController.resetDatabase',
 
   '/updateDataPointSetting': 'SettingsController.updateDataPointSetting',
   

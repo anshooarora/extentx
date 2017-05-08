@@ -47,4 +47,21 @@ module.exports = {
             deleteRels();
         });
     },
+
+    resetDatabase: function(req, res) {
+        try {
+            Project.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Report.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Author.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Category.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Log.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Test.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Exception.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            Media.destroy({ }).exec(function(err) { if (err) console.log(err); });
+            res.send(200);
+        } catch(err) {
+            res.send(400);
+        }       
+    },
+
 };

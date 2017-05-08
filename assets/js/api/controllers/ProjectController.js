@@ -1,6 +1,7 @@
 angular.module('ExtentX')
     .controller('ProjectController', ['$rootScope', '$scope', '$http', '$location', 'Icon', 'ChartSettings', 'PieChartSettings', 
     function($rootScope, $scope, $http, $location, Icon, ChartSettings, PieChartSettings) {
+        $scope.projectAndDepsCleared = false;
 
         $scope.destroyProjectWithDepsByProjectId = function(projectId) {
             console.log(projectId)
@@ -17,7 +18,7 @@ angular.module('ExtentX')
                 $http.defaults.headers.post['X-CSRF-Token'] = $rootScope._csrf;
             
                 $http(req).
-                    success(function(res) { });
+                    success(function(res) { $scope.projectAndDepsCleared = true; });
         };
 
         $scope.getProjectsWithDeps = function() {

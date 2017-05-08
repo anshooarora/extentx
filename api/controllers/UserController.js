@@ -86,7 +86,6 @@ module.exports = {
         if (typeof userName !== 'undefined' && typeof oldPassword !== 'undefined' && typeof newPassword !== 'undefined') {
             User.findOne({ name: userName }).exec(function(err, user) {
                 if (bcrypt.compareSync(oldPassword, user.password)) {
-                    console.log(newPassword)
                     var salt = bcrypt.genSaltSync(10);
                     var hash = bcrypt.hashSync(newPassword, salt);
 

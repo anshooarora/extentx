@@ -42,6 +42,14 @@
                                         <option ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
                                     </select>
                                     <button class="pull-right btn btn-primary" type="button" ng-click="destroyProjectWithDepsByProjectId(query.projectId)" type="submit">Delete</button>
+                                    <div class="alert alert-success pull-right" ng-if="projectAndDepsCleared" style="padding:7px 15px;margin-right:5px;">Project and dependencies cleared!</div>
+                                </div>
+                                <br/>
+                                <div ng-controller="AdminController">
+                                    Reset database to initial setting
+
+                                    <button class="pull-right btn btn-danger" type="button" ng-click="resetDatabase()" type="submit">Reset</button>
+                                    <div class="alert alert-success pull-right" ng-if="resetComplete" style="padding:7px 15px;margin-right:5px;">Reset complete!</div>
                                 </div>
                             </form>
                         </div>

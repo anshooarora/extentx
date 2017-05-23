@@ -1,4 +1,4 @@
-# ExtentX Community 1.0.1
+# ExtentX Community 1.0.2
 
 Report Server for ExtentReports
 
